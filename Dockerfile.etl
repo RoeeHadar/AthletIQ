@@ -1,0 +1,24 @@
+# Implements: FR-012, CON-003, ADR-004, ADR-006
+# ETL / batch image (pipeline CLI). Shared volumes: raw JSON + artifacts.
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml README.md ./
+COPY src ./src
+COPY api ./api
+COPY database ./database
+COPY scripts ./scripts
+COPY tests/fixtures/provider ./tests/fixtures/provider
+
+RUN pip install --no-cache-dir .
+
+ENV PYTHONPATH=/app
+ENV ATHLETIQ_RAW_PATH=/data/raw
+ENV ATHLETIQ_ARTIFACTS_PATH=/artifacts
+
+CMD ["python", "-m", "athletiq.pipeline", "--help"]

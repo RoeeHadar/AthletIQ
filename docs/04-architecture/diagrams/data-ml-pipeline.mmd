@@ -1,0 +1,16 @@
+flowchart TD
+  P[API-Sports] --> R[Raw JSON immutable]
+  R --> V[Validate]
+  V -->|valid| C[(Curated PostgreSQL)]
+  V -->|invalid| VR[Validation report]
+  C --> F[Feature tables]
+  F --> T[Train]
+  F --> Val[Validation]
+  F --> Te[Test]
+  T --> M[LR / XGBoost]
+  M --> Val
+  Val --> Sel[Select + pin]
+  Sel --> Te
+  Te --> Pub[Publish + lineage]
+  Pub --> API[FastAPI]
+  F --> API

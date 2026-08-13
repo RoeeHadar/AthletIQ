@@ -1,0 +1,27 @@
+{
+  "source": "docs/08-testing/test-plan.md",
+  "nfr_003": "never set API_SPORTS_KEY for this crew",
+  "tests": [
+    {"id": "TEST-001", "paths": ["tests/unit/test_bootstrap.py"]},
+    {"id": "TEST-002", "paths": ["tests/integration/test_schema.py"]},
+    {"id": "TEST-003", "paths": ["tests/unit/test_provider_ingest.py"]},
+    {"id": "TEST-004", "paths": ["tests/unit/test_load_validate.py"]},
+    {"id": "TEST-005", "paths": ["tests/unit/test_analytics.py"]},
+    {"id": "TEST-006", "paths": ["tests/unit/test_features.py"]},
+    {"id": "TEST-007", "paths": ["tests/unit/test_ml.py"]},
+    {"id": "TEST-008", "paths": ["tests/unit/test_api.py"]},
+    {"id": "TEST-009", "paths": ["tests/unit/test_pipeline.py"]},
+    {"id": "TEST-010", "paths": ["tests/integration/test_compose.py"]},
+    {"id": "TEST-011", "paths": ["tests/unit/test_ci_workflow.py"]},
+    {"id": "TEST-012", "paths": ["tests/unit/test_methodology.py"]},
+    {"id": "TEST-013", "paths": ["tests/unit/test_reproducibility.py"]},
+    {"id": "TEST-014", "paths": ["tests/unit/test_artifact_api.py", "tests/unit/test_api.py"]}
+  ],
+  "extra_not_numbered": [
+    {
+      "id": "Postgres stores",
+      "paths": ["tests/integration/test_postgres_stores.py"],
+      "note": "Gated on TEST_DATABASE_URL; supports FR-002/DR-003 Postgres path"
+    }
+  ]
+}

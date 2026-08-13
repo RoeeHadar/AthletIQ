@@ -1,0 +1,17 @@
+{
+  "response": [
+    {
+      "id": 1001,
+      "date": "2023-10-24T23:30:00+00:00",
+      "status": "Finished",
+      "teams": {
+        "home": {"id": 1, "name": "Boston Celtics"},
+        "away": {"id": 2, "name": "Los Angeles Lakers"}
+      },
+      "scores": {
+        "home": {"total": 110},
+        "away": {"total": 105}
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# Memory loop local state (counters / transcript cursors — not training data)
+memory/.state.json
+
+# Secrets and local env
+.env
+.env.local
+*.pem
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# AthletIQ runtime data (ADR-006 raw; ADR-004 artifacts)
+data/raw/
+artifacts/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

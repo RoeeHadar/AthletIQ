@@ -1,0 +1,19 @@
+flowchart TB
+  subgraph host [Developer host]
+    Script[scripts/run_pipeline.sh]
+    CLI[Python pipeline CLI]
+  end
+  subgraph compose [Docker Compose]
+    PG[(PostgreSQL)]
+    ETL[etl batch container]
+    API[api FastAPI container]
+    RawVol[(raw JSON volume)]
+    ArtVol[(artifacts volume)]
+  end
+  Script --> CLI
+  CLI --> ETL
+  ETL --> RawVol
+  ETL --> PG
+  ETL --> ArtVol
+  API --> ArtVol
+  API --> PG

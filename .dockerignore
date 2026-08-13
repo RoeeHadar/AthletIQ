@@ -1,0 +1,21 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+.git/
+memory/
+docs/
+.cursor/
+*.md
+!README.md
+.env
+.env.*
+data/
+artifacts/

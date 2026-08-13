@@ -1,0 +1,134 @@
+# Implements: FR-009, FR-014, CON-004, ADR-008, ADR-009, NFR-002, NFR-004
+openapi: 3.0.3
+info:
+  title: AthletIQ Demo API
+  version: 1.0.0
+  description: >
+    MVP prediction API (sync, game_id-keyed). Gate 4 Approved. No application auth (ADR-009).
+    No hard latency SLO (NFR-004). See docs/06-design/api-design.md.
+servers:
+  - url: http://localhost:8000
+    description: Local Compose
+security: []
+paths:
+  /v1/health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+        "503":
+          description: model_unavailable or db_unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/predict:
+    get:
+      summary: Predict home-win probability for a game
+      parameters:
+        - name: game_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Internal BIGINT game id as string
+        - name: provider_game_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Prediction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PredictionResponse"
+        "400":
+          description: invalid_request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: game_not_found or features_not_found (see error.code)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: model_unavailable or db_unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: internal_error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/model:
+    get:
+      summary: Model metadata and limitations
+      responses:
+        "200":
+          description: Metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelInfo"
+        "503":
+          description: model_unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  securitySchemes: {}
+  schemas:
+    PredictionResponse:
+      type: object
+      required: [game_id, home_win_pred, p_home_win, model_version, feature_version]
+      properties:
+        game_id: { type: string }
+        home_team_id: { type: string }
+        away_team_id: { type: string }
+        home_win_pred: { type: boolean }
+        p_home_win: { type: number, minimum: 0, maximum: 1 }
+        model_version: { type: string }
+        feature_version: { type: string }
+        dataset_version: { type: string }
+        limitations_ref: { type: string }
+        model_card_ref: { type: string }
+    ModelInfo:
+      type: object
+      required: [model_version, feature_version, limitations, methodology, model_card_ref]
+      properties:
+        model_version: { type: string }
+        feature_version: { type: string }
+        dataset_version: { type: string }
+        metrics: { type: object }
+        methodology: { type: object }
+        limitations: { type: string }
+        model_card_ref: { type: string }
+        baselines_served: { type: boolean }
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum:
+                - invalid_request
+                - game_not_found
+                - features_not_found
+                - model_unavailable
+                - db_unavailable
+                - internal_error
+            message: { type: string }
+            details: { type: object }

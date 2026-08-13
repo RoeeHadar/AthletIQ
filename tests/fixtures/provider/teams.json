@@ -1,0 +1,18 @@
+{
+  "response": [
+    {
+      "id": 1,
+      "name": "Boston Celtics",
+      "code": "BOS",
+      "conference": "East",
+      "division": "Atlantic"
+    },
+    {
+      "id": 2,
+      "name": "Los Angeles Lakers",
+      "code": "LAL",
+      "conference": "West",
+      "division": "Pacific"
+    }
+  ]
+}

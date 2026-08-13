@@ -1,0 +1,6 @@
+flowchart TB
+  GHA[GitHub Actions]
+  GHA --> L[lint]
+  GHA --> U[unit tests]
+  GHA --> I[integration tests + ephemeral test DB]
+  GHA --> B[Docker image build]

@@ -1,0 +1,12 @@
+flowchart LR
+  Provider[API-Sports]
+  Dev[Developer / analyst]
+  AthletIQ[AthletIQ system]
+  PredAPI[Prediction API]
+  GHA[GitHub Actions]
+
+  Provider -->|NBA data| AthletIQ
+  Dev -->|operate pipeline / call API| AthletIQ
+  AthletIQ --> PredAPI
+  Dev --> PredAPI
+  GHA -->|lint unit integration image build| AthletIQ

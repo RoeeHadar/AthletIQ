@@ -1,0 +1,86 @@
+# Implements: OPS-001, CON-005, NFR-003, SEC-002
+# AthletIQ CI — lint → unit → integration → image build (OPS-001).
+# NFR-003: fixture/offline only — do not call live API-Sports in any job.
+# SEC-002: no API keys committed; fixture path needs no repository secrets.
+
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + lint tools
+        run: pip install -e ".[dev]"
+      - name: Ruff
+        run: ruff check src api tests
+      - name: Compile
+        run: python -m compileall -q src api
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Unit tests (fixtures only; no live provider)
+        # NFR-003: do not set API_SPORTS_KEY — FixtureProvider / offline path only.
+        run: python -m pytest tests/unit -q
+        env:
+          ATHLETIQ_LOG_LEVEL: WARNING
+
+  integration:
+    needs: [lint, unit]
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: athletiq
+          POSTGRES_PASSWORD: athletiq
+          POSTGRES_DB: athletiq
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U athletiq -d athletiq"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Integration tests
+        # Ephemeral Postgres only. No live sports API (NFR-003).
+        run: python -m pytest tests/integration -q
+        env:
+          TEST_DATABASE_URL: postgresql://athletiq:athletiq@localhost:5432/athletiq
+          ATHLETIQ_LOG_LEVEL: WARNING
+
+  image:
+    needs: [integration]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ETL image
+        run: docker build -f Dockerfile.etl -t athletiq-etl:ci .
+      - name: Build API image
+        run: docker build -f api/Dockerfile -t athletiq-api:ci .

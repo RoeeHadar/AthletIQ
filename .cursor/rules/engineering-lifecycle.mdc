@@ -1,0 +1,63 @@
+---
+description: >-
+  Always-on engineering lifecycle gates — block non-trivial implementation until
+  required upstream docs are Approved; route work through skills and Grill-Me.
+alwaysApply: true
+---
+
+# Engineering lifecycle gates
+
+When a request involves **implementing a non-trivial feature**, first check whether the required upstream documentation exists and is **`Approved`** (per the gate list below). If not, **stop** and enter planning/design mode — invoke the relevant skill(s) to produce or update the missing documentation — rather than modifying application source code directly.
+
+**Exempt:** trivial fixes (typos, formatting, obvious bugs with no behavior/design change).
+
+## Permanent gates
+
+A gate is satisfied only when its required documents are `Approved`, not merely `Draft`.
+
+| Gate | Phase | Required artifacts |
+|---|---|---|
+| 0 | Project initiation | Project Charter |
+| 1 | Product definition | PRD |
+| 2 | Requirements | SRS, traceability |
+| 3 | Architecture | Architecture docs, ADRs (as needed) |
+| 4 | Detailed design | Relevant database / API / ML / error-handling design |
+| 5 | Implementation planning | Implementation Plan |
+| 6 | Implementation | Code (with `# Implements: FR-XXX` on modules listed in the plan) |
+| 7 | Verification | Tests, CI, quality checks; test strategy/plan docs live here |
+| 8 | Release | Deployment notes, release notes as applicable |
+| 9 | Operations | Monitoring/incident/change process as applicable |
+
+Change Requests re-enter at **Gate 2 (Requirements)**.
+
+Gates govern when a **phase** may start. Per-task **Definition of Done** lives in the Implementation Plan and governs when a single `IMP-XXX` is finished.
+
+**§22 / Gate 6 precondition:** Before non-trivial **Gate 6** coding, require **Approved** Implementation Plan **and** **Approved** Test Strategy (prefer Test Plan too). Gate 7’s *number* (verification after implementation) refers to executing and closing verification — it does **not** allow Test Strategy to stay Draft while coding starts. See `docs/00-meta/gates.md`.
+
+## Skills to invoke (not optional brainstorming)
+
+| Need | Skill |
+|---|---|
+| Charter / PRD | `project-discovery` |
+| SRS / traceability | `requirements` |
+| System/data/API/ML/infra architecture | `architecture` |
+| ADRs only | `architecture-decisions` |
+| IMP plan / annotation targets | `implementation-planning` |
+| Test strategy/plan | `testing` |
+| CI/CD, infra, deploy, ops | `devops-operations` |
+| Audits / drift | `engineering-review` |
+
+## Grill-Me
+
+For decisions only the user can make, invoke **Grill-Me** (`.cursor/skills/grill-me/`) before `[OPEN QUESTION]` / invented assumptions. `engineering-review` does **not** call Grill-Me.
+
+## Source-of-truth reminders
+
+- Charter ≠ PRD (no duplication)
+- Design vs contract vs implementation disagreement is a **defect**
+- ADR files only via `architecture-decisions`
+- Do not invent product facts, metrics, or users
+
+## Docs root
+
+Living docs live under `docs/`. See `docs/00-meta/documentation-guide.md`.

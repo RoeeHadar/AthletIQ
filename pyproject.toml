@@ -1,0 +1,47 @@
+# Implements: SEC-001, NFR-001, CON-001
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "athletiq"
+version = "0.1.0"
+description = "NBA sports analytics and pre-game home-win predictions (portfolio MVP)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "psycopg[binary]>=3.1",
+  "numpy>=1.26",
+  "scikit-learn>=1.4",
+  "xgboost>=2.0",
+  "joblib>=1.3",
+  "fastapi>=0.110",
+  "httpx>=0.27",
+  "uvicorn>=0.27",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+  "pyyaml>=6.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/athletiq"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+markers = [
+  "ml005: ML-005 quality-gate / attestation (may be heavier than unit smoke)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "api", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]

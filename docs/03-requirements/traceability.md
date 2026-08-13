@@ -1,0 +1,102 @@
+# Requirements traceability
+
+Status: Approved  
+Owner: Project owner  
+Last Updated: 2026-08-13  
+Version: 1.5.1
+
+## Direction
+
+```text
+Forward:  Requirement → Architecture → Design → Implementation → Test
+Reverse:  Implementation → Design → Architecture → Requirement
+```
+
+## Status columns (independent evidence)
+
+Do **not** set Implementation from a passing test, or Verification from an IMP Done checkbox.
+
+| Column | Source of truth | Allowed values |
+|---|---|---|
+| Requirement | SRS / CR | `Active` · `Amended (CR-001)` |
+| Implementation | IMP task Status + code (not pytest) | `Implemented` · `Partial` · `Not started` |
+| Verification | TEST plan Status only | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Deferred (remote CI)` · `Planned` |
+
+IMP-001…012 **Done** is Gate 6 code complete for listed modules. It is **not** Gate 8/9 and **not** PRD MVP-complete. Code-review and remote-CI DoD boxes remain open.
+
+**Partial** means the mapped IMP exists but the requirement’s product bar is not attested (example: DR-001 two completed live NBA seasons; ML-005 on a frozen real holdout).
+
+CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players` / `player_game_stats` are **reserved schema**, not a pipeline load outcome.
+
+## Matrix
+
+| Requirement | Architecture | Design | Implementation | Test | Requirement | Implementation | Verification |
+|---|---|---|---|---|---|---|---|
+| FR-001 | system/data | error + ADR-006 | IMP-003 | TEST-003 | Amended (CR-001) | Implemented | Passing (local) |
+| FR-002 | data | database | IMP-002, IMP-004 | TEST-002, TEST-004 | Amended (CR-001) | Implemented | Passing (local) / Passing (in-memory) |
+| FR-003 | data | database | IMP-005 | TEST-005 | Amended (CR-001) | Implemented | Passing (in-memory) |
+| FR-004 | system/data | ml | IMP-006 | TEST-006 | Amended (CR-001) | Implemented | Passing (local) |
+| FR-005 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| FR-006 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| FR-007 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| FR-008 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| FR-009 | api | api + error | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
+| FR-010 | system | ml + api + model-card | IMP-012 | TEST-012 | Active | Implemented | Passing (local) |
+| FR-011 | system | error | IMP-009 | TEST-009 | Active | Implemented | Passing (local) |
+| FR-012 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (static topology) |
+| FR-013 | data | error | IMP-004 | TEST-004 | Active | Implemented | Passing (in-memory) |
+| FR-014 | api | api | IMP-008 | TEST-008, TEST-014 | Active | Implemented | Passing (local) |
+| DR-001 | data | ml | IMP-003, IMP-004 | TEST-003, TEST-004 | Active | Partial | Passing (local) |
+| DR-002 | data | database | IMP-002, IMP-004 | TEST-002, TEST-004 | Amended (CR-001) | Implemented | Passing (local) / Passing (in-memory) |
+| DR-003 | data | database | IMP-004 | TEST-004 | Amended (CR-001) | Implemented | Passing (in-memory) |
+| ML-001 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
+| ML-002 | system | ml | IMP-006, IMP-007 | TEST-006, TEST-007 | Active | Implemented | Passing (local) / Passing (synthetic) |
+| ML-003 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| ML-004 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| ML-005 | system | ml | IMP-007 | TEST-007 (quality gate) | Active | Partial | Passing (synthetic) |
+| ML-006 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| ML-007 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| ML-008 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
+| ML-009 | system | ml | IMP-007 | TEST-007, TEST-013, TEST-014 | Active | Implemented | Passing (synthetic) / Passing (local) |
+| SEC-001 | system | error | IMP-001, IMP-003 | TEST-001, TEST-003 | Active | Implemented | Passing (local) |
+| SEC-002 | system | — | IMP-001, IMP-011 | TEST-001, TEST-011 | Active | Implemented | Passing (local) |
+| NFR-001 | system | ml | IMP-001, IMP-007 | TEST-001, TEST-013 | Active | Partial | Passing (local) / Partial (clean-machine) |
+| NFR-002 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
+| NFR-003 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local) |
+| NFR-004 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
+| NFR-005 | data | database | IMP-002 | TEST-002 | Active | Implemented | Passing (local) |
+| OPS-001 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Deferred (remote CI) |
+| OPS-002 | system | error + logging | IMP-001, IMP-009 | TEST-001, TEST-009 | Active | Implemented | Passing (local) |
+| CON-001 | system | — | IMP-001, IMP-009 | TEST-001, TEST-009 | Active | Implemented | Passing (local) |
+| CON-002 | data | database | IMP-002 | TEST-002 | Active | Implemented | Passing (local) |
+| CON-003 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (local) |
+| CON-004 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
+| CON-005 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Deferred (remote CI) |
+| CON-006 | system | — | IMP-009 | TEST-009 | Active | Implemented | Passing (local) |
+| CON-007 | data | — | IMP-003 | TEST-003 | Active | Implemented | Passing (local) |
+| CON-008 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
+| ADR-008 | system/api/data | ADR-008 + api/ml | IMP-006, IMP-008 | TEST-006, TEST-008, TEST-014 | Accepted | Implemented | Passing (local) |
+| ADR-009 | api | ADR-009 + api | IMP-008 | TEST-008 | Accepted | Implemented | Passing (local) |
+| ADR-010 | data | database + ADR-010 | IMP-002 | TEST-002 | Accepted | Implemented | Passing (local) |
+
+## Code annotation rule
+
+A file or module gets an inline reverse pointer if and only if it appears under **Files/modules affected** for an `IMP-XXX` task in `docs/07-implementation/implementation-plan.md`:
+
+```python
+# Implements: FR-XXX
+```
+
+Test files use TEST ids in `docs/08-testing/test-plan.md`. They must **not** carry `# Implements`.
+
+## Notes
+
+- Gate 7 test strategy/plan **Approved** — Gate 6 coding was allowed (§22).  
+- TEST-013 = training-repeatability on a controlled synthetic fixture — **not** clean-clone Compose.  
+- ML-005 verification is **synthetic** TEST-007 only — not an attested NBA holdout.  
+- NFR-001 Implementation **Partial**: documented Compose/Postgres workflow exists in root `README.md`; clean-machine **owner attestation is not recorded**. TEST-001/013 do not close the clean-machine AC.  
+- FR-012 Verification = TEST-010 **Passing (static topology)** only. E2E demo is NFR-001.  
+- CON-003 remains Passing (local): Compose file defines the three services.  
+- DR-001 Implementation **Partial**: season window + fixtures exist; two completed **live** NBA seasons are not attested.  
+- Remote GitHub Actions green is **Deferred** (workflow defined; TEST-011 asserts DAG locally).  
+- Postgres load path exists (`--store postgres`); TEST-004 status remains in-memory unless `TEST_DATABASE_URL` integration is recorded as Passing.

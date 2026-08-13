@@ -3,14 +3,577 @@
     {
       "id": 2001,
       "date": "2024-10-22T23:30:00+00:00",
+      "season": 2024,
       "status": "Finished",
       "teams": {
-        "home": {"id": 2, "name": "Los Angeles Lakers"},
-        "away": {"id": 1, "name": "Boston Celtics"}
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
       },
       "scores": {
-        "home": {"total": 98},
-        "away": {"total": 101}
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2002,
+      "date": "2024-10-23T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2003,
+      "date": "2024-10-24T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2004,
+      "date": "2024-10-25T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2005,
+      "date": "2024-10-26T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2006,
+      "date": "2024-10-27T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2007,
+      "date": "2024-10-28T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2008,
+      "date": "2024-10-29T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2009,
+      "date": "2024-10-30T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2010,
+      "date": "2024-10-31T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2011,
+      "date": "2024-11-01T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2012,
+      "date": "2024-11-02T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2013,
+      "date": "2024-11-03T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2014,
+      "date": "2024-11-04T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2015,
+      "date": "2024-11-05T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2016,
+      "date": "2024-11-06T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2017,
+      "date": "2024-11-07T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2018,
+      "date": "2024-11-08T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2019,
+      "date": "2024-11-09T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2020,
+      "date": "2024-11-10T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2021,
+      "date": "2024-11-11T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2022,
+      "date": "2024-11-12T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      }
+    },
+    {
+      "id": 2023,
+      "date": "2024-11-13T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      }
+    },
+    {
+      "id": 2024,
+      "date": "2024-11-14T23:30:00+00:00",
+      "season": 2024,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
       }
     }
   ]

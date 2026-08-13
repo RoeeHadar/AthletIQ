@@ -2,10 +2,10 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-12  
-Version: 1.0.0
+Last Updated: 2026-08-14  
+Version: 1.0.1
 
-Decision status: Accepted
+Decision status: Superseded
 
 ## Context
 
@@ -32,3 +32,4 @@ MVP default provider is **API-Sports NBA** (free-tier class). All provider I/O g
 - Related requirements: FR-001, CON-007, DR-001, SEC-001  
 - Related architecture docs: `system-architecture.md`, `data-architecture.md`  
 - Grill-Me architecture Q2 (2026-08-12)
+- **Superseded by:** [ADR-011](ADR-011-nba-stats-api-provider.md) (CR-002, 2026-08-14) — owner could not reach API-Sports dashboards

@@ -1,5 +1,5 @@
 flowchart TD
-  P[API-Sports] --> R[Raw JSON immutable]
+  P[NBA Stats API] --> R[Raw JSON immutable]
   R --> V[Validate]
   V -->|valid| C[(Curated PostgreSQL)]
   V -->|invalid| VR[Validation report]

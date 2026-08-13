@@ -7,7 +7,7 @@ Version: 0.3.0
 
 Living process for scope and requirement changes. Change Requests **re-enter at Gate 2 (Requirements)** — they are not the end of the chain.
 
-**Accepted CRs:** [CR-001](CR-001-mvp-team-stats-not-players.md) — MVP persist/ingest is team-level; player tables reserved.
+**Accepted CRs:** [CR-001](CR-001-mvp-team-stats-not-players.md) — MVP persist/ingest is team-level; player tables reserved. [CR-002](CR-002-nba-stats-api-provider.md) — live provider is no-key NBA Stats API (ADR-011).
 
 ## Propagation flow
 

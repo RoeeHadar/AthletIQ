@@ -61,20 +61,21 @@ Status: Planned | Implemented | Passing
 
 ### TEST-003 — Provider adapter and raw ingest (fixtures)
 
-- **Requirement IDs:** FR-001, CON-007, DR-001, SEC-001, ADR-002, ADR-006  
+- **Requirement IDs:** FR-001, CON-007, DR-001, SEC-001, ADR-011, ADR-006, CR-002  
 - **IMP refs:** IMP-003  
 - **Dependencies:** TEST-001  
-- **Description:** Fixture-backed ingest to immutable raw FS; season window; retries without live network.  
+- **Description:** Fixture-backed ingest to immutable raw FS; season window; retries without live network; mocked NBA Stats API pagination.  
 - **Preconditions:** `tests/fixtures/provider/`; no API key required.  
 - **Steps:**
   1. Ingest via fixture backend → raw files under configured path.  
   2. Re-run; assert immutability / batch layout per design.  
   3. Seasons outside active 2–3 window not ingested (or pruned).  
-  4. API key only from env.  
+  4. API key only from env (unused API-Sports fallback).  
   5. **Also (unit):** retry helper — max 5, backoff+jitter, honor `Retry-After` (mocked HTTP/clock).  
+  6. **Also (unit):** `NbaStatsApiProvider` with injected GET — multi-page newest-first, season filter, alias map, skip missing scores / non-NBA teams; no live HTTP.  
 - **Expected result:** No live HTTP; raw landing correct.  
 - **Level:** integration  
-- **Also:** unit (retry helper)  
+- **Also:** unit (retry helper; mocked nba-stats pages)  
 - **Status:** Passing
 
 ### TEST-004 — Validate, load, report, idempotency

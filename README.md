@@ -16,6 +16,12 @@ docker compose up -d --build
 docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider fixture
 ```
 
+Live two completed seasons (no API key; ADR-011) — not the CI/demo path:
+
+```text
+docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider nba-stats --seasons 2023 2024
+```
+
 Then:
 
 - `GET http://127.0.0.1:8000/v1/health`

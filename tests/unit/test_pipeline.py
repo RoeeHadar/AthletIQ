@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -12,6 +13,7 @@ import pytest
 
 from athletiq.config import Settings
 from athletiq.pipeline import STAGE_ORDER, PipelineContext, PipelineError, run_pipeline
+from athletiq.pipeline.__main__ import default_fixtures_dir
 from athletiq.pipeline.__main__ import main as pipeline_main
 from athletiq.pipeline.orchestrator import resolve_stages
 
@@ -69,6 +71,12 @@ def _settings(tmp_path: Path) -> Settings:
         artifacts_path=tmp_path / "artifacts",
         log_level="INFO",
     )
+
+
+def test_default_fixtures_dir_finds_repo_fixtures() -> None:
+    found = default_fixtures_dir()
+    assert (found / "teams.json").is_file()
+    assert found.resolve() == FIXTURES.resolve()
 
 
 def test_script_is_thin_wrapper_to_python_cli() -> None:
@@ -131,13 +139,36 @@ def test_forced_stage_failure_nonzero_and_stage_in_logs(
 def test_cli_main_failure_returns_nonzero(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ATHLETIQ_RAW_PATH", str(tmp_path / "raw"))
     monkeypatch.setenv("ATHLETIQ_ARTIFACTS_PATH", str(tmp_path / "artifacts"))
-    # Fixture provider only has 2 games → train must fail with identifiable stage.
+    tiny = tmp_path / "tiny_fixtures"
+    tiny.mkdir()
+    (tiny / "teams.json").write_text(
+        (FIXTURES / "teams.json").read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    one_game = {
+        "response": [
+            {
+                "id": 1,
+                "date": "2023-10-24T23:30:00+00:00",
+                "status": "Finished",
+                "teams": {
+                    "home": {"id": 1, "name": "Boston Celtics"},
+                    "away": {"id": 2, "name": "Los Angeles Lakers"},
+                },
+                "scores": {"home": {"total": 110}, "away": {"total": 105}},
+            }
+        ]
+    }
+    (tiny / "games_2023.json").write_text(json.dumps(one_game), encoding="utf-8")
+    one_game["response"][0]["id"] = 2
+    one_game["response"][0]["date"] = "2024-10-22T23:30:00+00:00"
+    (tiny / "games_2024.json").write_text(json.dumps(one_game), encoding="utf-8")
+    # Two labeled games → train must fail with identifiable stage.
     code = pipeline_main(
         [
             "--provider",
             "fixture",
             "--fixtures-dir",
-            str(FIXTURES),
+            str(tiny),
             "--seasons",
             "2023",
             "2024",

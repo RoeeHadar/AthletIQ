@@ -19,6 +19,7 @@ Version: 0.9.0
 | Train / validation / test | Temporal partitions; val→selection; test→final once |
 | Baseline | Deterministic/reference predictor (not necessarily a fitted ML model) |
 | Raw landing | Immutable provider JSON on filesystem |
+| NBA Stats API | No-key live MVP provider at `api.server.nbaapi.com` (ADR-011 / CR-002); CI still uses fixtures |
 | Quality gate failure | Eval acceptance miss (≠ execution failure) |
 | Quality gate / attestation | Empirical ML acceptance (e.g. ML-005); not a flaky PR unit invariant |
 | Execution failure | Pipeline hard failure / non-zero exit |

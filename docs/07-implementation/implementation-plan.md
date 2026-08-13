@@ -163,7 +163,7 @@ IMP-001 bootstrap
 
 ### IMP-003 — Provider adapter and raw ingest
 
-- **Requirement IDs:** FR-001, CON-007, DR-001, SEC-001, ADR-002, ADR-006  
+- **Requirement IDs:** FR-001, CON-007, DR-001, SEC-001, ADR-011, ADR-006, CR-002  
 - **Architecture references:** data-architecture.md (raw zone); system-architecture.md §2–3  
 - **Design references:** ml-design.md (active history / prune too-old); error-handling.md (retries)  
 - **Dependencies:** IMP-001  
@@ -171,7 +171,7 @@ IMP-001 bootstrap
   - `src/athletiq/provider/`
   - `src/athletiq/ingest/`
   - `tests/fixtures/provider/`
-- **Implementation sequence notes:** API-Sports adapter behind interface; immutable raw JSON to volume (`teams.json`, `games_{season}.json`, `manifest.json`); exponential backoff + jitter, max 5, honor `Retry-After`; season window 2 Must / ≤3 Should; record fixtures for CI (no live calls in tests). **CR-001:** adapter fetches teams + games (team stats derived at load); no `players.json`. **Independent of IMP-002** (raw is filesystem, not Postgres) — may run in parallel after IMP-001.  
+- **Implementation sequence notes:** Live adapter is **NBA Stats API** (`--provider nba-stats`, no key; ADR-011 / CR-002). Keep FixtureProvider for CI/demo and ApiSportsProvider as unused fallback. Immutable raw JSON to volume (`teams.json`, `games_{season}.json`, `manifest.json`); exponential backoff + jitter, max 5, honor `Retry-After`; season window 2 Must / ≤3 Should; record fixtures for CI (no live calls in tests). **CR-001:** adapter fetches teams + games (team stats derived at load); no `players.json`. **Independent of IMP-002** (raw is filesystem, not Postgres) — may run in parallel after IMP-001.  
 - **Testing requirements:** TEST-003  
 - **Definition of Done:**
   - [x] Requirements satisfied  

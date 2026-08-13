@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 0.4.2
+Last Updated: 2026-08-14  
+Version: 0.4.3
 
 Append-only. Register an ID here **before** using it in any document. Do not reuse IDs.
 
@@ -42,7 +42,7 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 | CON-004 | CON | FastAPI prediction HTTP API (MVP default) | SRS.md | 2026-08-12 |
 | CON-005 | CON | GitHub Actions CI | SRS.md | 2026-08-12 |
 | CON-006 | CON | Linux pipeline orchestration script | SRS.md | 2026-08-12 |
-| CON-007 | CON | External NBA provider via adapter; API-Sports preferred | SRS.md | 2026-08-12 |
+| CON-007 | CON | External NBA provider via adapter; NBA Stats API preferred | SRS.md | 2026-08-14 |
 | CON-008 | CON | MVP model families: baseline + LR + XGBoost | SRS.md | 2026-08-12 |
 | ADR-001 | ADR | PostgreSQL as system of record | ADR-001-postgresql.md | 2026-08-12 |
 | ADR-002 | ADR | API-Sports NBA as MVP provider | ADR-002-api-sports-provider.md | 2026-08-12 |
@@ -90,6 +90,8 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 
 | ADR-010 | ADR | BIGINT / BIGSERIAL surrogate keys | ADR-010-bigint-surrogate-keys.md | 2026-08-13 |
 | CR-001 | CR | MVP persist/ingest team-level entities; player tables reserved | CR-001-mvp-team-stats-not-players.md | 2026-08-13 |
+| CR-002 | CR | Live NBA provider: no-key nbaapi.com (supersede ADR-002) | CR-002-nba-stats-api-provider.md | 2026-08-14 |
+| ADR-011 | ADR | NBA Stats API (api.server.nbaapi.com) as MVP live provider | ADR-011-nba-stats-api-provider.md | 2026-08-14 |
 
 ## Prefixes
 

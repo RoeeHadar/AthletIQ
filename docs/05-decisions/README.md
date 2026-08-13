@@ -2,15 +2,16 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.1.0
+Last Updated: 2026-08-14  
+Version: 1.1.1
 
 ## Binding index (MVP)
 
 | ADR | Title | Decision status |
 |---|---|---|
 | [ADR-001](ADR-001-postgresql.md) | PostgreSQL | Accepted |
-| [ADR-002](ADR-002-api-sports-provider.md) | API-Sports NBA | Accepted |
+| [ADR-002](ADR-002-api-sports-provider.md) | API-Sports NBA | **Superseded** by ADR-011 |
+| [ADR-011](ADR-011-nba-stats-api-provider.md) | NBA Stats API (no-key live) | Accepted |
 | [ADR-003](ADR-003-served-model-selection.md) | Validation select / test once | Accepted |
 | [ADR-004](ADR-004-artifact-storage.md) | Local artifacts | Accepted |
 | [ADR-005](ADR-005-training-as-batch.md) | Batch + Python orchestrator | Accepted |

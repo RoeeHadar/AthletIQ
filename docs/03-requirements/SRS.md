@@ -2,10 +2,10 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.4.1
+Last Updated: 2026-08-14  
+Version: 1.4.2
 
-> Gate 2 **Approved** (amended 1.4.0 / **CR-001**: MVP persist/ingest is team-level; player tables reserved).
+> Gate 2 **Approved** (amended 1.4.0 / **CR-001**: team-level persist; **CR-002**: live provider ADR-011).
 
 ## Sources
 
@@ -13,6 +13,7 @@ Version: 1.4.1
 - `docs/02-product/PRD.md` (Approved 1.0.4; CR-001)
 - Grill-Me requirements Q1–Q6 (accepted as recommended)
 - `docs/11-change-management/CR-001-mvp-team-stats-not-players.md` (Accepted)
+- `docs/11-change-management/CR-002-nba-stats-api-provider.md` (Accepted)
 
 ## Conventions
 
@@ -572,15 +573,15 @@ Cloud deploy/CD after image build: **out of MVP** (Grill-Me Q6). Future Consider
 - **Design refs:** `docs/05-decisions/ADR-005-training-as-batch.md`  
 - **Tests:** TEST-009  
 
-### CON-007 — External provider via adapter; API-Sports preferred
+### CON-007 — External provider via adapter; NBA Stats API preferred
 
-- **Description:** Ingestion shall use an adapter-facing external NBA provider. **Preferred** provider is API-Sports NBA (free-tier class); final binding and rationale shall be recorded in an ADR. Alternate adapters may be documented as fallbacks.
+- **Description:** Ingestion shall use an adapter-facing external NBA provider. **Preferred** live provider is the no-key NBA Stats API (`api.server.nbaapi.com`) per ADR-011 / CR-002. Alternate adapters (fixtures; unused API-Sports fallback) may exist.
 - **Priority:** Must  
-- **Source:** Charter; PRD provider abstraction  
-- **Acceptance Criteria:** Adapter interface exists; default config targets API-Sports unless ADR changes it; secrets via SEC-001.  
+- **Source:** Charter; PRD provider abstraction; CR-002  
+- **Acceptance Criteria:** Adapter interface exists; live CLI path `--provider nba-stats` needs no API key; CI uses fixtures (NFR-003); secrets via SEC-001 when a keyed adapter is used.  
 - **Dependencies:** FR-001, SEC-001  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
-- **Design refs:** `docs/05-decisions/ADR-002-api-sports-provider.md`  
+- **Design refs:** `docs/05-decisions/ADR-011-nba-stats-api-provider.md`  
 - **Tests:** TEST-003  
 
 ### CON-008 — MVP model families

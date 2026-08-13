@@ -2,15 +2,15 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.1
+Last Updated: 2026-08-14  
+Version: 1.0.2
 
 > Zones and lineage. System/deployment: `system-architecture.md`.
 
 ## Lifecycle
 
 ```text
-API-Sports → Adapter → Raw JSON (immutable FS) → Validate
+NBA Stats API → Adapter → Raw JSON (immutable FS) → Validate
   → Curated PostgreSQL (idempotent upserts)
   → Feature tables (single feature-builder implementation)
   → Train / Validation / Test partitions
@@ -50,4 +50,4 @@ Running the same pipeline twice against the same raw dataset must not create dup
 
 ## Related
 
-ADR-001, ADR-002, ADR-003, ADR-004, ADR-006, ADR-008, ADR-010; **CR-001**.
+ADR-001, ADR-011, ADR-003, ADR-004, ADR-006, ADR-008, ADR-010; **CR-001**, **CR-002**.

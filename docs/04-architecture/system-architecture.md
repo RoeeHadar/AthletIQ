@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.1
+Last Updated: 2026-08-14  
+Version: 1.0.2
 
 > Logical + deployment views. Data lifecycle: `data-architecture.md`. API: `api-architecture.md`.  
 > Sources: SRS v1.1+; architecture Grill-Me; owner reviews (2026-08-12).
@@ -25,7 +25,7 @@ Answers: *What systems interact with AthletIQ?*
 
 ```mermaid
 flowchart LR
-  Provider[API-Sports]
+  Provider[NBA Stats API]
   Dev[Developer / analyst]
   AthletIQ[AthletIQ system]
   PredAPI[Prediction API]
@@ -76,7 +76,7 @@ Source: `diagrams/deployment.mmd`.
 | Volume | raw | Immutable provider JSON |
 | Volume | artifacts | Models, metrics, lineage metadata, selection pin |
 | Host | `scripts/run_pipeline.sh` | Thin entry → Python CLI |
-| External | API-Sports, GitHub Actions | Provider; CI quality + image build |
+| External | NBA Stats API, GitHub Actions | Provider; CI quality + image build |
 
 ### ETL container vs logical components
 
@@ -95,7 +95,7 @@ Answers: *How does data move through the ML system?* (detail in `data-architectu
 
 ```mermaid
 flowchart TD
-  P[API-Sports] --> R[Raw JSON immutable]
+  P[NBA Stats API] --> R[Raw JSON immutable]
   R --> V[Validate]
   V -->|valid| C[(Curated PostgreSQL)]
   V -->|invalid| VR[Validation report / skip or fail per design]
@@ -161,7 +161,7 @@ flowchart TB
 
 Source: `diagrams/ci.mmd`.
 
-**NFR:** CI must **not** depend on availability, rate limits, or mutable live responses from API-Sports (fixtures/recorded payloads only).
+**NFR:** CI must **not** depend on availability, rate limits, or mutable live responses from the live NBA provider (fixtures/recorded payloads only).
 
 Local/scheduled pipeline may call the real provider; that path is outside default CI.
 
@@ -192,7 +192,8 @@ Single-node Compose. Scaling mechanisms deferred until a real requirement exists
 | ADR | Topic | Status |
 |---|---|---|
 | [ADR-001](../05-decisions/ADR-001-postgresql.md) | PostgreSQL | Accepted |
-| [ADR-002](../05-decisions/ADR-002-api-sports-provider.md) | API-Sports | Accepted |
+| [ADR-002](../05-decisions/ADR-002-api-sports-provider.md) | API-Sports | Superseded |
+| [ADR-011](../05-decisions/ADR-011-nba-stats-api-provider.md) | NBA Stats API | Accepted |
 | [ADR-003](../05-decisions/ADR-003-served-model-selection.md) | Val select / test once | Accepted |
 | [ADR-004](../05-decisions/ADR-004-artifact-storage.md) | Local artifacts | Accepted |
 | [ADR-005](../05-decisions/ADR-005-training-as-batch.md) | Batch + Python orchestrator | Accepted |

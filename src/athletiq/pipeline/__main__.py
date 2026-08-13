@@ -17,6 +17,7 @@ from athletiq.pipeline.orchestrator import (
 )
 from athletiq.provider.api_sports import ApiSportsProvider
 from athletiq.provider.fixture import FixtureProvider
+from athletiq.provider.nba_stats import NbaStatsApiProvider
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -26,9 +27,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--provider",
-        choices=("fixture", "api-sports"),
+        choices=("fixture", "nba-stats", "api-sports"),
         default="fixture",
-        help="Data source (default: fixture / offline)",
+        help="Data source (default: fixture / offline; live: nba-stats, no key)",
     )
     p.add_argument(
         "--fixtures-dir",
@@ -64,13 +65,29 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def default_fixtures_dir() -> Path:
+    """Locate recorded fixtures whether running from a checkout or an installed image.
+
+    `__file__` is repo-relative only for an editable/src layout. The Compose ETL
+    image installs the wheel into site-packages and copies fixtures to
+    `/app/tests/fixtures/provider` (WORKDIR `/app`).
+    """
+    candidates = (
+        Path.cwd() / "tests" / "fixtures" / "provider",
+        Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "provider",
+    )
+    for path in candidates:
+        if (path / "teams.json").is_file():
+            return path
+    return candidates[0]
+
+
 def _provider(args: argparse.Namespace, api_key: str | None):
     if args.provider == "fixture":
-        fixtures = args.fixtures_dir
-        if fixtures is None:
-            # Repo-relative default for local/CI offline runs.
-            fixtures = Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "provider"
+        fixtures = args.fixtures_dir if args.fixtures_dir is not None else default_fixtures_dir()
         return FixtureProvider(fixtures)
+    if args.provider == "nba-stats":
+        return NbaStatsApiProvider(seasons=args.seasons, season_depth=args.season_depth)
     if not api_key:
         raise PipelineError("cli", "API_SPORTS_KEY required for --provider api-sports")
     return ApiSportsProvider(api_key=api_key)

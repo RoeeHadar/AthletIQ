@@ -39,4 +39,4 @@ No training, provider download, dataset mutation, or per-request model selection
 
 ## CI note
 
-API integration tests use fixtures — not live API-Sports (NFR-003).
+API integration tests use fixtures — not the live NBA provider (NFR-003).

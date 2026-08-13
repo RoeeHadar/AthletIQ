@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.1
+Last Updated: 2026-08-14  
+Version: 1.0.2
 
 > Organizational / sponsorship / portfolio view. Product capabilities and users: `docs/02-product/PRD.md`.  
 > Deliberate **technical constraints** for the portfolio live here so the PRD can stay product-shaped.
@@ -51,7 +51,7 @@ Portfolio **must-demonstrate** technical constraints (intentional; to be minted 
 | HTTP prediction API | Demo-grade serving of predictions (**FastAPI** expected MVP realization unless ADR supersedes) |
 | CI on GitHub Actions | Path: lint → unit → integration → image build |
 | Linux orchestration script | `scripts/run_pipeline.sh`: env check, migrations, ETL, validation, logs, failure reporting |
-| External NBA data provider | Discovery selection: **API-Sports NBA** (free tier class); record final choice + rationale in an ADR; keep an adapter boundary so the provider can be replaced |
+| External NBA data provider | Discovery selected API-Sports; **CR-002 / ADR-011** binds live MVP ingest to no-key **NBA Stats API** (`api.server.nbaapi.com`) after signup dashboards were unreachable; keep an adapter boundary so the provider can be replaced |
 | ML MVP model families | Baseline + **logistic regression** + **XGBoost** on the same holdout (see PRD); NumPy-from-scratch NN is post-MVP stretch |
 
 Still open from discovery:
@@ -61,7 +61,7 @@ Still open from discovery:
 
 ## Known assumptions
 
-- API-Sports NBA free-tier quotas are sufficient for MVP historical depth of 2–3 seasons with careful pagination/caching. `[ASSUMPTION — needs confirmation]`
+- NBA Stats API pagination is sufficient for MVP historical depth of 2 completed seasons. Confirmed 2026-08-14: 2640 finished NBA games (2023: 1319, 2024: 1321); API `pageSize` effectively 50.
 - Solo maintenance indefinitely is acceptable for portfolio scope. Known (Grill-Me).
 
 ## Success criteria

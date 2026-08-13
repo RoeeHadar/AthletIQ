@@ -1,5 +1,5 @@
-# Implements: FR-001, CON-007, ADR-002
-"""Provider client interface (API-Sports behind adapter)."""
+# Implements: FR-001, CON-007, ADR-011
+"""Provider client interface (live NBA Stats API or fixtures behind adapter)."""
 
 from __future__ import annotations
 

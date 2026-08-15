@@ -2,7 +2,7 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
+Last Updated: 2026-08-16  
 Version: 1.1.1
 
 > Requirement-driven cases. **Canonical** req↔test map: `../03-requirements/traceability.md`.  
@@ -364,4 +364,4 @@ Status: Planned | Implemented | Passing
 
 - Exact ML-005 attestation fixture / `dataset_version` — choose at IMP-007; freeze before gate.  
 - Compose smoke on every PR vs nightly — devops CI doc.  
-- Remote GitHub Actions green — workflow defined; local verification does not claim remote green.
+- Remote GitHub Actions green — attested `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)).

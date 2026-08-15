@@ -75,7 +75,7 @@ ATTESTATION_NOT_CLOSED_BY_PYTEST = {
     "NFR-001": "clean-machine Compose path — attested 2026-08-14 (not pytest)",
     "DR-001": "two completed live NBA seasons — owner-reported local 2026-08-14 (not pytest; not PRD-ticked)",
     "ML-005": "frozen real holdout — owner-reported local 2026-08-14 (TEST-007 remains synthetic; not PRD-ticked)",
-    "OPS-001": "remote GitHub Actions green — attested 4a2f713 run 31753742525 (not pytest)",
+    "OPS-001": "remote GitHub Actions green — attested 491c5c0 run 31913410157 (not pytest)",
     "CON-005": "remote GitHub Actions green — same as OPS-001 (not pytest)",
 }
 

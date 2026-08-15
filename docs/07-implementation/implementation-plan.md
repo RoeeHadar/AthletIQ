@@ -2,11 +2,11 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
+Last Updated: 2026-08-16  
 Version: 1.1.1
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
-> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved** — Gate 6 coding may proceed (`gates.md` §22). IMP-001…012 **Done**. IMP-013–018 **In progress** (CR-004 local; CI/review DoD open).
+> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved** — Gate 6 coding may proceed (`gates.md` §22). IMP-001…012 **Done**. IMP-013–018 **In progress** (CR-004 **CI green** on `491c5c0`; code-review DoD still open).
 
 ## Upstream
 
@@ -428,8 +428,8 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
 
 ### IMP-014 — Fixture WNBA + players + synthetic odds ingest/load
 
@@ -454,8 +454,8 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
 
 ### IMP-015 — Feature version team_l5_l10_player_agg_v1
 
@@ -476,8 +476,8 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
 
 ### IMP-016 — Per-league train/select/publish
 
@@ -499,8 +499,8 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
 
 ### IMP-017 — API league pin + Market P
 
@@ -522,8 +522,8 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
 
 ### IMP-018 — Broadcast gamecast UI
 
@@ -546,5 +546,5 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
   - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** In progress (local pytest green; CI and code-review DoD open)
+  - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
+- **Status:** In progress (CI green `491c5c0`; code-review DoD open)

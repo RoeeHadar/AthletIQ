@@ -3,7 +3,7 @@
 ## Must never miss
 
 - Non-trivial implementation requires upstream docs **`Approved`** per permanent gates. **Before Gate 6 code:** Approved Design, **Implementation Plan**, and **Test Strategy** (prefer Test Plan) — Gate 7 *number* is verification closeout; Test Strategy must not stay Draft while coding (`docs/00-meta/gates.md` §22). Trivial fixes exempt. Enforced by `.cursor/rules/engineering-lifecycle.mdc`.
-- **Gates 0–5 + Gate 7 Approved; Gate 6 — IMP-001…012 Done; IMP-013…018 In progress (CR-004 local).** Never claim CI green from local pytest — remote attestation only. Last remote-green SHA `4a2f713` is **pre-CR-004**.
+- **Gates 0–5 + Gate 7 Approved; Gate 6 — IMP-001…012 Done; IMP-013…018 In progress (CR-004 CI green `491c5c0`; code-review DoD open).** Never claim CI green from local pytest — remote attestation only. Last remote-green SHA `491c5c0` (run 31913410157).
 - Never invent product facts, requirements, users, metrics, or architectural decisions. Invoke **Grill-Me** (`.cursor/skills/grill-me/`) before `[OPEN QUESTION]` / `[ASSUMPTION]` / guessing — placeholders only after Grill-Me cannot resolve.
 - **PRD vs Charter boundary:** PRD = product capabilities/users only; portfolio technical must-demonstrate constraints live in **Charter** and ADRs — do not re-lock them as PRD product features.
 - ADR files owned exclusively by `architecture-decisions`; other skills flag `[DECISION PENDING: see ADR-XXX]` and never author ADRs. `engineering-review` flags drift only — never authors primary content, never calls Grill-Me.

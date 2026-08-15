@@ -2,7 +2,7 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
+Last Updated: 2026-08-16  
 Version: 1.6.2
 
 ## Direction
@@ -22,7 +22,7 @@ Do **not** set Implementation from a passing test, or Verification from an IMP D
 | Implementation | IMP task Status + code (not pytest) | `Implemented` · `Partial` · `Not started` |
 | Verification | TEST plan Status; OPS-001/CON-005 remote is GitHub Actions | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Passing (remote)` · `Deferred (remote CI)` · `Planned` |
 
-IMP-001…012 **Done** is Gate 6 code complete for listed MVP modules. IMP-013–018 (CR-004) are **In progress**: listed modules exist locally; CI and code-review DoD boxes remain open. IMP-011 remote CI is recorded green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)) — that SHA is pre-CR-004.
+IMP-001…012 **Done** is Gate 6 code complete for listed MVP modules. IMP-013–018 (CR-004) are **In progress**: listed modules exist; **CI passed** on `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)); code-review DoD remains open. IMP-011 remote CI was previously green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
 
 **Partial** means the mapped IMP exists but the requirement’s product bar is not attested. DR-001 / ML-005 local live bars were owner-reported **2026-08-14** (not PRD-ticked; TEST-007 remains synthetic).
 

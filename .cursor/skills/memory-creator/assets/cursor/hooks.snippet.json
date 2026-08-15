@@ -1,0 +1,24 @@
+{
+  "comment": "Merge these into an existing .cursor/hooks.json. Do not replace unrelated hooks.",
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "node .cursor/hooks/memory-session-start.mjs",
+        "timeout": 10
+      }
+    ],
+    "preCompact": [
+      {
+        "command": "node .cursor/hooks/memory-precompact.mjs",
+        "timeout": 10
+      }
+    ],
+    "stop": [
+      {
+        "command": "node .cursor/hooks/memory-stop.mjs",
+        "timeout": 15,
+        "loop_limit": 2
+      }
+    ]
+  }
+}

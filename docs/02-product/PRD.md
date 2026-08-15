@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.4
+Last Updated: 2026-08-15  
+Version: 1.0.5
 
 > Product / user view. Sponsorship, portfolio objectives, and deliberate technical constraints: `docs/01-project/project-charter.md`.  
 > No implementation decisions belong here (specific vendors, container orchestrators, ML algorithms as mandated designs, table DDL, class structures). Those live in Charter constraints (portfolio must-demonstrate), ADRs, and design docs.
@@ -77,7 +77,7 @@ Binary and probability are the **same prediction task** (probability is the pres
 | Feature engineering from recent team stats **without temporal leakage** | Yes | Player-level ML features |
 | Train/evaluate a baseline **and** at least two ML approaches on the same holdout (Charter constrains which families; algorithms finalized in ML design/ADRs) | Yes | NumPy neural net from scratch (no PyTorch) |
 | Win/lose prediction only (binary + probability) | Yes | Score / spread |
-| HTTP prediction API (demo-grade) | Yes | Minimal prediction UI |
+| HTTP prediction API (demo-grade) + local same-origin UI (CR-003 / FR-015) | Yes | Further UI beyond lookup |
 | Reproducible containerized local deployment + pipeline orchestration | Yes | — |
 | Automated CI: lint → unit → integration → image build | Yes | Deploy/CD beyond image build — **future consideration**; GCP is a **candidate** host (ADR-007 Proposed), not an Accepted MVP decision |
 | Documented evaluation methodology and known limitations with predictions | Yes | — |
@@ -95,31 +95,31 @@ Binary and probability are the **same prediction task** (probability is the pres
 
 MVP is complete when all of the following are true:
 
-- [ ] Clean environment can execute documented setup
-- [ ] Historical NBA data is successfully ingested for the agreed season depth
-- [ ] ETL validation completes successfully and emits a reproducible validation report
-- [ ] Required relational data is persisted (teams, games, team statistics). Player tables may exist unused until a future CR.
-- [ ] Required SQL analytics execute successfully
-- [ ] Features can be generated without temporal leakage relative to prediction time
-- [ ] Baseline model is evaluated on the holdout set
-- [ ] Logistic regression is evaluated on the same holdout set
-- [ ] XGBoost is evaluated on the same holdout set
-- [ ] Evaluation results are reproducible from documented steps
-- [ ] Prediction API returns a valid binary + probability prediction for supported inputs
-- [ ] Predictions are accompanied by documented methodology and known limitations
-- [ ] Unit and integration tests pass
-- [ ] Container image build succeeds
-- [ ] GitHub Actions (or equivalent CI defined in devops docs) passes the agreed path
-- [ ] Documentation gates for the MVP slice are satisfied
-- [ ] No secrets are committed
+- [x] Clean environment can execute documented setup
+- [x] Historical NBA data is successfully ingested for the agreed season depth
+- [x] ETL validation completes successfully and emits a reproducible validation report
+- [x] Required relational data is persisted (teams, games, team statistics). Player tables may exist unused until a future CR.
+- [x] Required SQL analytics execute successfully
+- [x] Features can be generated without temporal leakage relative to prediction time
+- [x] Baseline model is evaluated on the holdout set
+- [x] Logistic regression is evaluated on the same holdout set
+- [x] XGBoost is evaluated on the same holdout set
+- [x] Evaluation results are reproducible from documented steps
+- [x] Prediction API returns a valid binary + probability prediction for supported inputs
+- [x] Predictions are accompanied by documented methodology and known limitations
+- [x] Unit and integration tests pass
+- [x] Container image build succeeds
+- [x] GitHub Actions (or equivalent CI defined in devops docs) passes the agreed path
+- [x] Documentation gates for the MVP slice are satisfied
+- [x] No secrets are committed
 
 ## Future scope
 
 - NumPy neural net from scratch (no PyTorch), after LR/XGBoost path works
 - Richer predictions (score / spread)
 - Optional second league adapter
-- Minimal prediction UI  
-Still **no** betting product. Architecture may **document** where production ML ops would plug in later without implementing them in MVP.
+- Minimal prediction UI — pulled via CR-003 / FR-015
+Still **no** betting product (reversal needs a CR). Architecture may **document** where production ML ops would plug in later without implementing them in MVP.
 
 ## Constraints (product-level)
 

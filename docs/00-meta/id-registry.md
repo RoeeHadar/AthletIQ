@@ -92,6 +92,8 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 | CR-001 | CR | MVP persist/ingest team-level entities; player tables reserved | CR-001-mvp-team-stats-not-players.md | 2026-08-13 |
 | CR-002 | CR | Live NBA provider: no-key nbaapi.com (supersede ADR-002) | CR-002-nba-stats-api-provider.md | 2026-08-14 |
 | ADR-011 | ADR | NBA Stats API (api.server.nbaapi.com) as MVP live provider | ADR-011-nba-stats-api-provider.md | 2026-08-14 |
+| CR-003 | CR | Pull FUTURE-004 minimal prediction UI (FastAPI static) | CR-003-minimal-prediction-ui.md | 2026-08-15 |
+| FR-015 | FR | Local same-origin prediction UI at GET / | SRS.md | 2026-08-15 |
 
 ## Prefixes
 

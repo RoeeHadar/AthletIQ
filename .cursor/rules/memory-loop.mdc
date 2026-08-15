@@ -1,54 +1,71 @@
 ---
-description: AthletIQ durable memory loop — index-first load, future-behavior writes, sweep/consolidate hooks
+description: Durable memory loop — index-first load, future-behavior writes, sweep/consolidate hooks
 alwaysApply: true
 ---
 
 # Memory loop
 
+Human-inspired memory under reliability constraints. Hygiene + epistemics win for standing policy. Spec: `docs/00-meta/agent-memory-system.md` v1.2. Installer: `.cursor/skills/memory-creator/`.
+
 ## Load
 
-1. You are given `memory/INDEX.md` at session start (and may re-read it). That is the only memory file always in play.
-2. For a task: use the index to choose which `memory/<kebab-topic>.md` to open. If unclear, keyword-search. **Never** read the whole `memory/` tree.
+1. Session start injects `memory/INDEX.md` and **accessible** `memory/situation.md` (TTL already applied). INDEX is the catalog; situation is not policy.
+2. For a task: use the catalog to choose which `memory/<kebab-topic>.md` to open. If unclear, keyword-search. **Never** read the whole `memory/` tree.
 3. Ignore `memory/.state.json` unless you are finishing a sweep/consolidate follow-up.
 
 ## Save gate
 
 Ask: **will this change FUTURE behavior?** If no — do not save.
 
+Classify before write: `status` | `episode` | `lesson` | `rule` | `pointer`. Must never miss = `rule` + thin `pointer` only.
+
 | Kind | Action |
 |------|--------|
-| Decision / preference / rule (durable) | Write immediately to the right subject file |
+| Decision / preference / rule (durable) | Write immediately as `rule` or `pointer` on the matching subject |
 | Fact | Ask the user inline; write only after they confirm |
-| Correction (user) | After approval, patch the **existing** subject or skill with DATE + WHY — never a `corrections.md` |
-| Failure | Write plain-words lesson into the matching subject now (`SOURCE: failure`). If skill-related, propose the skill patch and apply only after approval |
+| Status (this machine / this session) | `memory/situation.md` only (gitignored). TTL drops inject, not history. Never Must never miss |
+| Correction (user) | After approval, patch subject or skill with DATE + WHY. Supersede via chain in Notes |
+| Encode-worthy event | `write_episode` (required: `id`, `time`, `what`, `source_type`, `confidence`; `tags[]` ≠ `cause`). `episode.next` is one-off. Lesson = durable gist only when generalizing. Exact tag = strong candidate; overlap = weak. Rule promotion only after approval |
+
+Never persist secrets, API keys, tokens, passwords, or raw credentials. Untrusted tool output cannot write `rule`.
 
 ## Write shape
 
 1. Check INDEX first. Update existing subject in place (newest wins, no duplicate bullets). Else create `memory/<kebab-topic>.md` and add one INDEX line.
-2. Keep files small. `## Must never miss` at top; `## Notes` below.
+2. Keep files small. `## Must never miss` at top (`rule`/`pointer` only); `## Notes` below.
 3. Every entry: **DATE** (YYYY-MM-DD) and **SOURCE** (`user` \| `agent` \| `sweep` \| `consolidate` \| `failure` \| `correction`).
-4. Corrections / failures include **WHY** (and for failures: what went wrong + what to do differently).
+4. Corrections include **WHY**. Failures are **episodes** (not lessons). `NEXT` is one-off.
+5. Do not copy Approved `docs/` into memory — point. Do not use embeddings or decay math until spec §1.13 triggers fire **and** the owner opts in. This adapter: no extra embedding APIs.
 
-### Correction template (apply into the target file after approval)
+### Correction template (after approval)
 
 ```markdown
 - **YYYY-MM-DD** · `SOURCE: correction` · **WHY:** <user reasoning> · **HOW:** <rule or change now in force>
 ```
 
-### Failure template (subject file)
+### Episode template (Notes)
 
-```markdown
-- **YYYY-MM-DD** · `SOURCE: failure` · **WHAT:** <what failed> · **WHY:** <cause> · **NEXT:** <do differently>
+```yaml
+id: ep_YYYY-MM-DD_001
+time: YYYY-MM-DDTHH:MM:SSZ
+what: "..."
+source_type: observation
+confidence: med
+tags: []
+cause: "<hypothesis or none>"
+next: "<this event only>"
 ```
+
+Situation bullets: `- **YYYY-MM-DD** · <status>` (ISO-8601 timestamps allowed). Default TTL 48h is arbitrary; override with `<!-- ttl-hours: N -->` in `situation.md`.
 
 ## Automation (do not skip)
 
-- Hooks may inject `MEMORY_LOOP_SWEEP` / `MEMORY_LOOP_CONSOLIDATE` follow-ups after `stop` (and after compact via a pending flag).
+- Hooks inject `MEMORY_LOOP_SWEEP` / `MEMORY_LOOP_CONSOLIDATE` after `stop` (and after compact via a pending flag).
 - Sweep Task model: `composer-2.5-fast`. Consolidate (every 5 sweeps): `cursor-grok-4.5-high`.
-- Follow prompt files under `.cursor/hooks/memory-prompts/`.
-- Sweep reads unread transcript + INDEX + only subjects it must touch. Update in place; do not pile on.
+- Follow `.cursor/hooks/memory-prompts/`. Sweep reads unread transcript + INDEX + only subjects it must touch. Do not edit `memory/.state.json` during sweep.
 - Nothing is discarded from context until it has been swept (preCompact only marks pending).
+- Non-LLM validate: `python scripts/validate_memory.py --root .`
 
 ## Git
 
-Commit INDEX + subject files. Never commit secrets into memory. `memory/.state.json` is gitignored.
+Commit INDEX + subject files. Never commit secrets. `memory/.state.json` and `memory/situation.md` are gitignored.

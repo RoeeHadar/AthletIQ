@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AthletIQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+  <body>
+    <!--
+      THESIS: Lookup is a stats-desk query, not a betting board or a circular win meter.
+      OWN-WORLD: NBA.com/Stats craft — navy mast, red Q, white sheet, navy table head, Source Sans 3.
+      STORY: Enter a loaded game id; read home-win call, probability, pin, methodology, and limitations.
+      FIRST VIEWPORT: Navy header (AthletIQ + Health pill) / Game ID + Predict row / box-score table / two-col disclose.
+      FORM: Category-standard dashboard (canon); seed 94dede82; craft bar NBA.com/Stats; approved comp A.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <a class="skip" href="#game-id">Skip to game lookup</a>
+    <header class="mast">
+      <h1 class="mast__brand">AthletI<span class="mast__q">Q</span></h1>
+      <p class="mast__health" id="health" data-state="loading">
+        <span class="mast__dot" aria-hidden="true"></span>
+        <span id="health-label">Checking</span>
+      </p>
+    </header>
+
+    <main class="page">
+      <form id="lookup" class="card lookup" action="/v1/predict" method="get">
+        <label class="lookup__label" for="game-id">Game ID</label>
+        <input
+          id="game-id"
+          name="game_id"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="e.g. 48"
+          required
+        />
+        <button class="lookup__go" type="submit">Predict</button>
+      </form>
+      <p class="hint" id="pin-hint"></p>
+
+      <section class="card result" id="result" aria-live="polite">
+        <p class="empty" id="empty">
+          Enter a numeric <code>game_id</code> from the loaded seasons. Fixture demo: try <strong>48</strong>.
+        </p>
+      </section>
+
+      <section class="disclose" id="disclose">
+        <article class="disclose__col">
+          <h2>
+            <img class="medal" src="/static/medal-methodology.svg" alt="" width="32" height="32" />
+            Methodology
+          </h2>
+          <div id="methodology-body">
+            <p class="empty">Loading model disclosure…</p>
+          </div>
+        </article>
+        <article class="disclose__col">
+          <h2>
+            <img class="medal" src="/static/medal-limitations.svg" alt="" width="32" height="32" />
+            Limitations
+          </h2>
+          <div id="limitations-body">
+            <p class="empty">Loading limitations…</p>
+          </div>
+        </article>
+      </section>
+    </main>
+    <footer class="colophon">Local demo · GET /v1/health · /v1/model · /v1/predict · no auth</footer>
+    <script src="/static/app.js" type="module"></script>
+  </body>
+</html>

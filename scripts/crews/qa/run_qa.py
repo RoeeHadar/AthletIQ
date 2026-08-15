@@ -30,6 +30,7 @@ MUST_TO_TESTS: dict[str, list[str]] = {
     "FR-012": ["TEST-010"],
     "FR-013": ["TEST-004"],
     "FR-014": ["TEST-008", "TEST-014"],
+    "FR-015": ["TEST-008"],
     "DR-001": ["TEST-003", "TEST-004"],
     "DR-002": ["TEST-002", "TEST-004"],
     "DR-003": ["TEST-004"],
@@ -62,11 +63,11 @@ MUST_TO_TESTS: dict[str, list[str]] = {
 }
 
 ATTESTATION_NOT_CLOSED_BY_PYTEST = {
-    "NFR-001": "clean-machine Compose path (owner attestation)",
-    "DR-001": "two completed live NBA seasons",
-    "ML-005": "frozen real holdout vs domain-informed baseline",
-    "OPS-001": "remote GitHub Actions green",
-    "CON-005": "remote GitHub Actions green",
+    "NFR-001": "clean-machine Compose path — attested 2026-08-14 (not pytest)",
+    "DR-001": "two completed live NBA seasons — owner-reported local 2026-08-14 (not pytest; not PRD-ticked)",
+    "ML-005": "frozen real holdout — owner-reported local 2026-08-14 (TEST-007 remains synthetic; not PRD-ticked)",
+    "OPS-001": "remote GitHub Actions green — attested 4a2f713 run 31753742525 (not pytest)",
+    "CON-005": "remote GitHub Actions green — same as OPS-001 (not pytest)",
 }
 
 

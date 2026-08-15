@@ -2,10 +2,10 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.4.2
+Last Updated: 2026-08-15  
+Version: 1.4.4
 
-> Gate 2 **Approved** (amended 1.4.0 / **CR-001**: team-level persist; **CR-002**: live provider ADR-011).
+> Gate 2 **Approved** (amended 1.4.0 / **CR-001**: team-level persist; **CR-002**: live provider ADR-011; **CR-003**: local prediction UI).
 
 ## Sources
 
@@ -170,6 +170,18 @@ Post-MVP (NumPy NN, score/spread, second league, minimal UI, cloud deploy): **Co
 - **Design refs:** `docs/06-design/api-design.md`  
 - **Tests:** TEST-008, TEST-014  
 
+### FR-015 — Local prediction UI
+
+- **Description:** The demo API shall serve a same-origin English web UI at `GET /` that looks up a prediction by `game_id`, shows health and served-model disclosure, and does not require application auth.
+- **Rationale:** PRD FUTURE-004; owner manual check (CR-003).  
+- **Priority:** Should  
+- **Source:** CR-003; PRD post-MVP  
+- **Acceptance Criteria:** `GET /` returns HTML; UI calls `/v1/health`, `/v1/model`, `/v1/predict`; errors use API `error.code`; no betting/odds chrome.  
+- **Dependencies:** FR-009, FR-010, ADR-009  
+- **Architecture refs:** `docs/04-architecture/api-architecture.md`  
+- **Design refs:** `PRODUCT.md`; `.impeccable/mocks/comp-a-header-lookup.png`  
+- **Tests:** TEST-008  
+
 ### FR-010 — Methodology and limitations disclosure
 
 - **Description:** Predictions and evaluation outputs shall be accompanied by documented evaluation methodology and known limitations (model card or equivalent).
@@ -329,7 +341,7 @@ Post-MVP (NumPy NN, score/spread, second league, minimal UI, cloud deploy): **Co
 - **Dependencies:** FR-006, FR-007, FR-008, ML-004  
 - **Architecture refs:** `docs/04-architecture/system-architecture.md`  
 - **Design refs:** `docs/06-design/ml-design.md`  
-- **Tests:** TEST-007 (quality gate; synthetic until NBA attestation)  
+- **Tests:** TEST-007 (quality gate; CI synthetic). Local live NBA holdout owner-reported 2026-08-14 (`ml005=True`, pin `logistic_regression-v1`, test log loss 0.623) — not a PRD tick.  
 
 ### ML-006 — Baseline definitions
 
@@ -419,7 +431,7 @@ Post-MVP (NumPy NN, score/spread, second league, minimal UI, cloud deploy): **Co
 - **Rationale:** PRD reproducibility metric.  
 - **Priority:** Must  
 - **Source:** PRD  
-- **Acceptance Criteria:** Documented steps exist in root `README.md` (copy `.env.example`, `docker compose up -d --build`, canonical `--store postgres` fixture pipeline, `/v1/health` + `/v1/model`). Clean-machine success is **owner attestation or scripted smoke** — not TEST-013. TEST-013 covers training-repeatability only. Until owner attestation is recorded, the clean-machine slice is **Partial**.  
+- **Acceptance Criteria:** Documented steps exist in root `README.md` (copy `.env.example`, `docker compose up -d --build`, canonical `--store postgres` fixture pipeline, `/v1/health` + `/v1/model`). Clean-machine success is **owner attestation or scripted smoke** — not TEST-013. TEST-013 covers training-repeatability only. **Attested 2026-08-14:** clean clone of `main` at `4a2f713` (not the developer working tree); README fixture path; `GET /v1/health` `ok`; `GET /v1/model` `xgboost-v1`.  
 - **Dependencies:** FR-011, FR-012, FR-005–FR-008  
 - **Architecture refs:** `docs/04-architecture/system-architecture.md`  
 - **Design refs:** `docs/06-design/ml-design.md`  
@@ -604,7 +616,7 @@ Cloud deploy/CD after image build: **out of MVP** (Grill-Me Q6). Future Consider
 | FUTURE-001 | NumPy neural net from scratch (no PyTorch) |
 | FUTURE-002 | Score / spread predictions |
 | FUTURE-003 | Second league adapter |
-| FUTURE-004 | Minimal prediction UI |
+| FUTURE-004 | Minimal prediction UI — **pulled** via CR-003 / FR-015 |
 | FUTURE-005 | Deploy/CD beyond image build — platform TBD at Gate 8 (GCP was a candidate only; no binding ADR) |
 
 No requirement IDs minted for these until pulled into scope via CR.

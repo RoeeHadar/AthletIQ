@@ -1,0 +1,8 @@
+id: ep_YYYY-MM-DD_001
+time: YYYY-MM-DDTHH:MM:SSZ
+what: "<what happened — one event>"
+source_type: observation
+confidence: med
+tags: []
+cause: "<hypothesis or none>"
+next: "<one-off for this event only>"

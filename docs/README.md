@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 0.3.0
+Last Updated: 2026-08-14  
+Version: 0.3.1
 
 Living documentation for AthletIQ. Read this index first; do not duplicate content across docs — follow the source-of-truth rules in `00-meta/documentation-guide.md`.
 
@@ -13,7 +13,7 @@ Root overview + local Compose demo: [`../README.md`](../README.md).
 
 | Folder | Purpose |
 |---|---|
-| `00-meta/` | ID registry, glossary, documentation guide, [gates](00-meta/gates.md), [quality checks](00-meta/quality-checks.md) |
+| `00-meta/` | ID registry, glossary, documentation guide, [gates](00-meta/gates.md), [quality checks](00-meta/quality-checks.md), [agent memory spec](00-meta/agent-memory-system.md) (portable skill anchor, Approved; installer: `.cursor/skills/memory-creator/`) |
 | `01-project/` | Project Charter (sponsorship / boundaries) |
 | `02-product/` | PRD (product / user intent) |
 | `03-requirements/` | SRS + bidirectional traceability |

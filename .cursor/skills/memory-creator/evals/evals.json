@@ -1,0 +1,23 @@
+{
+  "skill_name": "memory-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add persistent agent memory to this new Python research-assistant repo. We use Cursor. I want agents to remember decisions across chats, not dump recaps into one notes file. Use the portable defaults.",
+      "expected_output": "Phase 0+1 Cursor markdown install: memory/INDEX.md, gitignored situation.md, always-on memory-loop rule, hook scripts merged (not replacing unrelated hooks), sweep/consolidate prompts, validator, no product-domain subjects, no embeddings.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Install agent memory for a LangGraph support bot. SQLite store, no IDE hooks. Don't use markdown files as the source of truth. Extra embedding APIs are not allowed.",
+      "expected_output": "generic-runtime adapter: MemoryStore mapped to SQLite tables (episodes/lessons/rules/pointers/status/links), lifecycle mapped to graph nodes, AGENTS.md or equivalent instructions, no Cursor hooks, no extra embedding APIs, no auto-promote-to-rule.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "We already have a memory/ folder of mixed meeting notes and copied wiki pages. Bring it up to the portable spec without deleting anything the team wrote. Host is Cursor.",
+      "expected_output": "In-place upgrade: INDEX from existing files, status moved out of durable policy, wiki copies replaced with pointers (originals parked in Notes if unconfirmed), encode-worthy events wrapped as episode YAML with required fields, validator run, no silent deletion of unmatched notes.",
+      "files": []
+    }
+  ]
+}

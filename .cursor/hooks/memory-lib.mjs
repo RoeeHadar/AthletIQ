@@ -21,6 +21,66 @@ export function indexPath(root) {
   return join(memoryDir(root), "INDEX.md");
 }
 
+export function situationPath(root) {
+  return join(memoryDir(root), "situation.md");
+}
+
+/** Adapter-tunable. Arbitrary until measured. TTL drops inject, not history. */
+export const SITUATION_TTL_MS = 48 * 60 * 60 * 1000;
+
+const TTL_HOURS = /<!--\s*ttl-hours:\s*(\d+)\s*-->/i;
+const BULLET_DATE = /^-\s+\*\*(\d{4}-\d{2}-\d{2}(?:T[\d:.]+Z)?)\*\*/;
+
+export function situationTtlMs(text, fallbackMs = SITUATION_TTL_MS) {
+  const m = text.match(TTL_HOURS);
+  if (!m) return fallbackMs;
+  const hours = Number(m[1]);
+  return Number.isFinite(hours) && hours > 0 ? hours * 3600 * 1000 : fallbackMs;
+}
+
+function bulletStampMs(raw) {
+  const iso = raw.includes("T") ? raw : `${raw}T00:00:00Z`;
+  const t = Date.parse(iso);
+  return Number.isFinite(t) ? t : null;
+}
+
+/**
+ * Keep preamble + bullets still inside TTL. Undated bullets still inject.
+ * Expired dated bullets are omitted from inject only.
+ */
+export function filterAccessibleSituation(text, nowMs = Date.now(), fallbackTtlMs = SITUATION_TTL_MS) {
+  if (!text || !text.trim()) return "";
+  const ttlMs = situationTtlMs(text, fallbackTtlMs);
+  const chunks = text.split(/(?=^- )/m);
+  const kept = [];
+  for (const chunk of chunks) {
+    if (!chunk.startsWith("- ")) {
+      kept.push(chunk);
+      continue;
+    }
+    const m = chunk.match(BULLET_DATE);
+    if (!m) {
+      kept.push(chunk);
+      continue;
+    }
+    const stamp = bulletStampMs(m[1]);
+    if (stamp == null || nowMs - stamp <= ttlMs) kept.push(chunk);
+  }
+  return kept.join("").trim();
+}
+
+export function readAccessibleSituation(root, nowMs = Date.now()) {
+  const path = situationPath(root);
+  if (!existsSync(path)) return "";
+  try {
+    const filtered = filterAccessibleSituation(readFileSync(path, "utf8"), nowMs);
+    if (!filtered || !/^- /m.test(filtered)) return "";
+    return filtered;
+  } catch {
+    return "";
+  }
+}
+
 export function statePath(root) {
   return join(memoryDir(root), ".state.json");
 }

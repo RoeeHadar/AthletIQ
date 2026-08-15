@@ -43,6 +43,9 @@ LIMITATIONS_TEXT = (
     "Temporal ~70/15/15 split; selection on validation log loss only (tie → LR); "
     "test set used once for ML-005. Team-level L5/L10 + season WR features only; "
     "cold start uses season-to-date when prior games < 5. "
+    "Live NBA pin logistic_regression-v1: sklearn lbfgs max_iter=500 emitted "
+    "ConvergenceWarning; reported test log loss is that fit, not full optimizer "
+    "convergence (config not changed after inspecting test metrics). "
     "Does not claim to accurately predict NBA games — see model card."
 )
 

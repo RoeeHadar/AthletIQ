@@ -1,5 +1,7 @@
 # Memory loop local state (counters / transcript cursors — not training data)
 memory/.state.json
+# Working-memory overflow (TTL situation board — clone-local, not team policy)
+memory/situation.md
 
 # Secrets and local env
 .env
@@ -27,3 +29,4 @@ artifacts/
 Thumbs.db
 .idea/
 .vscode/
+node_modules/

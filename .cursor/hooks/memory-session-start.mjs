@@ -1,4 +1,11 @@
-import { indexPath, projectRoot, readIndex, respond } from "./memory-lib.mjs";
+import {
+  indexPath,
+  projectRoot,
+  readAccessibleSituation,
+  readIndex,
+  respond,
+  situationPath,
+} from "./memory-lib.mjs";
 
 async function readStdin() {
   const chunks = [];
@@ -15,15 +22,31 @@ async function readStdin() {
 const payload = await readStdin();
 const root = projectRoot(payload);
 const index = readIndex(root);
+const situation = readAccessibleSituation(root);
+
+const parts = [
+  "## Memory index (always loaded — subject files on demand only)",
+  "",
+  `Source: \`${indexPath(root)}\``,
+  "",
+  "Rules: load INDEX only by default. Open a subject file only when the task clearly needs it. Never read the whole memory tree. Before saving anything durable, check this index first. Status belongs in situation.md, not durable policy.",
+  "",
+  index.trim(),
+];
+
+if (situation) {
+  parts.push(
+    "",
+    "## Accessible situation (working memory — not policy)",
+    "",
+    `Source: \`${situationPath(root)}\``,
+    "",
+    "TTL has already dropped expired bullets from this inject. Do not treat this as standing rules. Do not copy it into Must never miss.",
+    "",
+    situation,
+  );
+}
 
 respond({
-  additional_context: [
-    "## AthletIQ memory index (always loaded — subject files on demand only)",
-    "",
-    `Source: \`${indexPath(root)}\``,
-    "",
-    "Rules: load INDEX only by default. Open a subject file only when the task clearly needs it. Never read the whole memory/ tree. Before saving anything durable, check this index first.",
-    "",
-    index.trim(),
-  ].join("\n"),
+  additional_context: parts.join("\n"),
 });

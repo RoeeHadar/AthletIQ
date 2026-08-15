@@ -162,3 +162,16 @@ def test_no_auth_dependency_on_app(tmp_path: Path) -> None:
     client = _client(tmp_path)
     assert client.get("/v1/model").status_code == 200
     assert "Authorization" not in client.get("/v1/model").request.headers
+
+
+def test_demo_ui_index_is_html(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    res = client.get("/")
+    assert res.status_code == 200
+    assert "text/html" in res.headers.get("content-type", "")
+    assert "AthletI" in res.text
+    assert "Game ID" in res.text
+    assert "/v1/predict" in res.text
+    css = client.get("/static/app.css")
+    assert css.status_code == 200
+

@@ -45,7 +45,7 @@ Canonical names only (see `glossary.md`). **One primary `Level` per TEST suite.*
 1. **Requirement-driven** — every Must SRS id maps to ≥1 TEST via `traceability.md` (**canonical**).  
 2. **No live API-Sports in CI** (NFR-003) — recorded fixtures only.  
 3. **NFR-004 falsifiable** — docs/OpenAPI cite “no hard SLO” (TEST-008); no load suite.  
-4. **Training-repeatability is verified, not merely configured** — **TEST-013** runs identical inputs twice (features/splits/selection/metrics). That is **not** the NFR-001 clean-machine / Compose demo (documented in root README; owner attestation or later smoke; currently Partial). TEST-001 only proves seed/path knobs exist.  
+4. **Training-repeatability is verified, not merely configured** — **TEST-013** runs identical inputs twice (features/splits/selection/metrics). That is **not** the NFR-001 clean-machine / Compose demo (documented in root README; attested 2026-08-14 on a clean clone of `4a2f713`). TEST-001 only proves seed/path knobs exist.  
 5. **Train/serve consistency (ML-008)** — API preprocessing **conforms to the same `feature_version` / feature contract** as training. Do **not** require “same Python import” unless design later mandates a shared module (current design prefers shared module, but the *requirement* is contract equivalence).  
 6. **Artifact/API consistency** — published metadata, on-disk artifact, and API-loaded model agree (**TEST-014**); pin/`feature_version` mismatch fails clearly.  
 7. **Secrets** — falsifiable redaction (sentinel value), not “by convention.”  

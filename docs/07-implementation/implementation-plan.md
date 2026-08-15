@@ -2,7 +2,7 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
+Last Updated: 2026-08-14  
 Version: 1.0.2
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
@@ -42,7 +42,7 @@ src/athletiq/           # shared + batch pipeline package
   config/
   logging/
   db/
-  provider/             # API-Sports adapter
+  provider/             # Fixture + NBA Stats (ADR-011); unused ApiSports fallback
   ingest/
   validate/
   load/
@@ -133,8 +133,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (full workflow = IMP-011; local TEST-001 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (full workflow = IMP-011; local TEST-001 green)  
 - **Status:** Done
 
 ### IMP-002 — Database schema and migrations
@@ -157,8 +157,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (full workflow = IMP-011; contract tests green; live migrate skips without Postgres)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (full workflow = IMP-011; contract tests green; live migrate skips without Postgres)  
 - **Status:** Done
 
 ### IMP-003 — Provider adapter and raw ingest
@@ -181,8 +181,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (full workflow = IMP-011; unit TEST-003 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (full workflow = IMP-011; unit TEST-003 green)  
 - **Status:** Done
 
 ### IMP-004 — Validate, transform/load, validation report
@@ -205,8 +205,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (full workflow = IMP-011; TEST-004 green on in-memory store)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (full workflow = IMP-011; TEST-004 green on in-memory store)  
 - **Status:** Done
 
 ### IMP-005 — SQL analytics
@@ -227,8 +227,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-005 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-005 green)  
 - **Status:** Done
 
 ### IMP-006 — Feature engineering
@@ -249,8 +249,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-006 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-006 green)  
 - **Status:** Done
 
 ### IMP-007 — ML train / select / publish
@@ -272,8 +272,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-007 green; TEST-013/014 with later IMPs)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-007 green; TEST-013/014 with later IMPs)  
 - **Status:** Done
 
 ### IMP-008 — FastAPI prediction service
@@ -295,8 +295,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-008 green; TEST-014 with later IMPs)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-008 green; TEST-014 with later IMPs)  
 - **Status:** Done
 
 ### IMP-009 — Pipeline orchestration
@@ -318,8 +318,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-009 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-009 green)  
 - **Status:** Done
 
 ### IMP-010 — Docker Compose local deployment
@@ -342,8 +342,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-010 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-010 green)  
 - **Status:** Done
 
 ### IMP-011 — GitHub Actions CI
@@ -365,8 +365,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (workflow defined; green on remote when pushed)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (workflow defined; remote green on `4a2f713` — [31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525))  
 - **Status:** Done
 
 ### IMP-012 — Methodology and limitations disclosure
@@ -388,8 +388,8 @@ IMP-001 bootstrap
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed (IMP-011; TEST-012 green)  
+  - [x] Code review passed — 2026-08-14 lead MVP critique APPROVE with notes (`docs/00-meta/reviews/2026-08-14-lead-mvp-critique.md`); application source `4a2f713`  
+  - [x] CI passed (IMP-011; TEST-012 green)  
 - **Status:** Done
 
 ---

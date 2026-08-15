@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-15T01:03:00+03:00",
+  "title": "Design System: AthletIQ",
+  "extensions": {
+    "colorMeta": {
+      "navy": { "role": "primary", "displayName": "League Navy", "canonical": "oklch(39.0% 0.133 261.2)", "tonalRamp": ["#000729", "#001b56", "#143d88", "#3560ae", "#5785d6", "#7aaaff", "#a4ceff", "#d3f0ff"] },
+      "navy-ink": { "role": "neutral", "displayName": "Mast Ink", "canonical": "oklch(23.1% 0.062 260.8)", "tonalRamp": ["#040b19", "#12213b", "#2f4264", "#4f6487", "#7187ac", "#95acd3", "#bacff1", "#e2efff"] },
+      "red": { "role": "secondary", "displayName": "League Red", "canonical": "oklch(53.0% 0.207 22.3)", "tonalRamp": ["#2c0000", "#5c0000", "#920000", "#bd0025", "#e93d48", "#ff686c", "#ff9a98", "#ffd0cc"] },
+      "paper": { "role": "neutral", "displayName": "Cool Paper", "canonical": "oklch(93.7% 0.006 264.5)", "tonalRamp": ["#0a0b0d", "#202224", "#414245", "#616367", "#84868a", "#a9abae", "#ccced1", "#edeef1"] },
+      "white": { "role": "neutral", "displayName": "Sheet White", "canonical": "oklch(100.0% 0.000 89.9)", "tonalRamp": ["#0b0b0b", "#222222", "#424242", "#636363", "#868686", "#ababab", "#cecece", "#eeeeee"] },
+      "rule": { "role": "neutral", "displayName": "Hairline Rule", "canonical": "oklch(88.7% 0.012 259.8)", "tonalRamp": ["#090b0e", "#1f2227", "#3f4349", "#5f636a", "#82868e", "#a6abb3", "#caced5", "#eceff3"] },
+      "ink": { "role": "neutral", "displayName": "Desk Ink", "canonical": "oklch(19.9% 0.014 258.4)", "tonalRamp": ["#090b0e", "#1e2227", "#3e434a", "#5f646b", "#81878f", "#a6abb4", "#c9ced5", "#ebeff4"] },
+      "muted": { "role": "neutral", "displayName": "Quiet Slate", "canonical": "oklch(40.5% 0.035 256.6)", "tonalRamp": ["#060b13", "#182230", "#364355", "#576477", "#79879b", "#9dacc1", "#c2cfe1", "#e6effc"] },
+      "focus": { "role": "tertiary", "displayName": "Focus Blue", "canonical": "oklch(48.8% 0.217 264.4)", "tonalRamp": ["#01003c", "#020078", "#0427b3", "#2052dc", "#417aff", "#64a1ff", "#90c9ff", "#c6eeff"] },
+      "banner-wash": { "role": "neutral", "displayName": "Alert Wash", "canonical": "oklch(95.7% 0.019 9.3)", "tonalRamp": ["#0f090a", "#291f20", "#4c3e40", "#6d5f61", "#918284", "#b6a6a8", "#d8cacb", "#f5eced"] },
+      "input-stroke": { "role": "neutral", "displayName": "Field Stroke", "canonical": "oklch(66.7% 0.026 259.8)", "tonalRamp": ["#080b11", "#1b222d", "#3a4351", "#5b6473", "#7d8797", "#a1acbc", "#c5cedd", "#e9eff9"] },
+      "bar-track": { "role": "neutral", "displayName": "Track Mist", "canonical": "oklch(91.3% 0.017 256.3)", "tonalRamp": ["#090b0f", "#1d2229", "#3c434c", "#5d646d", "#808791", "#a4abb6", "#c8ced8", "#eaeff5"] },
+      "health-idle": { "role": "neutral", "displayName": "Pulse Idle", "canonical": "oklch(71.5% 0.045 260.4)", "tonalRamp": ["#060b16", "#172234", "#34435b", "#54647d", "#7787a2", "#9bacc8", "#c0cfe8", "#e5efff"] },
+      "health-ok": { "role": "neutral", "displayName": "Pulse OK", "canonical": "oklch(72.3% 0.192 149.6)", "tonalRamp": ["#001400", "#003200", "#005a00", "#007e13", "#00a43e", "#2ccb63", "#76eb92", "#bcffc9"] },
+      "health-down": { "role": "neutral", "displayName": "Pulse Down", "canonical": "oklch(71.1% 0.166 22.2)", "tonalRamp": ["#260000", "#520000", "#850013", "#ae2c35", "#d85456", "#ff7a7a", "#ffa7a3", "#ffd7d3"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "AthletIQ wordmark in the navy mast." },
+      "headline": { "displayName": "Headline", "purpose": "Uppercase Methodology / Limitations titles beside navy medals." },
+      "title": { "displayName": "Title", "purpose": "Title-case Game ID and Predict controls." },
+      "body": { "displayName": "Body", "purpose": "Page default and disclose prose." },
+      "label": { "displayName": "Label", "purpose": "Uppercase navy box-score column heads." }
+    },
+    "shadows": [
+      { "name": "sheet", "value": "0 2px 8px rgba(15, 23, 42, 0.14)", "purpose": "Single ambient lift under the white lookup and result sheets." }
+    ],
+    "breakpoints": [
+      { "name": "stack", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Title-case Predict control: navy fill, 6px corners, mast-ink hover.",
+      "html": "<button class=\"ds-btn-primary\" type=\"submit\">Predict</button>",
+      "css": ".ds-btn-primary { font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; font-weight: 700; line-height: 1; letter-spacing: 0; text-transform: none; color: #ffffff; background: #17408b; border: 0; border-radius: 6px; padding: 0.7rem 1.35rem; cursor: pointer; } .ds-btn-primary:hover, .ds-btn-primary:active { background: #0b1c3a; } .ds-btn-primary:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Game ID Input",
+      "kind": "input",
+      "refersTo": "input-game",
+      "description": "Numeric game_id field: white sheet, field stroke, 6px corners, 600 ink.",
+      "html": "<input class=\"ds-input-game\" id=\"game-id\" name=\"game_id\" inputmode=\"numeric\" placeholder=\"e.g. 48\" />",
+      "css": ".ds-input-game { box-sizing: border-box; width: 20rem; max-width: 100%; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; color: #12161c; border: 1px solid #8b95a5; border-radius: 6px; padding: 0.55rem 0.7rem; background: #ffffff; } .ds-input-game:hover { border-color: #8b95a5; } .ds-input-game:focus, .ds-input-game:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 1px; }"
+    },
+    {
+      "name": "Mast",
+      "kind": "nav",
+      "refersTo": "nav-mast",
+      "description": "Full-bleed navy header with AthletIQ (red Q) and the Health pill.",
+      "html": "<header class=\"ds-mast\"><h1 class=\"ds-mast__brand\">AthletI<span class=\"ds-mast__q\">Q</span></h1><p class=\"ds-mast__health\" data-state=\"ok\"><span class=\"ds-mast__dot\" aria-hidden=\"true\"></span>Health</p></header>",
+      "css": ".ds-mast { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.5rem; padding: 0 1.35rem; background: #17408b; color: #ffffff; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-mast__brand { margin: 0; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1; } .ds-mast__q { color: #c8102e; } .ds-mast__health { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.22rem 0.7rem 0.22rem 0.5rem; font-size: 0.875rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: #ffffff; background: transparent; border: 1px solid #fff; border-radius: 999px; } .ds-mast__dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #22c55e; } .ds-mast__health:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Health Chip",
+      "kind": "chip",
+      "refersTo": "chip-health",
+      "description": "Title-case Health pill on navy: white outline, labeled pulse, green only for ok.",
+      "html": "<p class=\"ds-chip-health\" data-state=\"ok\"><span class=\"ds-chip-health__dot\" aria-hidden=\"true\"></span>Health</p>",
+      "css": ".ds-chip-health { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.22rem 0.7rem 0.22rem 0.5rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: #ffffff; background: #17408b; border: 1px solid #fff; border-radius: 999px; } .ds-chip-health__dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #93a4c0; } .ds-chip-health[data-state=\"ok\"] .ds-chip-health__dot { background: #22c55e; } .ds-chip-health[data-state=\"down\"] .ds-chip-health__dot { background: #f87171; } .ds-chip-health:hover { border-color: #fff; } .ds-chip-health:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Sheet Card",
+      "kind": "card",
+      "refersTo": "card-sheet",
+      "description": "White lookup/result sheet: 6px corners, hairline rule, one ambient shadow.",
+      "html": "<div class=\"ds-card\"><label class=\"ds-card__label\">Game ID</label></div>",
+      "css": ".ds-card { background: #ffffff; border: 1px solid #d5dae2; border-radius: 6px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14); padding: 1.05rem 1.2rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #12161c; } .ds-card__label { font-size: 0.95rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: #0b1c3a; }"
+    },
+    {
+      "name": "Box-score Table",
+      "kind": "custom",
+      "refersTo": "table-head",
+      "description": "Navy uppercase heads, white cells, ink Yes/No — not a green win badge.",
+      "html": "<table class=\"ds-box\"><thead><tr><th>Home win</th><th>P(home win)</th><th>Model</th></tr></thead><tbody><tr><td class=\"ds-box__win\">Yes</td><td>62.4%</td><td>xgboost-v1</td></tr></tbody></table>",
+      "css": ".ds-box { width: 100%; border-collapse: collapse; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; color: #12161c; } .ds-box th, .ds-box td { text-align: left; padding: 0.65rem 0.8rem; vertical-align: middle; } .ds-box th { background: #17408b; color: #ffffff; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; } .ds-box th + th { border-left: 1px solid rgba(255, 255, 255, 0.85); } .ds-box td { border-bottom: 1px solid #d5dae2; background: #ffffff; } .ds-box tr:last-child td { border-bottom: 0; } .ds-box__win { font-weight: 700; color: #12161c; }"
+    },
+    {
+      "name": "Probability Bar",
+      "kind": "custom",
+      "refersTo": "card-sheet",
+      "description": "Linear P(home win): percent, mist track, navy fill, 100% cap. Never a ring.",
+      "html": "<div class=\"ds-bar\"><span>62.4%</span><span class=\"ds-bar__track\" aria-hidden=\"true\"><span class=\"ds-bar__fill\" style=\"width:62.4%\"></span></span><span class=\"ds-bar__cap\">100%</span></div>",
+      "css": ".ds-bar { display: flex; align-items: center; gap: 0.55rem; min-width: 11rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; color: #12161c; } .ds-bar__track { flex: 1; height: 0.5rem; background: #dbe3ee; position: relative; } .ds-bar__fill { display: block; height: 100%; background: #17408b; } .ds-bar__cap { font-size: 0.72rem; font-weight: 700; color: #3d4a5c; }"
+    },
+    {
+      "name": "Error Banner",
+      "kind": "custom",
+      "refersTo": "banner-error",
+      "description": "Alert-wash sheet, red stroke, uppercase API code, mast-ink recovery copy.",
+      "html": "<p class=\"ds-banner\" role=\"alert\"><strong>game_not_found</strong> That game_id is not in this database. Use an id from the loaded pipeline.</p>",
+      "css": ".ds-banner { margin: 0; padding: 0.7rem 0.8rem; border: 1px solid #c8102e; border-radius: 6px; color: #0b1c3a; background: #fdecee; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.45; } .ds-banner strong { display: block; color: #c8102e; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Disclose Title",
+      "kind": "custom",
+      "refersTo": "nav-mast",
+      "description": "Uppercase navy section title with a 32px navy circular medal, on paper not a card.",
+      "html": "<h2 class=\"ds-disclose-title\"><svg class=\"ds-medal\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" aria-hidden=\"true\"><circle cx=\"16\" cy=\"16\" r=\"16\" fill=\"#17408B\"/><rect x=\"7\" y=\"18\" width=\"4\" height=\"8\" fill=\"#fff\"/><rect x=\"14\" y=\"12\" width=\"4\" height=\"14\" fill=\"#fff\"/><rect x=\"21\" y=\"8\" width=\"4\" height=\"18\" fill=\"#fff\"/></svg>Methodology</h2>",
+      "css": ".ds-disclose-title { display: flex; align-items: center; gap: 0.55rem; margin: 0; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #17408b; } .ds-medal { width: 2rem; height: 2rem; flex: 0 0 auto; display: block; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The NBA.com/Stats Desk",
+    "overview": "AthletIQ is a local stats-desk query: enter a loaded `game_id`, read the home-win call, then read the pin, methodology, and limitations. The craft is NBA.com/Stats executed straight — navy mast, a single red Q in the AthletIQ wordmark, white sheets on cool gray paper, navy box-score heads, Source Sans 3. It is not a betting board, not a live odds rail, and not a circular win meter.\n\nDensity is compact and tabular. Interactive labels stay title case. The page is one centered desk column, not an app shell with side rails. Probability is a numeric percent plus a linear navy fill. The home-win call is the words Yes or No in desk ink. Health is a labeled pill on the mast; color never carries that state alone.\n\nThis is a category-standard sports-analytics dashboard. Copy is English and names real endpoints. Focus rings are visible. The prediction is a disclosed estimate, not a scoreboard celebration.",
+    "keyCharacteristics": [
+      "Full-bleed navy mast: AthletIQ with a red Q, white-outline Health pill",
+      "Cool gray paper field; exactly two white lifted sheets (lookup + result)",
+      "Source Sans 3 at 400 / 600 / 700; no second display face",
+      "Title-case Game ID, Predict, and Health; uppercase reserved for table heads, disclose titles, and error codes",
+      "Ink Yes/No; navy linear P(home win) bar; 32px navy circular medals on the paper, not on a third card"
+    ],
+    "rules": [
+      { "name": "The Red Q Rule", "body": "Red is the Q and fault chrome. It is never a win, probability, or health-success fill.", "section": "colors" },
+      { "name": "The Ink Call Rule", "body": "Home-win Yes/No is desk ink on a white cell. Never green, never red, never a filled badge.", "section": "colors" },
+      { "name": "The Title-Case Controls Rule", "body": "Game ID, Predict, and Health stay title case with no tracking. Uppercase is only for box-score heads, disclose section titles, and error codes.", "section": "typography" },
+      { "name": "The Desk Column Rule", "body": "One stats-desk column. No sidebar, no betting rail, no app-shell navigation beyond the mast.", "section": "layout" },
+      { "name": "The Two-Sheet Rule", "body": "Only the lookup row and the result sheet lift. Methodology and Limitations stay on the paper, not in a third card.", "section": "elevation" },
+      { "name": "The Soft Sheet Rule", "body": "6px on sheets and controls. The Health chip is the only pill. Probability is a sharp rectangular bar, never a circular meter.", "section": "shapes" },
+      { "name": "The Linear Probability Rule", "body": "P(home win) is a percent plus a navy fill in a cool rectangular track. No gauges, rings, or pie meters.", "section": "components" },
+      { "name": "The Medal Pair Rule", "body": "Methodology and Limitations are a paired heading-plus-medal on the paper. Do not promote them into cards or kickers.", "section": "components" }
+    ],
+    "dos": [
+      "Do keep the navy mast, red Q, Cool Paper field, and two white 6px sheets.",
+      "Do set Game ID, Predict, and Health in title case.",
+      "Do set Yes/No in Desk Ink and P(home win) as a linear navy bar.",
+      "Do show a 2px Focus Blue ring on keyboard focus.",
+      "Do pair disclose titles with the navy circular medals and leave those columns on the paper."
+    ],
+    "donts": [
+      "Don't color the home-win call green or red, or wrap it in a success/fail badge.",
+      "Don't use a circular win meter, gauge, or pie for probability.",
+      "Don't lift Methodology/Limitations into a third card or add a sidebar/odds rail.",
+      "Don't all-caps Game ID, Predict, or Health, or add eyebrow kickers above titles.",
+      "Don't introduce a second display face or a glyph-icon font.",
+      "Don't spread Pulse OK green beyond the Health dot."
+    ]
+  }
+}

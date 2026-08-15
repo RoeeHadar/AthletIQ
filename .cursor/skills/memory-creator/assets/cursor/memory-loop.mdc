@@ -1,0 +1,65 @@
+---
+description: Durable agent memory loop — index-first load, future-behavior writes, sweep/consolidate
+alwaysApply: true
+---
+
+# Memory loop
+
+Portable behavior: human-inspired memory under reliability constraints. Hygiene + epistemics win for standing policy.
+
+## Load
+
+1. You are given the memory catalog (`memory/INDEX.md` or equivalent) at session start (and may re-read it). That is the only memory file always in play.
+2. For a task: use the catalog to choose which subject to open. If unclear, keyword-search. **Never** read the whole memory tree.
+3. Ignore hook cursor files (e.g. `memory/.state.json`) unless you are finishing a sweep/consolidate follow-up.
+
+## Save gate
+
+Ask: **will this change FUTURE behavior?** If no — do not save.
+
+Classify before write: `status` | `episode` | `lesson` | `rule` | `pointer`. Durable policy = `rule` + thin `pointer` only.
+
+| Kind | Action |
+|------|--------|
+| Decision / preference / rule (durable) | Write immediately as `rule` or `pointer` on the matching subject |
+| Fact | Ask the user inline; write only after they confirm |
+| Status (this machine / this session) | Working backend only (`memory/situation.md` if using the markdown adapter). TTL drops inject, not history. Never durable policy |
+| Correction (user) | After approval, patch subject or skill with DATE + WHY. Supersede via chain in Notes |
+| Encode-worthy event | `write_episode` (required: time, what, source_type, confidence; tags[] ≠ cause). `episode.next` is one-off. Lesson = durable gist only when generalizing. Exact tag = strong candidate; overlap = weak. Rule promotion only after approval |
+
+## Write shape
+
+1. Check the catalog first. Update an existing subject in place (newest wins, no duplicate bullets). Else create `memory/<kebab-topic>.md` and add one catalog line.
+2. Keep files small. Durable policy at top (`rule`/`pointer` only); Notes below.
+3. Every entry: **DATE** (YYYY-MM-DD) and **SOURCE** (`user` \| `agent` \| `sweep` \| `consolidate` \| `failure` \| `correction`).
+4. Corrections / failures include **WHY**. Failures are **episodes**. `NEXT` is one-off.
+5. Do not copy the project's external source of truth into memory — point. Do not use embeddings or decay math until the install's triggers fire.
+
+### Correction template (after approval)
+
+```markdown
+- **YYYY-MM-DD** · `SOURCE: correction` · **WHY:** <user reasoning> · **HOW:** <rule or change now in force>
+```
+
+### Episode template (Notes)
+
+```yaml
+id: ep_YYYY-MM-DD_001
+time: YYYY-MM-DDTHH:MM:SSZ
+what: "..."
+source_type: observation
+confidence: med
+tags: []
+cause: "<hypothesis or none>"
+next: "<this event only>"
+```
+
+## Automation
+
+If this project wired hooks: follow sweep/consolidate prompts under `.cursor/hooks/memory-prompts/`. Sweep reads unread transcript + catalog + only subjects it must touch. Do not edit `memory/.state.json` during sweep. Nothing is discarded from context until it has been swept (compact only marks pending).
+
+If this project has no hooks: still apply the write gate at turn end; do not dump recap into durable policy.
+
+## Git
+
+Commit the catalog + subject files. Never commit secrets. Working state and hook cursor files are gitignored when Git is in use.

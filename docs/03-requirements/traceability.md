@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.5.1
+Last Updated: 2026-08-15  
+Version: 1.5.5
 
 ## Direction
 
@@ -20,11 +20,11 @@ Do **not** set Implementation from a passing test, or Verification from an IMP D
 |---|---|---|
 | Requirement | SRS / CR | `Active` · `Amended (CR-001)` |
 | Implementation | IMP task Status + code (not pytest) | `Implemented` · `Partial` · `Not started` |
-| Verification | TEST plan Status only | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Deferred (remote CI)` · `Planned` |
+| Verification | TEST plan Status; OPS-001/CON-005 remote is GitHub Actions | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Passing (remote)` · `Deferred (remote CI)` · `Planned` |
 
-IMP-001…012 **Done** is Gate 6 code complete for listed modules. It is **not** Gate 8/9 and **not** PRD MVP-complete. Code-review and remote-CI DoD boxes remain open.
+IMP-001…012 **Done** is Gate 6 code complete for listed modules. It is **not** Gate 8/9 and **not** PRD MVP-complete. Code-review DoD boxes remain open. IMP-011 remote CI is recorded green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
 
-**Partial** means the mapped IMP exists but the requirement’s product bar is not attested (example: DR-001 two completed live NBA seasons; ML-005 on a frozen real holdout).
+**Partial** means the mapped IMP exists but the requirement’s product bar is not attested. DR-001 / ML-005 local live bars were owner-reported **2026-08-14** (not PRD-ticked; TEST-007 remains synthetic).
 
 CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players` / `player_game_stats` are **reserved schema**, not a pipeline load outcome.
 
@@ -46,32 +46,33 @@ CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players
 | FR-012 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (static topology) |
 | FR-013 | data | error | IMP-004 | TEST-004 | Active | Implemented | Passing (in-memory) |
 | FR-014 | api | api | IMP-008 | TEST-008, TEST-014 | Active | Implemented | Passing (local) |
-| DR-001 | data | ml | IMP-003, IMP-004 | TEST-003, TEST-004 | Active | Partial | Passing (local) |
+| FR-015 | api | — | CR-003 | TEST-008 | Active | Implemented | Passing (local) |
+| DR-001 | data | ml | IMP-003, IMP-004 | TEST-003, TEST-004 | Active | Implemented | Passing (local) |
 | DR-002 | data | database | IMP-002, IMP-004 | TEST-002, TEST-004 | Amended (CR-001) | Implemented | Passing (local) / Passing (in-memory) |
 | DR-003 | data | database | IMP-004 | TEST-004 | Amended (CR-001) | Implemented | Passing (in-memory) |
 | ML-001 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
 | ML-002 | system | ml | IMP-006, IMP-007 | TEST-006, TEST-007 | Active | Implemented | Passing (local) / Passing (synthetic) |
 | ML-003 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ML-004 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
-| ML-005 | system | ml | IMP-007 | TEST-007 (quality gate) | Active | Partial | Passing (synthetic) |
+| ML-005 | system | ml | IMP-007 | TEST-007 (quality gate) | Active | Implemented | Passing (synthetic) |
 | ML-006 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ML-007 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ML-008 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
 | ML-009 | system | ml | IMP-007 | TEST-007, TEST-013, TEST-014 | Active | Implemented | Passing (synthetic) / Passing (local) |
 | SEC-001 | system | error | IMP-001, IMP-003 | TEST-001, TEST-003 | Active | Implemented | Passing (local) |
 | SEC-002 | system | — | IMP-001, IMP-011 | TEST-001, TEST-011 | Active | Implemented | Passing (local) |
-| NFR-001 | system | ml | IMP-001, IMP-007 | TEST-001, TEST-013 | Active | Partial | Passing (local) / Partial (clean-machine) |
+| NFR-001 | system | ml | IMP-001, IMP-007 | TEST-001, TEST-013 | Active | Implemented | Passing (local) |
 | NFR-002 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
 | NFR-003 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local) |
 | NFR-004 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
 | NFR-005 | data | database | IMP-002 | TEST-002 | Active | Implemented | Passing (local) |
-| OPS-001 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Deferred (remote CI) |
+| OPS-001 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Passing (remote) |
 | OPS-002 | system | error + logging | IMP-001, IMP-009 | TEST-001, TEST-009 | Active | Implemented | Passing (local) |
 | CON-001 | system | — | IMP-001, IMP-009 | TEST-001, TEST-009 | Active | Implemented | Passing (local) |
 | CON-002 | data | database | IMP-002 | TEST-002 | Active | Implemented | Passing (local) |
 | CON-003 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (local) |
 | CON-004 | api | api | IMP-008 | TEST-008 | Active | Implemented | Passing (local) |
-| CON-005 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Deferred (remote CI) |
+| CON-005 | system | ci-cd | IMP-011 | TEST-011 | Active | Implemented | Passing (local); Passing (remote) |
 | CON-006 | system | — | IMP-009 | TEST-009 | Active | Implemented | Passing (local) |
 | CON-007 | data | — | IMP-003 | TEST-003 | Active | Implemented | Passing (local) |
 | CON-008 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
@@ -93,10 +94,10 @@ Test files use TEST ids in `docs/08-testing/test-plan.md`. They must **not** car
 
 - Gate 7 test strategy/plan **Approved** — Gate 6 coding was allowed (§22).  
 - TEST-013 = training-repeatability on a controlled synthetic fixture — **not** clean-clone Compose.  
-- ML-005 verification is **synthetic** TEST-007 only — not an attested NBA holdout.  
-- NFR-001 Implementation **Partial**: documented Compose/Postgres workflow exists in root `README.md`; clean-machine **owner attestation is not recorded**. TEST-001/013 do not close the clean-machine AC.  
+- ML-005 verification **TEST-007** remains **synthetic**. Owner-reported **local live** holdout **2026-08-14** (working-tree Compose, not the NFR-001 clean clone): `ml005=True`, pin `logistic_regression-v1`, test log loss **0.623**. Not a PRD tick. Fixture clean-clone pin is `xgboost-v1` (48 games) — different dataset.  
+- NFR-001 Implementation **Implemented**; Verification **Passing (local)**. Clean-clone attestation **2026-08-14**: `git clone` of `https://github.com/RoeeHadar/AthletIQ` `main` at `4a2f713ed4cf58966358c6dd12b3ea77813d905a` into a directory outside the developer working tree; `cp .env.example .env`; `docker compose up -d --build`; `docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider fixture` (48 games, pin `xgboost-v1`); `GET /v1/health` `{"status":"ok"}`; `GET /v1/model` `xgboost-v1`. TEST-001/013 still do not close the clean-machine AC by themselves. No Compose e2e pytest added.  
 - FR-012 Verification = TEST-010 **Passing (static topology)** only. E2E demo is NFR-001.  
 - CON-003 remains Passing (local): Compose file defines the three services.  
-- DR-001 Implementation **Partial**: season window + fixtures exist; two completed **live** NBA seasons are not attested.  
-- Remote GitHub Actions green is **Deferred** (workflow defined; TEST-011 asserts DAG locally).  
+- DR-001 Implementation **Implemented**. TEST-003/004 remain fixture/in-memory. Owner-reported **local live** ingest **2026-08-14**: `--provider nba-stats --seasons 2023 2024`, **2640** games (2023: 1319, 2024: 1321). Not a PRD tick. Not the NFR-001 fixture stack.  
+- OPS-001 / CON-005 remote verification: GitHub Actions run [31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525) succeeded for a push to main at head SHA 4a2f713ed4cf58966358c6dd12b3ea77813d905a; lint and unit succeeded in parallel, integration succeeded after both, and image succeeded after integration. TEST-011 remains Passing (local) for static DAG/policy verification; NFR-003 remains fixture/offline-only.  
 - Postgres load path exists (`--store postgres`); TEST-004 status remains in-memory unless `TEST_DATABASE_URL` integration is recorded as Passing.

@@ -4,8 +4,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.0
+Last Updated: 2026-08-14  
+Version: 1.0.1
 
 > **FR-010** disclosure for evaluation and API consumers. Design source: `ml-design.md`.  
 > Runtime summary: `GET /v1/model` (`limitations_ref` → this document).
@@ -81,6 +81,8 @@ Publish: **joblib** model + **JSON** metadata + **selection pin** (`model_versio
 4. Provider free-tier coverage and schema drift can affect ingest completeness.
 5. Manual retrain only — no drift dashboards or automated retrain in MVP.
 6. Honest evaluation ≠ guaranteed predictive skill on future seasons.
+7. Live NBA holdout pin `logistic_regression-v1` was fit with sklearn `LogisticRegression(solver="lbfgs", max_iter=500)` on unscaled team L5/L10 features. The solver emitted `ConvergenceWarning`. Reported test log loss 0.623 is the output of that fit, not a claim of full optimizer convergence. Config was not changed after inspecting test metrics.
+8. Naive and domain-informed baselines emit hard 0/1 probabilities, so log loss sits near the clip epsilon when they are wrong. ML-005 is therefore easy relative to a calibrated baseline. This matches the locked Grill-Me baseline definitions — it is not a reason to change the baselines.
 
 ## Non-claims
 

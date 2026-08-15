@@ -10,10 +10,14 @@ You run once every 5 sweeps. Clean the memory store — do not pile on.
    - Merge duplicate bullets
    - Resolve conflicts with **newest wins** (by DATE; if tied, prefer `correction` / `user` over `agent` / `sweep`)
    - Squeeze related notes into one clean rule when possible
-   - Keep `## Must never miss` at the top and truly must-not-miss
+   - Keep `## Must never miss` at the top: `rule` / thin `pointer` only — move `status` out; leave `episode` / `lesson` in Notes (do not collapse episodes into lessons)
+   - Drop copies of Approved `docs/`; point instead
+   - Recurrence of lessons: exact tag = strong candidate; overlap = weak candidate; do not auto-promote lessons to rules
+   - Do not add embeddings, decay math, or fitted retrieval weights
+   - Do not persist secrets
 4. Update INDEX lines if a file’s one-line description drifted.
 5. Delete empty subject files and remove their INDEX lines.
-6. Do not use external APIs. Model work stays inside Cursor.
+6. Do not use extra paid APIs. Model work stays inside Cursor.
 
 ## Metadata
 

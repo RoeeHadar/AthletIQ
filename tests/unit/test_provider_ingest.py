@@ -80,7 +80,7 @@ def test_fixture_ingest_writes_immutable_batch(tmp_path: Path) -> None:
     assert (batch / "games_2023.json").is_file()
     assert (batch / "games_2024.json").is_file()
     teams = json.loads((batch / "teams.json").read_text(encoding="utf-8"))
-    assert len(teams["response"]) == 2
+    assert len(teams["response"]) == 4
 
     with pytest.raises(FileExistsError):
         write_raw_json(batch / "teams.json", {"response": []})
@@ -91,11 +91,23 @@ def test_fixture_ingest_writes_immutable_batch(tmp_path: Path) -> None:
 
 def test_ingest_skips_out_of_window_seasons(tmp_path: Path) -> None:
     class DualProvider:
+        def leagues(self):
+            return ["nba"]
+
         def fetch_teams(self):
             return [{"id": 1, "name": "X"}]
 
-        def fetch_games(self, season: int):
+        def fetch_games(self, season: int, league: str = "nba"):
             return [{"id": season, "season": season}]
+
+        def fetch_players(self):
+            return []
+
+        def fetch_player_game_stats(self):
+            return []
+
+        def fetch_odds_snapshots(self):
+            return []
 
     batch = ingest_raw(
         DualProvider(),

@@ -13,7 +13,12 @@ SCHEMA = ROOT / "database" / "schema.sql"
 MIGRATIONS = ROOT / "database" / "migrations"
 
 
-def test_schema_sql_uses_bigint_not_uuid() -> None:
+def test_migrations_dir_finds_sql() -> None:
+    from athletiq.db.migrate import migrations_dir
+
+    names = {p.name for p in migrations_dir().glob("*.sql")}
+    assert "001_initial.sql" in names
+    assert "002_cr004_league_players_odds.sql" in names
     text = SCHEMA.read_text(encoding="utf-8")
     assert "BIGSERIAL" in text
     assert "game_id" in text
@@ -32,6 +37,8 @@ def test_schema_declares_required_indexes() -> None:
         "idx_player_game_stats_player_game",
         "idx_player_game_stats_team_game",
         "idx_features_version_game",
+        "idx_games_league",
+        "idx_odds_snapshots_game",
     ):
         assert name in text
 
@@ -46,12 +53,14 @@ def test_schema_declares_dr002_tables() -> None:
         "player_game_stats",
         "team_game_stats",
         "features",
+        "odds_snapshots",
     ):
         assert f"CREATE TABLE IF NOT EXISTS {table}" in text
 
 
-def test_migration_001_exists() -> None:
+def test_migration_001_and_002_exist() -> None:
     assert (MIGRATIONS / "001_initial.sql").is_file()
+    assert (MIGRATIONS / "002_cr004_league_players_odds.sql").is_file()
 
 
 def _pg_url() -> str | None:
@@ -78,6 +87,7 @@ def test_apply_migrations_idempotent(database_url: str) -> None:
 
     first = apply_migrations(database_url)
     assert "001_initial" in first
+    assert "002_cr004_league_players_odds" in first
 
     second = apply_migrations(database_url)
     assert second == first
@@ -101,6 +111,7 @@ def test_apply_migrations_idempotent(database_url: str) -> None:
             "player_game_stats",
             "team_game_stats",
             "features",
+            "odds_snapshots",
             "model_registry",
             "schema_migrations",
         ):

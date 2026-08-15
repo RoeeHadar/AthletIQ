@@ -18,6 +18,9 @@ class ValidationReport:
     games_loaded: int = 0
     games_skipped: int = 0
     team_stats_upserted: int = 0
+    players_loaded: int = 0
+    player_stats_upserted: int = 0
+    odds_loaded: int = 0
     skip_reasons: list[str] = field(default_factory=list)
     required_seasons: list[int] = field(default_factory=list)
     batch_id: str | None = None

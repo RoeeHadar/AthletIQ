@@ -1,0 +1,676 @@
+{
+  "response": [
+    {
+      "game_id": 901,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-24T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 902,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-25T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 903,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-26T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 904,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-27T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 905,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-28T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 906,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-29T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 907,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-30T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 908,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-10-31T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 909,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-01T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 910,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-02T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 911,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-03T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 912,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-04T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 913,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-05T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 914,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-06T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 915,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-07T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 916,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-08T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 917,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-09T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 918,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-10T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 919,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-11T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 920,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-12T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 921,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-13T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 922,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-14T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 923,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-15T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 924,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2022-11-16T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1001,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-24T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1002,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-25T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1003,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-26T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1004,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-27T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1005,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-28T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1006,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-29T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1007,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-30T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1008,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-10-31T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1009,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-01T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1010,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-02T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1011,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-03T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1012,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-04T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1013,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-05T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1014,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-06T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1015,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-07T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1016,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-08T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1017,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-09T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1018,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-10T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1019,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-11T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1020,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-12T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1021,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-13T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1022,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-14T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 1023,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-15T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 1024,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2023-11-16T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2001,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-22T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2002,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-23T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2003,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-24T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2004,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-25T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2005,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-26T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2006,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-27T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2007,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-28T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2008,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-29T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2009,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-30T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2010,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-10-31T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2011,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-01T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2012,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-02T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2013,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-03T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2014,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-04T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2015,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-05T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2016,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-06T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2017,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-07T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2018,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-08T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2019,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-09T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2020,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-10T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2021,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-11T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2022,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-12T22:30:00+00:00",
+      "implied_p_home_win": 0.4976
+    },
+    {
+      "game_id": 2023,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-13T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 2024,
+      "league": "nba",
+      "source": "synthetic",
+      "captured_at": "2024-11-14T22:30:00+00:00",
+      "implied_p_home_win": 0.5038
+    },
+    {
+      "game_id": 3001,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-15T22:00:00+00:00",
+      "implied_p_home_win": 0.5021
+    },
+    {
+      "game_id": 3002,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-18T22:00:00+00:00",
+      "implied_p_home_win": 0.5015
+    },
+    {
+      "game_id": 3003,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-21T22:00:00+00:00",
+      "implied_p_home_win": 0.501
+    },
+    {
+      "game_id": 3004,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-24T22:00:00+00:00",
+      "implied_p_home_win": 0.5005
+    },
+    {
+      "game_id": 3005,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-27T22:00:00+00:00",
+      "implied_p_home_win": 0.5
+    },
+    {
+      "game_id": 3006,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-05-30T22:00:00+00:00",
+      "implied_p_home_win": 0.4995
+    },
+    {
+      "game_id": 3007,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-02T22:00:00+00:00",
+      "implied_p_home_win": 0.4991
+    },
+    {
+      "game_id": 3008,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-05T22:00:00+00:00",
+      "implied_p_home_win": 0.505
+    },
+    {
+      "game_id": 3009,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-08T22:00:00+00:00",
+      "implied_p_home_win": 0.5044
+    },
+    {
+      "game_id": 3010,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-11T22:00:00+00:00",
+      "implied_p_home_win": 0.5039
+    },
+    {
+      "game_id": 3011,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-14T22:00:00+00:00",
+      "implied_p_home_win": 0.5033
+    },
+    {
+      "game_id": 3012,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2023-06-17T22:00:00+00:00",
+      "implied_p_home_win": 0.4975
+    },
+    {
+      "game_id": 3101,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-15T22:00:00+00:00",
+      "implied_p_home_win": 0.5021
+    },
+    {
+      "game_id": 3102,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-18T22:00:00+00:00",
+      "implied_p_home_win": 0.5015
+    },
+    {
+      "game_id": 3103,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-21T22:00:00+00:00",
+      "implied_p_home_win": 0.501
+    },
+    {
+      "game_id": 3104,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-24T22:00:00+00:00",
+      "implied_p_home_win": 0.5005
+    },
+    {
+      "game_id": 3105,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-27T22:00:00+00:00",
+      "implied_p_home_win": 0.5
+    },
+    {
+      "game_id": 3106,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-05-30T22:00:00+00:00",
+      "implied_p_home_win": 0.4995
+    },
+    {
+      "game_id": 3107,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-02T22:00:00+00:00",
+      "implied_p_home_win": 0.4991
+    },
+    {
+      "game_id": 3108,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-05T22:00:00+00:00",
+      "implied_p_home_win": 0.505
+    },
+    {
+      "game_id": 3109,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-08T22:00:00+00:00",
+      "implied_p_home_win": 0.5044
+    },
+    {
+      "game_id": 3110,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-11T22:00:00+00:00",
+      "implied_p_home_win": 0.5039
+    },
+    {
+      "game_id": 3111,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-14T22:00:00+00:00",
+      "implied_p_home_win": 0.5033
+    },
+    {
+      "game_id": 3112,
+      "league": "wnba",
+      "source": "synthetic",
+      "captured_at": "2024-06-17T22:00:00+00:00",
+      "implied_p_home_win": 0.4975
+    }
+  ]
+}

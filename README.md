@@ -6,7 +6,7 @@ Sports analytics system for NBA historical data and pre-game win/lose prediction
 
 ## Local demo (Compose)
 
-Not MVP-complete: PRD acceptance is unchecked. **NFR-001** clean-clone Compose is attested (2026-08-14) on `4a2f713`. Fixture provider needs **no** `API_SPORTS_KEY`. Remote CI (fixture-only) is green on `4a2f713` ([run 31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
+Not a re-attest of NFR-001. **NFR-001** clean-clone Compose was attested (2026-08-14) on `4a2f713`. Fixture provider needs **no** `API_SPORTS_KEY`. Remote CI (fixture-only) was green on `4a2f713` ([run 31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)) — that SHA is **pre-CR-004**.
 
 **Prerequisites:** Docker Compose, Git.
 
@@ -16,10 +16,10 @@ docker compose up -d --build
 docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider fixture
 ```
 
-Live two completed seasons (no API key; ADR-011) — not the CI/demo path:
+Live three completed NBA seasons (no API key; ADR-011) — not the CI/demo path:
 
 ```text
-docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider nba-stats --seasons 2023 2024
+docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider nba-stats
 ```
 
 Then:
@@ -71,4 +71,4 @@ Project skills under `.cursor/skills/`: `project-discovery`, `requirements`, `ar
 
 ## Status
 
-**Gates 0–5 + Gate 7 Approved.** Gate 6: **IMP-001…012 Done**. Post-IMP remainings closed locally (Postgres adapters behind `--store` / `ATHLETIQ_STORE`, TEST-013/014 Passing). Remote CI (fixture-only) green on `4a2f713` ([run 31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)). **NFR-001** clean-clone Compose attested 2026-08-14. PRD acceptance unchecked.
+**Gates 0–5 + Gate 7 Approved.** Gate 6: **IMP-001…012 Done**; **IMP-013…018 In progress** (CR-004 local). Post-IMP remainings closed locally (Postgres adapters behind `--store` / `ATHLETIQ_STORE`, TEST-013/014 Passing). Remote CI (fixture-only) last attested green on `4a2f713` ([run 31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)). **NFR-001** clean-clone Compose attested 2026-08-14 on that SHA. PRD MVP acceptance ticked (v1.0.5); CR-004 is the post-MVP iteration.

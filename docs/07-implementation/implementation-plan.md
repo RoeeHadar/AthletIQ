@@ -2,27 +2,27 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.0.2
+Last Updated: 2026-08-15  
+Version: 1.1.1
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
-> **Gate 5 Approved.** **Gate 7 test strategy v1.0.0 + test plan v1.0.1 Approved** — Gate 6 coding may proceed (`gates.md` §22).
+> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved** — Gate 6 coding may proceed (`gates.md` §22). IMP-001…012 **Done**. IMP-013–018 **In progress** (CR-004 local; CI/review DoD open).
 
 ## Upstream
 
 | Artifact | Status |
 |---|---|
-| Charter 1.0.1, PRD 1.0.4, SRS v1.4.0, traceability 1.5.0 | Approved (CR-001) |
-| Architecture + ADRs 001–006, 008, 009, **010** | Approved / Accepted |
-| Design: ML / DB / API / errors + contracts | Approved (DB design **v1.0.2** cites ADR-010 + CR-001) |
-| Test strategy / test plan | **Approved** (strategy v1.0.0; plan **v1.0.1**) — Gate 6 coding allowed (§22) |
+| Charter 1.0.1, PRD 1.1.0, SRS v1.5.0, traceability 1.6.1 | Approved (CR-004) |
+| Architecture + ADRs 001–006, 008–013 | Approved / Accepted (ADR-002 superseded; ADR-007 Proposed) |
+| Design: ML / DB / API / errors + contracts | Approved (CR-004) |
+| Test strategy / test plan | **Approved** (strategy v1.1.0; plan **v1.1.1**) — Gate 6 coding allowed (§22) |
 | ADR-007 GCP | Proposed / non-binding — **out of MVP scope** |
 
 ## Deliberate skips (not IMP-scoped)
 
 ### Out of scope for MVP
 
-- Post-MVP product: NumPy NN, score/spread, second league, UI, player-level features, automated retrain, drift dashboards  
+- Post-MVP remaining: NumPy NN, score/spread, live WNBA HTTP, live odds, automated retrain, drift dashboards, Comp B/C  
 - Public auth / internet-safe bind (MVP keeps ADR-009 no-auth demo)  
 - Cloud deploy / GCP (ADR-007 Proposed only)
 
@@ -401,4 +401,150 @@ IMP-001 bootstrap
 
 ## Post-MVP backlog (not minted)
 
-NumPy NN; score/spread; second league; UI; GCP when Gate 8 designed.
+NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
+
+---
+
+## CR-004 tasks
+
+### IMP-013 — Schema: league/sport, players loadable, odds_snapshots
+
+- **Requirement IDs:** FR-002, DR-002, DR-004, NFR-005, CON-002, ADR-010, ADR-012  
+- **Architecture references:** data-architecture.md  
+- **Design references:** database-design.md; `database/schema.sql`  
+- **Dependencies:** IMP-002  
+- **Files/modules affected:**
+  - `database/schema.sql`
+  - `database/migrations/002_cr004_league_players_odds.sql`
+  - `src/athletiq/db/`
+- **Implementation sequence notes:** Forward-only 002: add `sport`/`league`; composite unique `(league, provider_*_id)`; `odds_snapshots`; indexes. Existing rows default `nba` / `basketball`.  
+- **Testing requirements:** TEST-002, TEST-015  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)
+
+### IMP-014 — Fixture WNBA + players + synthetic odds ingest/load
+
+- **Requirement IDs:** FR-001, FR-016, FR-017, FR-018, DR-001, DR-003, CON-007, ADR-006, ADR-012  
+- **Architecture references:** data-architecture.md  
+- **Design references:** error-handling.md  
+- **Dependencies:** IMP-013, IMP-003, IMP-004  
+- **Files/modules affected:**
+  - `src/athletiq/provider/`
+  - `src/athletiq/ingest/`
+  - `src/athletiq/validate/`
+  - `src/athletiq/load/`
+  - `tests/fixtures/provider/`
+- **Implementation sequence notes:** Extend Protocol with optional player/odds fetches (nba-stats returns empty). Fixture files: NBA 2022+2023+2024, WNBA overlapping, `players.json`, `player_game_stats.json`, `odds_snapshots.json`. Default `--season-depth 3`. Live nba-stats unchanged except depth.  
+- **Testing requirements:** TEST-003, TEST-004, TEST-015, TEST-016, TEST-017  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)
+
+### IMP-015 — Feature version team_l5_l10_player_agg_v1
+
+- **Requirement IDs:** FR-004, ML-001, ML-008, ML-011, ADR-008  
+- **Architecture references:** data-architecture.md  
+- **Design references:** ml-design.md  
+- **Dependencies:** IMP-014, IMP-006  
+- **Files/modules affected:**
+  - `src/athletiq/features/`
+- **Implementation sequence notes:** Keep team L5/L10 keys; append home/away top5 L5 pts/minutes. Leakage tests include player timestamps.  
+- **Testing requirements:** TEST-006, TEST-016  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)
+
+### IMP-016 — Per-league train/select/publish
+
+- **Requirement IDs:** FR-005–FR-008, ML-003, ML-005, ML-007, ML-009, ML-010, CON-008, ADR-003, ADR-013  
+- **Architecture references:** system-architecture.md  
+- **Design references:** ml-design.md  
+- **Dependencies:** IMP-015, IMP-007  
+- **Files/modules affected:**
+  - `src/athletiq/ml/`
+  - `src/athletiq/pipeline/`
+- **Implementation sequence notes:** Split by `league`; publish `nba-*` and `wnba-*` artifacts; `selected_pin.json` v2 `pins` map with legacy flat fallback = nba.  
+- **Testing requirements:** TEST-007, TEST-013, TEST-018  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)
+
+### IMP-017 — API league pin + Market P
+
+- **Requirement IDs:** FR-009, FR-014, FR-018, FR-019, CON-004, CON-009, ADR-008, ADR-012, ADR-013  
+- **Architecture references:** api-architecture.md  
+- **Design references:** api-design.md; `api/openapi.yaml`  
+- **Dependencies:** IMP-016, IMP-008  
+- **Files/modules affected:**
+  - `api/app/`
+  - `api/openapi.yaml`
+- **Implementation sequence notes:** Load pin by game.league; add `league`, `market_p_home_win`, `market_source`; `/v1/model?league=`.  
+- **Testing requirements:** TEST-008, TEST-014, TEST-017, TEST-018  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)
+
+### IMP-018 — Broadcast gamecast UI
+
+- **Requirement IDs:** FR-015, FR-018, FR-019, FR-020, CON-009  
+- **Architecture references:** api-architecture.md  
+- **Design references:** PRODUCT.md; `.impeccable/mocks/gamecast-comp-a-horizontal-split.png`  
+- **Dependencies:** IMP-017, CR-003 static surface  
+- **Files/modules affected:**
+  - `api/static/`
+  - `PRODUCT.md`
+  - `DESIGN.md`
+- **Implementation sequence notes:** Impeccable replacement world (broadcast WP gamecast, Comp A horizontal split). Producer bar + dormant/live split + synthetic Market P + chyrons. Predict team identity (FR-020). No book chrome. Same `GET /`.  
+- **Testing requirements:** TEST-019  
+- **Definition of Done:**
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** In progress (local pytest green; CI and code-review DoD open)

@@ -1,4 +1,4 @@
-# Implements: FR-009, FR-014, ADR-008, ADR-001
+# Implements: FR-009, FR-014, FR-020, ADR-008, ADR-001
 """Postgres-backed GameRepo / FeatureRepo — persistence adapters only."""
 
 from __future__ import annotations
@@ -28,8 +28,13 @@ class PostgresGameRepo:
     def get_game(self, game_id: int) -> dict[str, Any] | None:
         row = self._conn.execute(
             """
-            SELECT game_id, home_team_id, away_team_id, provider_game_id
-            FROM games WHERE game_id = %s
+            SELECT g.game_id, g.home_team_id, g.away_team_id, g.provider_game_id, g.league,
+                   ht.name AS home_team_name, ht.abbreviation AS home_team_abbreviation,
+                   at.name AS away_team_name, at.abbreviation AS away_team_abbreviation
+            FROM games g
+            LEFT JOIN teams ht ON ht.team_id = g.home_team_id
+            LEFT JOIN teams at ON at.team_id = g.away_team_id
+            WHERE g.game_id = %s
             """,
             (game_id,),
         ).fetchone()
@@ -40,7 +45,27 @@ class PostgresGameRepo:
             "home_team_id": int(row["home_team_id"]),
             "away_team_id": int(row["away_team_id"]),
             "provider_game_id": str(row["provider_game_id"]),
+            "league": str(row.get("league") or "nba"),
+            "home_team_name": row.get("home_team_name"),
+            "home_team_abbreviation": row.get("home_team_abbreviation"),
+            "away_team_name": row.get("away_team_name"),
+            "away_team_abbreviation": row.get("away_team_abbreviation"),
         }
+
+    def latest_synthetic_odds(self, game_id: int) -> float | None:
+        row = self._conn.execute(
+            """
+            SELECT implied_p_home_win
+            FROM odds_snapshots
+            WHERE game_id = %s AND source = 'synthetic'
+            ORDER BY captured_at DESC
+            LIMIT 1
+            """,
+            (game_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        return float(row["implied_p_home_win"])
 
     def resolve_provider_game_id(self, provider_game_id: str) -> int | None:
         row = self._conn.execute(

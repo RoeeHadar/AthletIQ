@@ -3,36 +3,62 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AthletIQ</title>
+    <title>AthletIQ — Game lookup</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/app.css" />
+    <link rel="stylesheet" href="/static/app.css?v=gamecast" />
   </head>
   <body>
     <!--
-      THESIS: Lookup is a stats-desk query, not a betting board or a circular win meter.
-      OWN-WORLD: NBA.com/Stats craft — navy mast, red Q, white sheet, navy table head, Source Sans 3.
-      STORY: Enter a loaded game id; read home-win call, probability, pin, methodology, and limitations.
-      FIRST VIEWPORT: Navy header (AthletIQ + Health pill) / Game ID + Predict row / box-score table / two-col disclose.
-      FORM: Category-standard dashboard (canon); seed 94dede82; craft bar NBA.com/Stats; approved comp A.
+      THESIS: A powered-on broadcast win-probability graphic, not an empty stats desk or a scorebug.
+      OWN-WORLD: Matte charcoal field, Home ice-cyan / Away amber plates, Barlow Condensed gothic, hard edges, producer bar, legal chyrons.
+      STORY: Pick NBA or WNBA, enter a loaded game_id, TAKE, read the Home/Away split of model P vs implied 1−P, labeled synthetic Market P, pin, methodology, limitations.
+      FIRST VIEWPORT: Full-bleed producer bar (AthletIQ, league, Health, pin, Game ID, TAKE) / giant horizontal split / market ribbon / two chyron columns.
+      FORM: Broadcast gamecast (user-pinned); Comp A horizontal split; seed 29c1a33a (degraded roll; pin beat assigned direction).
       FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
     -->
     <a class="skip" href="#game-id">Skip to game lookup</a>
-    <header class="mast">
-      <h1 class="mast__brand">AthletI<span class="mast__q">Q</span></h1>
-      <p class="mast__health" id="health" data-state="loading">
-        <span class="mast__dot" aria-hidden="true"></span>
-        <span id="health-label">Checking</span>
-      </p>
-    </header>
-
-    <main class="page">
-      <form id="lookup" class="card lookup" action="/v1/predict" method="get">
-        <label class="lookup__label" for="game-id">Game ID</label>
+    <header class="producer">
+      <p class="producer__brand">AthletIQ</p>
+      <div class="producer__tools">
+        <select id="league" name="league" class="visually-hidden" tabindex="-1" aria-hidden="true">
+          <option value="nba" selected>NBA</option>
+          <option value="wnba">WNBA</option>
+        </select>
+        <div class="seg" role="group" aria-label="League">
+          <button type="button" class="seg__btn" data-league="nba" aria-pressed="true">NBA</button>
+          <button type="button" class="seg__btn" data-league="wnba" aria-pressed="false">WNBA</button>
+        </div>
+        <p class="producer__health" id="health" data-state="loading">
+          <svg class="producer__wave" viewBox="0 0 24 12" width="24" height="12" aria-hidden="true">
+            <path
+              d="M1 6h3l2-4 3 8 2-4h4l2 3 2-3h4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linejoin="round"
+              stroke-linecap="square"
+            />
+          </svg>
+          <span id="health-label">Health</span>
+        </p>
+        <svg class="producer__bug" viewBox="0 0 16 20" width="14" height="18" aria-hidden="true">
+          <path
+            d="M8 1.5c-3.1 0-5.6 2.4-5.6 5.4 0 4 5.6 11.1 5.6 11.1s5.6-7.1 5.6-11.1c0-3-2.5-5.4-5.6-5.4z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+          />
+          <circle cx="8" cy="6.8" r="1.7" fill="currentColor" />
+        </svg>
+        <p class="producer__pin" id="pin-hint"></p>
+      </div>
+      <form id="lookup" class="producer__lookup" action="/v1/predict" method="get">
+        <label class="producer__gid" for="game-id">Game ID</label>
         <input
           id="game-id"
           name="game_id"
@@ -41,31 +67,52 @@
           placeholder="e.g. 48"
           required
         />
-        <button class="lookup__go" type="submit">Predict</button>
+        <button class="producer__take lookup__go" type="submit" aria-label="Predict">TAKE</button>
       </form>
-      <p class="hint" id="pin-hint"></p>
+    </header>
 
-      <section class="card result" id="result" aria-live="polite">
-        <p class="empty" id="empty">
-          Enter a numeric <code>game_id</code> from the loaded seasons. Fixture demo: try <strong>48</strong>.
-        </p>
+    <main class="stage">
+      <p class="banner" id="banner" hidden role="alert"></p>
+      <section
+        class="split"
+        id="split"
+        data-state="idle"
+        aria-live="polite"
+        aria-label="Home win probability split. Idle. Enter a game id."
+      >
+        <div class="split__home" id="split-home">
+          <p class="split__abbr" id="home-abbr">HOME</p>
+          <p class="split__role">Home</p>
+          <p class="split__pct" id="home-pct">—</p>
+        </div>
+        <div class="split__away" id="split-away">
+          <p class="split__abbr" id="away-abbr">AWAY</p>
+          <p class="split__role">Away</p>
+          <p class="split__pct" id="away-pct">—</p>
+          <p class="split__implied">Away implied</p>
+        </div>
       </section>
-
+      <section class="market" id="market" data-state="idle">
+        <p class="market__label">Market P · Synthetic · not a book</p>
+        <div class="market__echo" aria-hidden="true">
+          <span class="market__home" id="market-home"></span>
+          <span class="market__away" id="market-away"></span>
+        </div>
+        <p class="market__pct" id="market-pct">—</p>
+      </section>
+      <p class="idle-hint" id="idle-hint">
+        Enter a numeric <code>game_id</code> from the loaded seasons. Fixture NBA demo uses
+        <button type="button" class="idle-hint__try" data-fill="48">48</button>.
+      </p>
       <section class="disclose" id="disclose">
         <article class="disclose__col">
-          <h2>
-            <img class="medal" src="/static/medal-methodology.svg" alt="" width="32" height="32" />
-            Methodology
-          </h2>
+          <h2>Methodology</h2>
           <div id="methodology-body">
             <p class="empty">Loading model disclosure…</p>
           </div>
         </article>
         <article class="disclose__col">
-          <h2>
-            <img class="medal" src="/static/medal-limitations.svg" alt="" width="32" height="32" />
-            Limitations
-          </h2>
+          <h2>Limitations</h2>
           <div id="limitations-body">
             <p class="empty">Loading limitations…</p>
           </div>
@@ -73,6 +120,6 @@
       </section>
     </main>
     <footer class="colophon">Local demo · GET /v1/health · /v1/model · /v1/predict · no auth</footer>
-    <script src="/static/app.js" type="module"></script>
+    <script src="/static/app.js?v=gamecast" type="module"></script>
   </body>
 </html>

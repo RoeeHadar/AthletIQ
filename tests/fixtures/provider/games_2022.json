@@ -1,0 +1,604 @@
+{
+  "response": [
+    {
+      "id": 901,
+      "date": "2022-10-24T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 902,
+      "date": "2022-10-25T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 903,
+      "date": "2022-10-26T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 904,
+      "date": "2022-10-27T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 905,
+      "date": "2022-10-28T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 906,
+      "date": "2022-10-29T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 907,
+      "date": "2022-10-30T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 908,
+      "date": "2022-10-31T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 909,
+      "date": "2022-11-01T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 910,
+      "date": "2022-11-02T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 911,
+      "date": "2022-11-03T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 912,
+      "date": "2022-11-04T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 913,
+      "date": "2022-11-05T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 914,
+      "date": "2022-11-06T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 915,
+      "date": "2022-11-07T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 916,
+      "date": "2022-11-08T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 917,
+      "date": "2022-11-09T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 918,
+      "date": "2022-11-10T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 919,
+      "date": "2022-11-11T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 920,
+      "date": "2022-11-12T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 921,
+      "date": "2022-11-13T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 922,
+      "date": "2022-11-14T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 98
+        },
+        "away": {
+          "total": 104
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 923,
+      "date": "2022-11-15T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    },
+    {
+      "id": 924,
+      "date": "2022-11-16T23:30:00+00:00",
+      "season": 2022,
+      "status": "Finished",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 110
+        },
+        "away": {
+          "total": 100
+        }
+      },
+      "league": "nba"
+    }
+  ]
+}

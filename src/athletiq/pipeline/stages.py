@@ -1,4 +1,4 @@
-# Implements: FR-011, CON-001, OPS-002, ADR-005
+# Implements: FR-011, CON-001, OPS-002, ADR-005, ML-010, ADR-013, CR-004
 """Concrete pipeline stage implementations (offline-capable)."""
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ import numpy as np
 
 from athletiq.features.builder import (
     FEATURE_VERSION,
+    PlayerGameHistory,
     TeamGameHistory,
     build_feature_row,
     feature_vector,
@@ -100,6 +101,7 @@ def stage_features(ctx: PipelineContext) -> None:
 
     history: list[TeamGameHistory] = []
     games = store.iter_games()
+    tip_by_game = {g.game_id: g.record.game_start_time for g in games}
     for g in games:
         rec = g.record
         if rec.home_score is None or rec.away_score is None:
@@ -127,12 +129,32 @@ def stage_features(ctx: PipelineContext) -> None:
             )
         )
 
+    player_history: list[PlayerGameHistory] = []
+    iter_pgs = getattr(store, "iter_player_game_stats", None)
+    if iter_pgs is not None:
+        for stat in iter_pgs():
+            tip = stat.get("game_start_time") or tip_by_game.get(stat["game_id"])
+            if tip is None:
+                continue
+            minutes = float(stat["minutes"] or 0.0)
+            points = float(stat["points"] or 0.0)
+            player_history.append(
+                PlayerGameHistory(
+                    player_id=int(stat["player_id"]),
+                    team_id=int(stat["team_id"]),
+                    game_start_time=tip,
+                    minutes=minutes,
+                    points=points,
+                )
+            )
+
     feature_store = _open_feature_store(ctx)
     rows_meta: list[dict] = []
     X_rows: list[list[float]] = []
     y_rows: list[float] = []
     home_wr: list[float] = []
     away_wr: list[float] = []
+    league_rows: list[str] = []
 
     try:
         txn = getattr(feature_store, "transaction", None)
@@ -141,23 +163,27 @@ def stage_features(ctx: PipelineContext) -> None:
                 _build_and_persist_features(
                     games,
                     history,
+                    player_history,
                     feature_store,
                     rows_meta,
                     X_rows,
                     y_rows,
                     home_wr,
                     away_wr,
+                    league_rows,
                 )
         else:
             _build_and_persist_features(
                 games,
                 history,
+                player_history,
                 feature_store,
                 rows_meta,
                 X_rows,
                 y_rows,
                 home_wr,
                 away_wr,
+                league_rows,
             )
     except Exception:
         close = getattr(feature_store, "close", None)
@@ -173,6 +199,7 @@ def stage_features(ctx: PipelineContext) -> None:
         y=np.asarray(y_rows, dtype=float),
         home_season_wr=np.asarray(home_wr, dtype=float),
         away_season_wr=np.asarray(away_wr, dtype=float),
+        league=np.asarray(league_rows),
     )
     meta_path = ctx.artifacts_dir / "feature_matrix_meta.json"
     meta_path.write_text(
@@ -201,12 +228,14 @@ def stage_features(ctx: PipelineContext) -> None:
 def _build_and_persist_features(
     games,
     history,
+    player_history,
     feature_store,
     rows_meta,
     X_rows,
     y_rows,
     home_wr,
     away_wr,
+    league_rows,
 ) -> None:
     for g in sorted(games, key=lambda x: x.record.game_start_time):
         rec = g.record
@@ -219,6 +248,7 @@ def _build_and_persist_features(
             away_team_id=g.away_team_id,
             history=history,
             label_home_win=label,
+            player_history=player_history,
         )
         feature_store.upsert(row)
         if label is None:
@@ -228,7 +258,8 @@ def _build_and_persist_features(
         y_rows.append(float(label))
         home_wr.append(float(row.payload["home_season_wr"]))
         away_wr.append(float(row.payload["away_season_wr"]))
-        rows_meta.append({"game_id": g.game_id, "label": label})
+        league_rows.append(getattr(rec, "league", None) or "nba")
+        rows_meta.append({"game_id": g.game_id, "label": label, "league": league_rows[-1]})
 
 
 def stage_train(ctx: PipelineContext) -> None:
@@ -241,42 +272,65 @@ def stage_train(ctx: PipelineContext) -> None:
         else:
             raise PipelineError("train", "missing feature_matrix.npz; run features first")
 
-    data = np.load(matrix_path)
+    data = np.load(matrix_path, allow_pickle=True)
     X = data["X"]
     y = data["y"]
     home_wr = data["home_season_wr"]
     away_wr = data["away_season_wr"]
-    if len(y) < 3:
-        raise PipelineError(
-            "train",
-            f"need at least 3 labeled games for temporal split; got {len(y)}",
-        )
+    if "league" in data.files:
+        leagues = np.asarray(data["league"]).astype(str)
+    else:
+        leagues = np.array(["nba"] * len(y), dtype=str)
 
     dataset_version = ctx.batch_id or "local"
-    result = run_train_select_publish(
-        X=X,
-        y=y,
-        home_season_wr=home_wr,
-        away_season_wr=away_wr,
-        artifacts_dir=ctx.artifacts_dir,
-        dataset_version=str(dataset_version),
-        seed=ctx.settings.seed,
-        feature_version=FEATURE_VERSION,
-        evaluate_test=True,
-    )
-    ctx.pin_path = result.pin_path
-    # Quality-gate miss is recorded, not an infra crash (FR-011).
-    if result.ml005_pass is False:
-        logger.warning(
-            "stage=train status=quality_gate_miss ml005=false selected=%s",
-            result.selected_family,
+    pins: dict[str, dict] = {}
+    unique_leagues = sorted(set(leagues.tolist()))
+    for league in unique_leagues:
+        mask = leagues == league
+        n = int(mask.sum())
+        if n < 3:
+            logger.warning("stage=train skip league=%s labeled=%s", league, n)
+            continue
+        result = run_train_select_publish(
+            X=X[mask],
+            y=y[mask],
+            home_season_wr=home_wr[mask],
+            away_season_wr=away_wr[mask],
+            artifacts_dir=ctx.artifacts_dir,
+            dataset_version=f"{dataset_version}:{league}",
+            seed=ctx.settings.seed,
+            feature_version=FEATURE_VERSION,
+            model_version=None,
+            evaluate_test=True,
+            pin_name=f"selected_pin_{league}.json",
+            model_version_prefix=f"{league}-",
         )
-    logger.info(
-        "stage=train pin=%s model_version=%s ml005=%s",
-        result.pin_path,
-        result.model_version,
-        result.ml005_pass,
+        pin_obj = json.loads(Path(result.pin_path).read_text(encoding="utf-8"))
+        pins[league] = pin_obj
+        if result.ml005_pass is False:
+            logger.warning(
+                "stage=train status=quality_gate_miss league=%s ml005=false selected=%s",
+                league,
+                result.selected_family,
+            )
+        logger.info(
+            "stage=train league=%s pin=%s model_version=%s ml005=%s",
+            league,
+            result.pin_path,
+            result.model_version,
+            result.ml005_pass,
+        )
+
+    if not pins:
+        raise PipelineError("train", "no league had at least 3 labeled games")
+
+    combined = ctx.artifacts_dir / "selected_pin.json"
+    combined.write_text(
+        json.dumps({"schema": "athletiq.pins.v2", "default_league": "nba", "pins": pins}, indent=2),
+        encoding="utf-8",
     )
+    ctx.pin_path = combined
+    logger.info("stage=train pin=%s leagues=%s", combined, sorted(pins))
 
 
 def _latest_batch(raw_root: Path) -> Path:

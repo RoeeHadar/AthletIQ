@@ -1,11 +1,12 @@
-# Implements: FR-009, FR-014, CON-004, ADR-008, ADR-009, NFR-002, NFR-004
+# Implements: FR-009, FR-014, FR-018, FR-019, CON-004, ADR-008, ADR-009, NFR-002, NFR-004, CR-004
 openapi: 3.0.3
 info:
   title: AthletIQ Demo API
   version: 1.0.0
   description: >
-    MVP prediction API (sync, game_id-keyed). Gate 4 Approved. No application auth (ADR-009).
-    No hard latency SLO (NFR-004). See docs/06-design/api-design.md.
+    Prediction API (sync, game_id-keyed). CR-004: per-league pins, labeled synthetic
+    Market P. No application auth (ADR-009). No hard latency SLO (NFR-004).
+    See docs/06-design/api-design.md.
 servers:
   - url: http://localhost:8000
     description: Local Compose
@@ -72,6 +73,14 @@ paths:
   /v1/model:
     get:
       summary: Model metadata and limitations
+      parameters:
+        - name: league
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [nba, wnba]
+          description: Served pin for this league (default NBA)
       responses:
         "200":
           description: Metadata
@@ -95,8 +104,15 @@ components:
         game_id: { type: string }
         home_team_id: { type: string }
         away_team_id: { type: string }
+        home_team_name: { type: string, nullable: true }
+        home_team_abbreviation: { type: string, nullable: true }
+        away_team_name: { type: string, nullable: true }
+        away_team_abbreviation: { type: string, nullable: true }
         home_win_pred: { type: boolean }
         p_home_win: { type: number, minimum: 0, maximum: 1 }
+        league: { type: string, description: nba or wnba }
+        market_p_home_win: { type: number, minimum: 0, maximum: 1, nullable: true }
+        market_source: { type: string, nullable: true, description: synthetic when present }
         model_version: { type: string }
         feature_version: { type: string }
         dataset_version: { type: string }
@@ -114,6 +130,7 @@ components:
         limitations: { type: string }
         model_card_ref: { type: string }
         baselines_served: { type: boolean }
+        league: { type: string, description: nba or wnba }
     ErrorResponse:
       type: object
       properties:

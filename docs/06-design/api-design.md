@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-12  
-Version: 1.0.0
+Last Updated: 2026-08-15  
+Version: 1.1.1
 
 > Design intent. Contract: `api/openapi.yaml`. FastAPI (CON-004). ADR-008, **ADR-009** (no auth).
 
@@ -32,16 +32,16 @@ Base path: `/v1`
 
 **Query:** `game_id` (string form of internal **BIGINT**) preferred; optional `provider_game_id` resolver.
 
-**Response 200:** see OpenAPI — includes lineage fields.
+**Response 200:** OpenAPI — includes lineage fields, `league`, nullable `market_p_home_win` / `market_source` (`synthetic` or omitted), and nullable home/away `team_name` / `team_abbreviation` from the `teams` table (never invented).
 
-`home_win_pred` = `p_home_win >= 0.5`.
+`home_win_pred` = `p_home_win >= 0.5`. Pin chosen by `game.league` (ADR-013).
 
 ### `GET /v1/model`
 
-Read-only metadata / limitations / lineage.
+Read-only metadata / limitations / lineage. Optional query `league` (`nba` default).
 
-- 200 — pin present  
-- **503** — no selected model / pin/artifact missing (same as health model failure; `error.code`: `model_unavailable`)
+- 200 — pin present for that league  
+- **503** — no selected model / pin/artifact missing (`error.code`: `model_unavailable`)
 
 ## Errors
 
@@ -62,4 +62,4 @@ Envelope:
 
 ## Non-goals
 
-Paid auth products, async prediction jobs, training triggers, live provider proxy.
+Paid auth products, async prediction jobs, training triggers, live provider proxy, live book HTTP.

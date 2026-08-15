@@ -28,14 +28,17 @@ class _ManyGamesProvider:
     def __init__(self, n_games: int = 40) -> None:
         self.n_games = n_games
 
+    def leagues(self) -> list[str]:
+        return ["nba"]
+
     def fetch_teams(self) -> list[dict[str, Any]]:
         return [
-            {"id": 1, "name": "Boston Celtics", "code": "BOS"},
-            {"id": 2, "name": "Los Angeles Lakers", "code": "LAL"},
+            {"id": 1, "name": "Boston Celtics", "code": "BOS", "league": "nba"},
+            {"id": 2, "name": "Los Angeles Lakers", "code": "LAL", "league": "nba"},
         ]
 
-    def fetch_games(self, season: int) -> list[dict[str, Any]]:
-        if season != 2023:
+    def fetch_games(self, season: int, league: str = "nba") -> list[dict[str, Any]]:
+        if league != "nba" or season != 2023:
             return []
         start = datetime(2023, 10, 24, 23, 30, tzinfo=timezone.utc)
         games: list[dict[str, Any]] = []
@@ -60,6 +63,15 @@ class _ManyGamesProvider:
                 }
             )
         return games
+
+    def fetch_players(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_player_game_stats(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_odds_snapshots(self) -> list[dict[str, Any]]:
+        return []
 
 
 def _settings(tmp_path: Path) -> Settings:
@@ -112,6 +124,32 @@ def test_happy_path_exit_zero_and_artifacts(tmp_path: Path, caplog: pytest.LogCa
     assert (tmp_path / "artifacts" / "selected_pin.json").is_file()
     assert (tmp_path / "artifacts" / "reports" / "validation_happy1.json").is_file()
     assert any("stage=train status=ok" in r.message for r in caplog.records)
+    pin = json.loads((tmp_path / "artifacts" / "selected_pin.json").read_text(encoding="utf-8"))
+    assert pin.get("schema") == "athletiq.pins.v2"
+    assert "nba" in pin.get("pins", {})
+
+
+def test_postgres_store_applies_migrations_before_stages(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    called: list[str] = []
+
+    def fake_apply(url: str, *, directory=None):  # noqa: ANN001
+        called.append(url)
+        return ["001_initial", "002_cr004_league_players_odds"]
+
+    monkeypatch.setattr("athletiq.db.migrate.apply_migrations", fake_apply)
+    ctx = PipelineContext(
+        settings=_settings(tmp_path),
+        provider=_ManyGamesProvider(3),
+        raw_root=tmp_path / "raw",
+        artifacts_dir=tmp_path / "artifacts",
+        store_kind="postgres",
+        seasons=[2023],
+        batch_id="mig1",
+    )
+    run_pipeline(ctx, [])
+    assert called == ["postgresql://athletiq:athletiq@localhost:5432/athletiq"]
 
 
 def test_forced_stage_failure_nonzero_and_stage_in_logs(

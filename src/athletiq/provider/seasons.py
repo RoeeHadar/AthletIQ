@@ -1,4 +1,4 @@
-# Implements: DR-001 — active history window (2 Must / ≤3 Should)
+# Implements: DR-001, CR-004 — active history window (3 completed NBA seasons)
 """Completed-season window helpers."""
 
 from __future__ import annotations
@@ -9,7 +9,7 @@ from datetime import date
 def active_season_years(
     *,
     as_of: date | None = None,
-    depth: int = 2,
+    depth: int = 3,
 ) -> list[int]:
     """Return the most recent `depth` completed NBA season start years.
 

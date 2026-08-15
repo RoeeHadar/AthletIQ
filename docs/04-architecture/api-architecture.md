@@ -2,14 +2,14 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.1
+Last Updated: 2026-08-15  
+Version: 1.1.1
 
 > Sync demo FastAPI (CON-004). Contract details in Gate 4 `api-design.md`.
 
 ## Purpose
 
-Synchronous home-win predictions for a known **`game_id`** using precomputed features and a batch-pinned model (FR-009, ADR-008).
+Synchronous home-win predictions for a known **`game_id`** using precomputed features and the **batch pin for `game.league`** (FR-009, ADR-008, ADR-013). Optional labeled synthetic Market P from `odds_snapshots` (ADR-012). Same-origin UI at `GET /` (FR-015). Predict does **not** call a book or the live provider.
 
 ## Request lifecycle
 
@@ -30,8 +30,10 @@ No async queues/workers in MVP.
 |---|---|
 | Primary key | `game_id` |
 | Feature row | `(game_id, feature_version)` |
-| Model | Published pin only |
-| Optional resolver (MVP) | `provider_game_id` → unique `game_id`. Home/away/date matchup is **Future / not MVP**. |
+| Model | Published **per-league** pin only (ADR-013) |
+| Market P | Nullable; from curated synthetic snapshot; never live HTTP |
+| Team identity | Nullable name + abbreviation from `teams` via `home_team_id` / `away_team_id` (FR-020). Never invented. |
+| Optional resolver (MVP) | `provider_game_id` → unique `game_id`. Home/away/date matchup browse is **Future / not MVP**. |
 
 ## Non-responsibilities
 

@@ -1,7 +1,7 @@
--- Implements: FR-002, DR-002, DR-003, NFR-005, CON-002, ADR-001, ADR-010
+-- Implements: FR-002, DR-002, DR-003, DR-004, NFR-005, CON-002, ADR-001, ADR-010, ADR-012, CR-004
 -- AthletIQ curated schema contract (PostgreSQL)
 -- Design: docs/06-design/database-design.md
--- Status: Approved contract aligned to Gate 4 design + ADR-010 (BIGINT) + CR-001
+-- Status: Approved contract aligned to Gate 4 design + ADR-010 (BIGINT) + CR-004
 
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version              TEXT PRIMARY KEY,
@@ -10,26 +10,30 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 
 CREATE TABLE IF NOT EXISTS teams (
     team_id              BIGSERIAL PRIMARY KEY,
-    provider_team_id     TEXT NOT NULL UNIQUE,
+    provider_team_id     TEXT NOT NULL,
     name                 TEXT NOT NULL,
     abbreviation         TEXT,
     conference           TEXT,
     division             TEXT,
-    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    sport                TEXT NOT NULL DEFAULT 'basketball',
+    league               TEXT NOT NULL DEFAULT 'nba',
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT teams_league_provider_uid UNIQUE (league, provider_team_id)
 );
 
--- Reserved (CR-001): pipeline does not ingest or upsert players.
 CREATE TABLE IF NOT EXISTS players (
     player_id            BIGSERIAL PRIMARY KEY,
-    provider_player_id   TEXT NOT NULL UNIQUE,
+    provider_player_id   TEXT NOT NULL,
     full_name            TEXT NOT NULL,
     team_id              BIGINT REFERENCES teams(team_id),
-    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    league               TEXT NOT NULL DEFAULT 'nba',
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT players_league_provider_uid UNIQUE (league, provider_player_id)
 );
 
 CREATE TABLE IF NOT EXISTS games (
     game_id              BIGSERIAL PRIMARY KEY,
-    provider_game_id     TEXT NOT NULL UNIQUE,
+    provider_game_id     TEXT NOT NULL,
     season               INT NOT NULL,
     game_start_time      TIMESTAMPTZ NOT NULL,
     home_team_id         BIGINT NOT NULL REFERENCES teams(team_id),
@@ -38,11 +42,13 @@ CREATE TABLE IF NOT EXISTS games (
     away_score           INT,
     home_win             BOOLEAN,
     status               TEXT NOT NULL DEFAULT 'unknown',
+    sport                TEXT NOT NULL DEFAULT 'basketball',
+    league               TEXT NOT NULL DEFAULT 'nba',
     updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT games_teams_distinct CHECK (home_team_id <> away_team_id)
+    CONSTRAINT games_teams_distinct CHECK (home_team_id <> away_team_id),
+    CONSTRAINT games_league_provider_uid UNIQUE (league, provider_game_id)
 );
 
--- Reserved (CR-001): pipeline does not ingest or upsert player_game_stats.
 CREATE TABLE IF NOT EXISTS player_game_stats (
     game_id              BIGINT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
     player_id            BIGINT NOT NULL REFERENCES players(player_id),
@@ -77,7 +83,18 @@ CREATE TABLE IF NOT EXISTS features (
     PRIMARY KEY (game_id, feature_version)
 );
 
--- Optional mirror of artifact metadata (JSON files remain canonical for MVP)
+CREATE TABLE IF NOT EXISTS odds_snapshots (
+    snapshot_id          BIGSERIAL PRIMARY KEY,
+    game_id              BIGINT NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    captured_at          TIMESTAMPTZ NOT NULL,
+    source               TEXT NOT NULL,
+    implied_p_home_win   DOUBLE PRECISION NOT NULL,
+    payload              JSONB,
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (game_id, source, captured_at)
+);
+
+-- Optional mirror of artifact metadata (JSON files remain canonical for serving)
 CREATE TABLE IF NOT EXISTS model_registry (
     model_version        TEXT PRIMARY KEY,
     feature_version      TEXT NOT NULL,
@@ -92,7 +109,10 @@ CREATE TABLE IF NOT EXISTS model_registry (
 
 CREATE INDEX IF NOT EXISTS idx_games_start ON games (game_start_time);
 CREATE INDEX IF NOT EXISTS idx_games_season ON games (season);
+CREATE INDEX IF NOT EXISTS idx_games_league ON games (league);
+CREATE INDEX IF NOT EXISTS idx_teams_league ON teams (league);
 CREATE INDEX IF NOT EXISTS idx_team_game_stats_team_game ON team_game_stats (team_id, game_id);
 CREATE INDEX IF NOT EXISTS idx_player_game_stats_player_game ON player_game_stats (player_id, game_id);
 CREATE INDEX IF NOT EXISTS idx_player_game_stats_team_game ON player_game_stats (team_id, game_id);
 CREATE INDEX IF NOT EXISTS idx_features_version_game ON features (feature_version, game_id);
+CREATE INDEX IF NOT EXISTS idx_odds_snapshots_game ON odds_snapshots (game_id);

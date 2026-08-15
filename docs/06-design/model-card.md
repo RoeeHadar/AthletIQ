@@ -4,8 +4,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.0.1
+Last Updated: 2026-08-15  
+Version: 1.1.0
 
 > **FR-010** disclosure for evaluation and API consumers. Design source: `ml-design.md`.  
 > Runtime summary: `GET /v1/model` (`limitations_ref` → this document).
@@ -21,15 +21,16 @@ Features, training labels for prior games, model selection, and evaluation use o
 
 ## Features
 
-- **Version:** `team_l5_l10_v1` (MVP).
-- **Team-level only:** L5/L10 win rate, point differential, points for/against; season win rate to date.
-- **Cold start:** if fewer than `min_prior_games = 5` completed prior games → season-to-date aggregates for that side.
-- **No player-level features** in MVP.
+- **Version:** `team_l5_l10_player_agg_v1` (CR-004).
+- **Team windows:** L5/L10 win rate, point differential, points for/against; season win rate to date.
+- **Player aggregates:** mean L5 points and minutes of the top-5 players by prior minutes (per side). Missing box scores → 0.0.
+- **Cold start:** if fewer than `min_prior_games = 5` completed prior games → season-to-date aggregates for team windows.
 - Train and serve share the same feature definitions / preprocessing contract (ML-008).
+- **Pins:** separate served models per `league` (ADR-013).
 
 ## Data window
 
-Active history: **2 Must / ≤3 Should** most recent **completed** NBA seasons (DR-001). Seasons outside the window are too old (do not ingest; prune if present).
+Active history: **3** most recent **completed** NBA seasons plus overlapping WNBA (DR-001 / CR-004). Seasons outside the window are too old (do not ingest; prune if present).
 
 ## Splits
 
@@ -75,7 +76,7 @@ Publish: **joblib** model + **JSON** metadata + **selection pin** (`model_versio
 
 ## Known limitations
 
-1. Team-level features only; ignores injuries, rest, travel, coaching, lineup, market odds.
+1. Ignores injuries, rest, travel, coaching, and live market odds. Player context is team-aggregated top-5 L5 points/minutes only (no injury feed, no embeddings).
 2. Cold-start games use coarse season-to-date proxies.
 3. Small / fixture datasets can pass local demos without reflecting production NBA signal.
 4. Provider free-tier coverage and schema drift can affect ingest completeness.

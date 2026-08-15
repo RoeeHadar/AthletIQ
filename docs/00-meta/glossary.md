@@ -2,13 +2,13 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 0.9.0
+Last Updated: 2026-08-15  
+Version: 0.10.0
 
 | Term | Definition |
 |---|---|
 | AthletIQ | Product/project name |
-| Game | An NBA scheduled contest with a unique provider/`game_id` |
+| Game | A scheduled basketball contest (NBA or WNBA) with a unique `(league, provider_game_id)` / `game_id` |
 | Matchup | Home/away pairing (product language). **Not** an MVP predict input. MVP optional resolver is `provider_game_id` → `game_id`. |
 | Prediction time | Game start; features may use only info available by then |
 | Temporal boundary / no leakage | Invariant: no post-`t` info in features, selection, or evaluation |
@@ -23,7 +23,7 @@ Version: 0.9.0
 | Quality gate failure | Eval acceptance miss (≠ execution failure) |
 | Quality gate / attestation | Empirical ML acceptance (e.g. ML-005); not a flaky PR unit invariant |
 | Execution failure | Pipeline hard failure / non-zero exit |
-| Active history window | Most recent **2 Must / ≤3 Should** completed NBA seasons; older data pruned as “too old” |
+| Active history window | Most recent **3** completed NBA seasons (CR-004) plus overlapping WNBA; older data pruned as “too old” |
 | Prune policy | Drop duplicates (natural key), noisy (validation fail), and too-old (outside active window) |
 | Feature windows | Team form last **5** and **10** games before tip (MVP) |
 | Surrogate key | Internal BIGINT / BIGSERIAL id (`game_id`, …) per **ADR-010**; not UUID |
@@ -36,4 +36,9 @@ Version: 0.9.0
 | ADR | Architecture Decision Record |
 | CR | Change Request |
 | Selection pin | Batch-time JSON that names the served `model_version` / artifact / `feature_version`; API loads this only (ADR-003) — never a live baseline |
-| Cold start | Team has fewer than `min_prior_games` (MVP = 5) completed prior games before tip; use season-to-date aggregates instead of sparse L5/L10 |
+| Cold start | Team has fewer than `min_prior_games` (MVP = 5) completed prior games before tip; use season-to-date aggregates instead of sparse L5/L10. Player-agg features use zeros / empty-window analogue when box scores are missing. |
+| League | `nba` or `wnba` on teams/games; routes the served pin (ADR-013) |
+| Sport | `basketball` for both leagues this CR |
+| Market P | Labeled implied `P(home_win)` from `odds_snapshots` (synthetic this CR; not a book) |
+| Odds snapshot | Pre-tip implied home-win probability row; `source=synthetic` for CR-004 (ADR-012) |
+| Per-league pin | Selection pin scoped to one `league` (ADR-013); API loads the pin matching `game.league` |

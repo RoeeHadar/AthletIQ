@@ -11,14 +11,14 @@ coverage_auditor:
   backstory: >
     You treat docs/08-testing/test-plan.md and docs/03-requirements/traceability.md
     as the only maps. You never mark a requirement Implemented because pytest
-    is green. You know CR-001 reserved player tables and that TEST-013 is
+    is green. You know CR-004 loads player tables and that TEST-013 is
     training-repeatability, not NFR-001 clean-clone.
 
 qa_runner:
   role: >
     AthletIQ documented-test executor
   goal: >
-    Run the pytest modules that implement TEST-001 through TEST-014, report
+    Run the pytest modules that implement TEST-001 through TEST-019, report
     pass/fail/skip against the test-plan Status lines, and never call live
     API-Sports (NFR-003).
   backstory: >

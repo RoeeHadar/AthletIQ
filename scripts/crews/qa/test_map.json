@@ -15,7 +15,12 @@
     {"id": "TEST-011", "paths": ["tests/unit/test_ci_workflow.py"]},
     {"id": "TEST-012", "paths": ["tests/unit/test_methodology.py"]},
     {"id": "TEST-013", "paths": ["tests/unit/test_reproducibility.py"]},
-    {"id": "TEST-014", "paths": ["tests/unit/test_artifact_api.py", "tests/unit/test_api.py"]}
+    {"id": "TEST-014", "paths": ["tests/unit/test_artifact_api.py", "tests/unit/test_api.py"]},
+    {"id": "TEST-015", "paths": ["tests/unit/test_cr004.py", "tests/integration/test_schema.py"]},
+    {"id": "TEST-016", "paths": ["tests/unit/test_cr004.py", "tests/unit/test_features.py"]},
+    {"id": "TEST-017", "paths": ["tests/unit/test_cr004.py"]},
+    {"id": "TEST-018", "paths": ["tests/unit/test_cr004.py"]},
+    {"id": "TEST-019", "paths": ["tests/unit/test_cr004.py"]}
   ],
   "extra_not_numbered": [
     {

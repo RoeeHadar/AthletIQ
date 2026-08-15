@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.1.1
+Last Updated: 2026-08-15  
+Version: 1.2.0
 
 ## Binding index (MVP)
 
@@ -19,6 +19,8 @@ Version: 1.1.1
 | [ADR-008](ADR-008-inference-feature-contract.md) | game_id + precomputed features | Accepted |
 | [ADR-009](ADR-009-no-auth-mvp-api.md) | No auth on MVP demo API | Accepted |
 | [ADR-010](ADR-010-bigint-surrogate-keys.md) | BIGINT / BIGSERIAL surrogate keys | Accepted |
+| [ADR-012](ADR-012-synthetic-odds-snapshots.md) | Fixture/synthetic odds snapshots | Accepted |
+| [ADR-013](ADR-013-per-league-selection-pins.md) | Per-league selection pins | Accepted |
 
 ## Deferred / non-binding
 

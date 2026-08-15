@@ -32,10 +32,10 @@ def raw_batch(tmp_path: Path) -> Path:
 
 def test_load_valid_batch(raw_batch: Path) -> None:
     store, report = load_raw_batch(raw_batch, required_seasons=[2023, 2024])
-    assert store.count_teams() == 2
+    assert store.count_teams() == 4
     assert store.count_games(2023) >= 1
     assert store.count_games(2024) >= 1
-    assert report.teams_loaded == 2
+    assert report.teams_loaded == 4
     assert report.games_loaded >= 2
     assert report.teams_skipped == 0
 
@@ -53,7 +53,7 @@ def test_skip_invalid_row_counted(raw_batch: Path, tmp_path: Path) -> None:
     store, report = load_raw_batch(dirty, required_seasons=[2023, 2024])
     assert report.teams_skipped == 1
     assert any("missing id or name" in r for r in report.skip_reasons)
-    assert store.count_teams() == 2
+    assert store.count_teams() == 4
 
 
 def test_idempotent_rerun_no_duplicate_grain(raw_batch: Path) -> None:
@@ -101,7 +101,7 @@ def test_validation_report_written(raw_batch: Path, tmp_path: Path) -> None:
     out = tmp_path / "reports" / "validation.json"
     write_validation_report(report, out)
     payload = json.loads(out.read_text(encoding="utf-8"))
-    assert payload["teams_loaded"] == 2
+    assert payload["teams_loaded"] == 4
     assert "skip_reasons" in payload
 
 

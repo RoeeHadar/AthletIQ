@@ -1,4 +1,4 @@
-# Implements: FR-011, CON-006, CON-001, OPS-002, ADR-005
+# Implements: FR-011, CON-006, CON-001, OPS-002, ADR-005, CR-004
 """Stage ordering, resume window, and failure reporting."""
 
 from __future__ import annotations
@@ -38,7 +38,7 @@ class PipelineContext:
     artifacts_dir: Path
     store_kind: StoreKind = "memory"
     seasons: list[int] | None = None
-    season_depth: int = 2
+    season_depth: int = 3
     batch_id: str | None = None
     batch_dir: Path | None = None
     store: CuratedStore | None = None
@@ -112,6 +112,18 @@ def run_pipeline(
 
     ctx.artifacts_dir.mkdir(parents=True, exist_ok=True)
     ctx.raw_root.mkdir(parents=True, exist_ok=True)
+
+    if ctx.store_kind == "postgres":
+        url = ctx.settings.database_url
+        if not url:
+            raise PipelineError("cli", "DATABASE_URL required for --store postgres")
+        try:
+            from athletiq.db.migrate import apply_migrations
+
+            apply_migrations(url)
+        except Exception as exc:  # noqa: BLE001 — bound for OPS-002
+            logger.error("stage=load status=failed reason=migrations %s", exc)
+            raise PipelineError("load", f"migrations failed: {exc}") from exc
 
     for name in stages:
         fn = fns.get(name)

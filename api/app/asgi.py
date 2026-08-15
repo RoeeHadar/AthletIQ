@@ -1,4 +1,4 @@
-# Implements: FR-012, FR-009, ADR-001, ADR-004, ADR-009
+# Implements: FR-012, FR-009, FR-018, ADR-001, ADR-004, ADR-009, CR-004
 """Uvicorn ASGI entry — explicit store selection; DATABASE_URL is connection only."""
 
 from __future__ import annotations
@@ -28,7 +28,9 @@ def build_app():
 
     if store_kind == "postgres":
         from athletiq.db.api_repos import PostgresFeatureRepo, PostgresGameRepo
+        from athletiq.db.migrate import apply_migrations
 
+        apply_migrations(url)
         games = PostgresGameRepo.connect(url)
         features = PostgresFeatureRepo.connect(url)
         db_ping = lambda: _db_ping(url)  # noqa: E731

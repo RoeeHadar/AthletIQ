@@ -1,4 +1,4 @@
-# Implements: FR-009, FR-010, FR-014, CON-004, ADR-009, NFR-002, NFR-004
+# Implements: FR-009, FR-010, FR-014, FR-018, FR-019, CON-004, ADR-009, NFR-002, NFR-004
 """HTTP routes under /v1."""
 
 from __future__ import annotations
@@ -31,15 +31,17 @@ def health(request: Request):
 
 
 @router.get("/model")
-def model_info(request: Request):
+def model_info(request: Request, league: Annotated[str | None, Query()] = None):
     state = _state(request)
-    loaded = state.require_model()
-    return model_disclosure(
+    loaded = state.require_model(league)
+    body = model_disclosure(
         model_version=loaded.model_version,
         feature_version=loaded.feature_version,
         dataset_version=loaded.dataset_version,
         metrics=loaded.metadata.get("metrics"),
     )
+    body["league"] = (league or getattr(state, "_default_league", None) or "nba")
+    return body
 
 
 @router.get("/predict")

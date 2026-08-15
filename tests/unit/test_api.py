@@ -19,7 +19,7 @@ OPENAPI = ROOT / "api" / "openapi.yaml"
 
 
 def _train_tiny_model(artifacts: Path) -> None:
-    # 18-dim vector matching FEATURE_KEYS
+    # Vector matching FEATURE_KEYS
     rng = np.random.default_rng(0)
     X = rng.normal(size=(40, len(FEATURE_KEYS)))
     y = (X[:, 0] > 0).astype(int)
@@ -114,6 +114,10 @@ def test_predict_success_lineage_matches_pin(tmp_path: Path) -> None:
     assert body["feature_version"] == FEATURE_VERSION
     assert "p_home_win" in body
     assert body["home_win_pred"] == (body["p_home_win"] >= 0.5)
+    assert body["home_team_name"] is None
+    assert body["home_team_abbreviation"] is None
+    assert body["away_team_name"] is None
+    assert body["away_team_abbreviation"] is None
 
     model = client.get("/v1/model").json()
     assert model["model_version"] == body["model_version"]
@@ -138,6 +142,37 @@ def test_predict_game_not_found_and_features_not_found(tmp_path: Path) -> None:
     assert r2.status_code == 404
     assert r2.json()["error"]["code"] == "features_not_found"
     assert r2.json()["error"]["details"]["feature_version"] == FEATURE_VERSION
+
+
+def test_predict_includes_team_identity_from_game_row(tmp_path: Path) -> None:
+    artifacts = tmp_path / "artifacts"
+    _train_tiny_model(artifacts)
+    games = InMemoryGameRepo(
+        games={
+            1: {
+                "home_team_id": 10,
+                "away_team_id": 20,
+                "home_team_name": "Boston Celtics",
+                "home_team_abbreviation": "BOS",
+                "away_team_name": "Los Angeles Lakers",
+                "away_team_abbreviation": "LAL",
+                "league": "nba",
+            }
+        }
+    )
+    features = InMemoryFeatureRepo(rows={(1, FEATURE_VERSION): _feature_row(1)})
+    state = AppState(
+        artifacts_dir=artifacts,
+        games=games,
+        features=features,
+        db_ping=lambda: True,
+    )
+    state.load_pin()
+    body = TestClient(create_app(state)).get("/v1/predict", params={"game_id": "1"}).json()
+    assert body["home_team_name"] == "Boston Celtics"
+    assert body["home_team_abbreviation"] == "BOS"
+    assert body["away_team_name"] == "Los Angeles Lakers"
+    assert body["away_team_abbreviation"] == "LAL"
 
 
 def test_predict_invalid_and_model_unavailable(tmp_path: Path) -> None:
@@ -168,9 +203,11 @@ def test_demo_ui_index_is_html(tmp_path: Path) -> None:
     client = _client(tmp_path)
     res = client.get("/")
     assert res.status_code == 200
+    assert res.headers.get("cache-control") == "no-store"
     assert "text/html" in res.headers.get("content-type", "")
-    assert "AthletI" in res.text
+    assert "AthletIQ" in res.text
     assert "Game ID" in res.text
+    assert "TAKE" in res.text
     assert "/v1/predict" in res.text
     css = client.get("/static/app.css")
     assert css.status_code == 200

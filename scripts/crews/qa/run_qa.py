@@ -1,4 +1,4 @@
-"""Deterministic QA runner for Approved TEST-001…014.
+"""Deterministic QA runner for Approved TEST-001…019.
 
 CrewAI YAML under config/ describes the workforce. This script is the
 executor (no live LLM, no live API-Sports). NFR-003.
@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 MAP_PATH = Path(__file__).resolve().parent / "test_map.json"
 
-# SRS Musts from docs/03-requirements/traceability.md (CR-001-amended).
+# SRS Musts from docs/03-requirements/traceability.md (CR-004-amended).
 MUST_TO_TESTS: dict[str, list[str]] = {
     "FR-001": ["TEST-003"],
     "FR-002": ["TEST-002", "TEST-004"],
@@ -30,10 +30,16 @@ MUST_TO_TESTS: dict[str, list[str]] = {
     "FR-012": ["TEST-010"],
     "FR-013": ["TEST-004"],
     "FR-014": ["TEST-008", "TEST-014"],
-    "FR-015": ["TEST-008"],
-    "DR-001": ["TEST-003", "TEST-004"],
-    "DR-002": ["TEST-002", "TEST-004"],
-    "DR-003": ["TEST-004"],
+    "FR-015": ["TEST-008", "TEST-019"],
+    "FR-016": ["TEST-015"],
+    "FR-017": ["TEST-016"],
+    "FR-018": ["TEST-017"],
+    "FR-019": ["TEST-018"],
+    "FR-020": ["TEST-008"],
+    "DR-001": ["TEST-003", "TEST-004", "TEST-015"],
+    "DR-002": ["TEST-002", "TEST-004", "TEST-015"],
+    "DR-003": ["TEST-004", "TEST-016", "TEST-017"],
+    "DR-004": ["TEST-017"],
     "ML-001": ["TEST-006"],
     "ML-002": ["TEST-006", "TEST-007"],
     "ML-003": ["TEST-007"],
@@ -42,6 +48,8 @@ MUST_TO_TESTS: dict[str, list[str]] = {
     "ML-006": ["TEST-007"],
     "ML-007": ["TEST-007"],
     "ML-008": ["TEST-006"],
+    "ML-010": ["TEST-007", "TEST-018"],
+    "ML-011": ["TEST-006", "TEST-016"],
     "ML-009": ["TEST-007", "TEST-013", "TEST-014"],
     "SEC-001": ["TEST-001", "TEST-003"],
     "SEC-002": ["TEST-001", "TEST-011"],
@@ -60,6 +68,7 @@ MUST_TO_TESTS: dict[str, list[str]] = {
     "CON-006": ["TEST-009"],
     "CON-007": ["TEST-003"],
     "CON-008": ["TEST-007"],
+    "CON-009": ["TEST-017", "TEST-019"],
 }
 
 ATTESTATION_NOT_CLOSED_BY_PYTEST = {
@@ -117,7 +126,7 @@ def main() -> int:
     if failed:
         print("REJECT: " + ", ".join(failed))
         return 1
-    print("ACCEPT: TEST-001…014 pytest green (skips inside suites still honest)")
+    print("ACCEPT: TEST-001…019 pytest green (skips inside suites still honest)")
     return 0
 
 

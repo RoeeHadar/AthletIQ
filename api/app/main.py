@@ -8,12 +8,21 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.types import Scope
 
 from api.app.errors import ApiError, api_error_handler
 from api.app.routes import router
 from api.app.state import AppState
 
 _STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+_NO_STORE = {"Cache-Control": "no-store"}
+
+
+class _NoStoreStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope: Scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "no-store"
+        return response
 
 
 def create_app(state: AppState | None = None) -> FastAPI:
@@ -31,9 +40,9 @@ def create_app(state: AppState | None = None) -> FastAPI:
 
     @app.get("/", include_in_schema=False)
     def demo_ui() -> FileResponse:
-        return FileResponse(_STATIC_DIR / "index.html")
+        return FileResponse(_STATIC_DIR / "index.html", headers=_NO_STORE)
 
-    app.mount("/static", StaticFiles(directory=_STATIC_DIR), name="static")
+    app.mount("/static", _NoStoreStaticFiles(directory=_STATIC_DIR), name="static")
 
     # Explicitly no auth / tenancy middleware (NFR-002, ADR-009).
     return app

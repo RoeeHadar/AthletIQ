@@ -1,279 +1,309 @@
 ---
 name: AthletIQ
-description: Local NBA stats-desk lookup for a disclosed home-win estimate.
+description: Broadcast win-probability gamecast for a disclosed home-win estimate.
 colors:
-  navy: "#17408b"
-  navy-ink: "#0b1c3a"
-  red: "#c8102e"
-  paper: "#e8eaee"
-  white: "#ffffff"
-  rule: "#d5dae2"
-  ink: "#12161c"
-  muted: "#3d4a5c"
-  focus: "#1d4ed8"
-  banner-wash: "#fdecee"
-  input-stroke: "#8b95a5"
-  bar-track: "#dbe3ee"
-  health-idle: "#93a4c0"
+  field: "#0d1117"
+  producer: "#07090c"
+  home: "#3ec6ff"
+  away: "#ffb020"
+  ink-fill: "#0a0c10"
+  type: "#f4f7fb"
+  muted: "#9aa8b8"
+  rule: "#2a313c"
+  market: "#12161c"
+  track: "#1c232d"
+  dormant: "#1a212b"
+  dormant-type: "#d8dee8"
+  error: "#ff8a8a"
+  error-wash: "#2a1214"
   health-ok: "#22c55e"
   health-down: "#f87171"
+  health-idle: "#8b9bb0"
 typography:
   display:
-    fontFamily: '"Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    fontSize: "1.35rem"
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "0.02em"
+    fontFamily: '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif'
+    fontSize: "clamp(2.8rem, 9vw, 6rem)"
+    fontWeight: 800
+    lineHeight: 0.85
+    letterSpacing: "-0.02em"
   headline:
-    fontFamily: '"Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    fontSize: "0.95rem"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "0.06em"
+    fontFamily: '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif'
+    fontSize: "clamp(2.4rem, 7vw, 5.2rem)"
+    fontWeight: 800
+    lineHeight: 0.9
+    letterSpacing: "-0.03em"
   title:
-    fontFamily: '"Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    fontSize: "0.95rem"
-    fontWeight: 700
+    fontFamily: '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif'
+    fontSize: "1.85rem"
+    fontWeight: 800
     lineHeight: 1
-    letterSpacing: "normal"
+    letterSpacing: "0.04em"
   body:
-    fontFamily: '"Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.45
+    fontFamily: '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif'
+    fontSize: "1.05rem"
+    fontWeight: 500
+    lineHeight: 1.35
     letterSpacing: "normal"
   label:
-    fontFamily: '"Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    fontSize: "0.72rem"
+    fontFamily: '"Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif'
+    fontSize: "0.82rem"
     fontWeight: 700
     lineHeight: 1.2
-    letterSpacing: "0.06em"
+    letterSpacing: "0.08em"
 rounded:
-  sheet: "6px"
-  pill: "999px"
-  circle: "50%"
+  none: "0"
 spacing:
   xs: "0.4rem"
-  sm: "0.55rem"
-  md: "0.7rem"
-  lg: "1.2rem"
-  xl: "1.35rem"
+  sm: "0.65rem"
+  md: "1.25rem"
+  lg: "1.4rem"
+  xl: "2.5rem"
 components:
   button-primary:
-    backgroundColor: "{colors.navy}"
-    textColor: "{colors.white}"
-    typography: "{typography.title}"
-    rounded: "{rounded.sheet}"
-    padding: "0.7rem 1.35rem"
+    backgroundColor: "{colors.producer}"
+    textColor: "{colors.home}"
+    rounded: "{rounded.none}"
+    padding: "0.5rem 1.15rem"
   button-primary-hover:
-    backgroundColor: "{colors.navy-ink}"
-    textColor: "{colors.white}"
-    typography: "{typography.title}"
-    rounded: "{rounded.sheet}"
-    padding: "0.7rem 1.35rem"
+    backgroundColor: "{colors.home}"
+    textColor: "{colors.ink-fill}"
+    rounded: "{rounded.none}"
+    padding: "0.5rem 1.15rem"
   input-game:
-    backgroundColor: "{colors.white}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sheet}"
-    padding: "0.55rem 0.7rem"
-    width: "20rem"
-  card-sheet:
-    backgroundColor: "{colors.white}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sheet}"
-    padding: "1.05rem 1.2rem"
+    backgroundColor: "{colors.field}"
+    textColor: "{colors.type}"
+    rounded: "{rounded.none}"
+    padding: "0.48rem 0.55rem"
+    width: "7.5rem"
+  chip-pin:
+    backgroundColor: "{colors.track}"
+    textColor: "{colors.home}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+    padding: "0.22rem 0.5rem"
   chip-health:
     backgroundColor: "transparent"
-    textColor: "{colors.white}"
-    typography: "{typography.title}"
-    rounded: "{rounded.pill}"
-    padding: "0.22rem 0.7rem 0.22rem 0.5rem"
-  nav-mast:
-    backgroundColor: "{colors.navy}"
-    textColor: "{colors.white}"
-    typography: "{typography.display}"
-    height: "3.5rem"
-    padding: "0 1.35rem"
-  table-head:
-    backgroundColor: "{colors.navy}"
-    textColor: "{colors.white}"
+    textColor: "{colors.type}"
     typography: "{typography.label}"
-    padding: "0.65rem 0.8rem"
+    rounded: "{rounded.none}"
+    padding: "0.28rem 0.65rem"
+  nav-producer:
+    backgroundColor: "{colors.producer}"
+    textColor: "{colors.type}"
+    height: "4.5rem"
+    padding: "0.65rem 1.25rem"
+  seg-league:
+    backgroundColor: "transparent"
+    textColor: "{colors.type}"
+    rounded: "{rounded.none}"
+    padding: "0.38rem 0.7rem"
+  seg-league-pressed:
+    backgroundColor: "{colors.type}"
+    textColor: "{colors.ink-fill}"
+    rounded: "{rounded.none}"
+    padding: "0.38rem 0.7rem"
+  split-home:
+    backgroundColor: "{colors.home}"
+    textColor: "{colors.ink-fill}"
+    padding: "1.4rem 1.35rem 1.2rem"
+  split-away:
+    backgroundColor: "{colors.away}"
+    textColor: "{colors.ink-fill}"
+    padding: "1.4rem 1.35rem 1.2rem"
+  split-dormant:
+    backgroundColor: "{colors.dormant}"
+    textColor: "{colors.dormant-type}"
+    padding: "1.4rem 1.35rem 1.2rem"
+  market-ribbon:
+    backgroundColor: "{colors.market}"
+    textColor: "{colors.muted}"
+    height: "2.6rem"
+    padding: "0.55rem 1.25rem"
   banner-error:
-    backgroundColor: "{colors.banner-wash}"
-    textColor: "{colors.navy-ink}"
-    rounded: "{rounded.sheet}"
-    padding: "0.7rem 0.8rem"
+    backgroundColor: "{colors.error-wash}"
+    textColor: "{colors.type}"
+    padding: "0.75rem 1.25rem"
+  chyron:
+    backgroundColor: "{colors.field}"
+    textColor: "{colors.type}"
+    padding: "1.35rem 1.25rem"
 ---
 
 # Design System: AthletIQ
 
 ## Overview
 
-**Creative North Star: "The NBA.com/Stats Desk"**
+**Creative North Star: "The Powered-On Gamecast"**
 
-AthletIQ is a local stats-desk query: enter a loaded `game_id`, read the home-win call, then read the pin, methodology, and limitations. The craft is NBA.com/Stats executed straight — navy mast, a single red Q in the AthletIQ wordmark, white sheets on cool gray paper, navy box-score heads, Source Sans 3. It is not a betting board, not a live odds rail, and not a circular win meter.
+AthletIQ is a local lookup instrument drawn as a powered-on broadcast win-probability graphic. Pick NBA or WNBA, enter a loaded `game_id`, TAKE, and read Home versus Away as a full-bleed horizontal split of model P against implied 1−P, then a labeled synthetic Market P ribbon, the served pin, and legal Methodology / Limitations chyrons. The craft is matte charcoal, ice-cyan Home plates, amber Away plates, Barlow Condensed gothic, hard edges, and a producer bar. It is not an NBA.com/Stats desk, not a scorebug, and not a sportsbook.
 
-Density is compact and tabular. Interactive labels stay title case. The page is one centered desk column, not an app shell with side rails. Probability is a numeric percent plus a linear navy fill. The home-win call is the words Yes or No in desk ink. Health is a labeled pill on the mast; color never carries that state alone.
+Density is broadcast-tight: all lookup chrome lives in one full-bleed producer strip. Idle plates sit dormant with em dashes; a successful TAKE slams them into cyan and amber widths. Type on live plates is near-black plate ink. Health is a labeled hard chip with an authored waveform; color never carries that state alone. Copy is English and names real endpoints. The prediction is a disclosed estimate, not a scoreboard celebration.
 
-This is a category-standard sports-analytics dashboard. Copy is English and names real endpoints. Focus rings are visible. The prediction is a disclosed estimate, not a scoreboard celebration.
+This is sports-broadcast graphic language on a local demo. Keyboard focus is a 2px ice-cyan ring. There is no second display face and no rounded sheet.
 
 **Key Characteristics:**
 
-- Full-bleed navy mast: AthletIQ with a red Q, white-outline Health pill
-- Cool gray paper field; exactly two white lifted sheets (lookup + result)
-- Source Sans 3 at 400 / 600 / 700; no second display face
-- Title-case Game ID, Predict, and Health; uppercase reserved for table heads, disclose titles, and error codes
-- Ink Yes/No; navy linear P(home win) bar; 32px navy circular medals on the paper, not on a third card
+- Full-bleed producer bar: ATHLETIQ, NBA/WNBA, Health waveform, pin chips, Game ID, TAKE, 2px ice-cyan underline
+- Giant horizontal split: dormant charcoal and dashes at rest; live ice-cyan / amber widths equal model P vs 1−P
+- Market ribbon under the split, labeled Synthetic · not a book, echoing the same two-color split
+- Two legal chyron columns on the field (Methodology | Limitations) with underlined gothic titles
+- Barlow Condensed at 400 / 500 / 700 / 800; producer chrome uppercase; chyron body sentence case
+- Hard edges (0 radius); flat band stack; no lifted sheets
 
 ## Colors
 
-A cool navy desk with one league-red signal. Neutrals do the paper, ink, and rules. Green exists only as the health-ok pulse.
+A matte charcoal broadcast field with two live plate colors — ice cyan for Home, amber for Away. Neutrals do producer chrome, type, and rules. Green exists only on the health waveform.
 
 ### Primary
 
-- **League Navy** (`navy`): Mast, Predict fill, box-score header, disclose titles, probability fill, and the medal discs. This is the structural color of the desk.
+- **Ice Cyan** (`home`): Live Home plate, 2px producer underline, TAKE stroke and type, pin-chip type, idle-hint links, and keyboard focus. Structural live-Home chrome, not the page field.
 
 ### Secondary
 
-- **League Red** (`red`): The Q in AthletIQ, error-banner stroke, and the uppercase error-code line. It is identity and fault chrome, not a win color.
-
-### Tertiary
-
-- **Focus Blue** (`focus`): 2px keyboard rings on the game field and Predict. Do not use it as a fill.
+- **Away Amber** (`away`): Live Away plate and the Market ribbon’s away echo. Never a producer fill, never a focus ring, never Health.
 
 ### Neutral
 
-- **Cool Paper** (`paper`): Page field behind the sheets and the disclose columns.
-- **Sheet White** (`white`): Lookup and result sheets, table cells, mast type, Health outline.
-- **Desk Ink** (`ink`): Body copy and the Yes/No call.
-- **Mast Ink** (`navy-ink`): Game ID label, Predict hover fill, banner body type.
-- **Quiet Slate** (`muted`): Pin hint, captions, empty states, meta, colophon, bar cap.
-- **Hairline Rule** (`rule`): Sheet stroke and row rules.
-- **Field Stroke** (`input-stroke`): Game ID border at rest.
-- **Track Mist** (`bar-track`): Probability track behind the navy fill.
-- **Alert Wash** (`banner-wash`): Error banner field.
-- **Pulse Idle / OK / Down** (`health-idle`, `health-ok`, `health-down`): 8px Health dots only. The pill label still names the state.
+- **Matte Charcoal** (`field`): Page field and the Game ID input fill.
+- **Producer Black** (`producer`): Producer bar fill, TAKE rest fill, and the 2px rule between live plates.
+- **Plate Ink** (`ink-fill`): Type on live cyan and amber plates, TAKE hover type, pressed league cell, skip-link type.
+- **Broadcast White** (`type`): Body type on charcoal, wordmark, idle producer chrome, skip-link fill, pressed-segment fill, chyron title underline.
+- **Quiet Steel** (`muted`): Market labels, idle hint, chyron empty/meta, colophon.
+- **Hairline Graphite** (`rule`): Split bottom rule, market bottom rule, pin-chip stroke.
+- **Market Ribbon** (`market`): Full-bleed band under the split.
+- **Track Slate** (`track`): Pin-chip fill.
+- **Dormant Plate** (`dormant`): Idle/error/loading split plates and the idle Market echo.
+- **Dormant Type** (`dormant-type`): Type on dormant plates.
+- **Fault Pink** (`error`): Error-code line and banner bottom stroke.
+- **Fault Wash** (`error-wash`): Error banner field.
+- **Wave Idle / OK / Down** (`health-idle`, `health-ok`, `health-down`): Health waveform stroke only. The chip label still names the state.
 
 ### Named Rules
 
-**The Red Q Rule.** Red is the Q and fault chrome. It is never a win, probability, or health-success fill.
+**The Two-Plate Rule.** Live Home is ice cyan; live Away is amber. Width is model P versus implied 1−P. Type on live plates is plate ink. Idle plates are dormant charcoal with dashes — never franchise colors, never a third meter language.
 
-**The Ink Call Rule.** Home-win Yes/No is desk ink on a white cell. Never green, never red, never a filled badge.
+**The Ice-Cyan Chrome Rule.** Ice cyan is Home’s live fill, the producer underline, TAKE, pin type, idle-hint links, and focus rings. It is not Away, not a page field, and not health-success.
 
 ## Typography
 
-**Display Font:** Source Sans 3 (Helvetica Neue, Helvetica, Arial)
-**Body Font:** Source Sans 3 (same stack)
-**Label/Mono Font:** none — `<code>` is the body face at 0.9em
+**Display Font:** Barlow Condensed (Arial Narrow, Helvetica Neue)
+**Body Font:** Barlow Condensed (same stack)
+**Label/Mono Font:** none — `<code>` is the gothic at a slightly smaller size
 
-**Character:** One news-desk sans. Weight and case carry hierarchy; no serif, no condensed scoreboard face, no display italic for headlines.
+**Character:** One condensed broadcast gothic. Weight, tracking, and uppercase carry hierarchy. No serif, no news-desk grotesque, no italic display.
 
 ### Hierarchy
 
-- **Display** (700, 1.35rem, line-height 1, 0.02em): AthletIQ in the mast.
-- **Headline** (700, 0.95rem, 0.06em, uppercase): Methodology and Limitations. Pair with the 32px navy medal; do not sit a kicker above them.
-- **Title** (700, 0.95rem, normal case): Game ID and Predict. Health is 0.875rem / 600, still title case.
-- **Body** (400, 1rem, 1.45): Page default, methodology and limitations prose (0.9rem in those columns). Input value is 600 / 1rem / 1.2.
-- **Label** (700, 0.72rem, 0.06em, uppercase): Box-score column heads on navy. Caption/hint/meta sit at 0.88–0.9rem in Quiet Slate; colophon at 0.8rem.
+- **Display** (800, `clamp(2.8rem, 9vw, 6rem)`, line-height 0.85, −0.02em): Team abbr on each plate (HOME / AWAY or served names), uppercase. At 720px this steps to `clamp(1.8rem, 12vw, 2.6rem)`.
+- **Headline** (800, `clamp(2.4rem, 7vw, 5.2rem)`, line-height 0.9, −0.03em): Live probability numerals. Dormant numerals sit smaller (`clamp(2rem, 5vw, 3.4rem)` with 0.12em tracking). At 720px live numerals step to `clamp(1.6rem, 10vw, 2.2rem)`.
+- **Title** (800, 1.85rem, 0.04em, uppercase): ATHLETIQ wordmark in the producer bar. Disclose headings use the same weight and case at 1.05rem / 0.14em with a 1px Broadcast White underline.
+- **Body** (500, 1.05rem, 1.35): Page default. Chyron prose is 400 / 0.98rem / 1.4, max 75ch. Idle hint is 0.95rem Quiet Steel. Input value is 700 / 1.15rem. Plate role labels (Home / Away) are 700 / 1rem / 0.16em uppercase.
+- **Label** (700, 0.82rem, 0.08em, uppercase): League cells, Health, Game ID, pin chips (0.78rem), market copy, error codes, TAKE (800 / 1rem / 0.12em). Implied-P captions are 0.72rem / 0.1em at 80% opacity. Colophon is 0.85rem / 0.04em Quiet Steel.
 
 ### Named Rules
 
-**The Title-Case Controls Rule.** Game ID, Predict, and Health stay title case with no tracking. Uppercase is only for box-score heads, disclose section titles, and error codes.
+**The Gothic Case Rule.** Producer chrome, TAKE, league codes, Health, chips, market copy, disclose titles, and plate abbr/role stay uppercase condensed. Chyron body stays sentence case at 400. Visible TAKE is the word TAKE (accessible name Predict).
 
 ## Layout
 
-One full-bleed navy mast, then a centered column `min(56rem, calc(100% - 2rem))`. Vertical order is lookup sheet, pin hint, result sheet, two-column disclose, colophon. Horizontal rhythm on the desk is 1.2rem sheet padding and 1.35rem page/disclose gaps. Lookup is a wrapping row: label, 20rem field, Predict. Disclose is two equal columns with 2.25rem column gap, sitting on the paper. At 640px the lookup stacks and stretches, Predict goes full width, disclose becomes one column, the 100% cap hides, and the probability track shortens to 3.75rem.
+Full-bleed producer bar (`min-height` 4.5rem, padding 0.65rem / 1.25rem) holds brand, league, Health, pin chips, Game ID, and TAKE. TAKE’s lookup cluster is `margin-left: auto`. Below it, a flex column stage: optional error banner, giant horizontal split (`min-height: min(52vh, 28rem)`), market ribbon (`min-height` 2.6rem), idle hint, two chyron columns, colophon. Horizontal gutter is 1.25rem. Disclose is two equal columns with 2.5rem column gap, sitting on the charcoal field. No centered desk column, no identity band, no sidebar.
+
+At 720px the lookup cluster goes full width, the Game ID field flexes, TAKE stays right, the split min-height becomes 16rem, and disclose stacks to one column.
 
 ### Named Rules
 
-**The Desk Column Rule.** One stats-desk column. No sidebar, no betting rail, no app-shell navigation beyond the mast.
+**The Producer Bar Rule.** Lookup lives in the producer bar. Do not reintroduce a white identity band, a lifted lookup sheet, or a second header.
 
 ## Elevation & Depth
 
-Hybrid: tonal bands (navy mast / paper field / white sheets) plus one ambient shadow on the sheets. Disclose, hint, and colophon stay flat on the paper. No hover lift, no offset neobrutalist shadow, no overlay scrim.
-
-### Shadow Vocabulary
-
-- **Sheet** (`box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14)`): Lookup and result cards only, with a 1px Hairline Rule.
+Flat tonal banding. Depth is stacked broadcast bands: Producer Black, Matte Charcoal, live plates or Dormant Plate, Market Ribbon. No `box-shadow`. No hover lift. Live plates and the Market echo ease width and fill (220ms, `cubic-bezier(0.16, 1, 0.3, 1)`) when `prefers-reduced-motion: no-preference`.
 
 ### Named Rules
 
-**The Two-Sheet Rule.** Only the lookup row and the result sheet lift. Methodology and Limitations stay on the paper, not in a third card.
+**The Band Stack Rule.** Surfaces are flat. Separate regions with fill change and 1–2px rules, never shadow or rounded lift.
 
 ## Shapes
 
-Sheets, fields, Predict, and error banners share a 6px corner. The Health chip is the only pill (999px) and the only 1px white stroke on navy. Health dots and medals are true circles. The probability track is a sharp 0.5rem-tall rectangle — no stadium cap, no ring.
+Every control, chip, field, plate, and banner is a hard rectangle (`border-radius: 0`). The producer underline is a hard 2px Ice Cyan stripe. TAKE is a 2px Ice Cyan outline. League, Health, and pin chips use 1px hairlines. The Home plate’s inner edge is a 2px Producer Black divider. The Market echo is a sharp 0.85rem-tall rectangle. Health is not a pill. Probability is plate width, never a stadium bar or a ring.
 
 ### Named Rules
 
-**The Soft Sheet Rule.** 6px on sheets and controls. The Health chip is the only pill. Probability is a sharp rectangular bar, never a circular meter.
+**The Hard-Edge Rule.** Radius is 0. No pills, no 6px sheets, no stadium tracks, no circular meters.
 
 ## Components
 
 ### Buttons
 
-- **Shape:** Soft sheet corners (6px).
-- **Primary:** League Navy fill, white 700 title-case Predict, padding 0.7rem 1.35rem. No letter-spacing, no uppercase.
-- **Hover / Focus:** Hover and active darken to Mast Ink. Focus-visible is a 2px Focus Blue ring, offset 2px. Disabled is 0.55 opacity, not a new color.
-- **Secondary / Ghost / Tertiary:** none. Do not add ghost buttons on the mast.
+- **Shape:** Hard rectangle (0).
+- **Primary:** TAKE. Producer Black fill, 2px Ice Cyan stroke, Ice Cyan 800 uppercase, padding 0.5rem / 1.15rem, tracking 0.12em. Visible label TAKE.
+- **Hover / Focus:** Hover fills Ice Cyan with Plate Ink type. Focus-visible is a 2px Ice Cyan ring, offset 2px. Disabled is 0.55 opacity (`cursor: wait` while a lookup runs).
+- **Text control:** Idle-hint fixture id is Ice Cyan, 800, underlined, no chrome.
 
 ### Chips
 
-- **Style:** Health is a transparent pill on the mast, 1px white border, 0.875rem / 600 white type, 8px circular pulse, gap 0.4rem.
-- **State:** Idle pulse is `health-idle`; ok is `health-ok` with the label Health; down uses `health-down` and the error code as the label. Color is not the only signal.
+- **Health:** Hard rectangle on the producer, 1px Broadcast White stroke at 55%, 0.82rem / 700 / 0.08em uppercase, authored 24×12 waveform SVG. Wave idle / ok / down colors the stroke only. Down replaces the Health label with the error code.
+- **Pin:** Track Slate fill, 1px Hairline Graphite, Ice Cyan 700 uppercase, padding 0.22rem / 0.5rem. Model pin and feature version only.
 
 ### Cards / Containers
 
-- **Corner Style:** 6px.
-- **Background:** Sheet White.
-- **Shadow Strategy:** Sheet shadow only (see Elevation).
-- **Border:** 1px Hairline Rule.
-- **Internal Padding:** Lookup 1.05rem / 1.2rem; result 1rem / 1.2rem. Empty result keeps a 5.25rem min-height.
+- **Corner Style:** None (0). This system has no lifted sheets.
+- **Background:** Regions are full-bleed bands (producer, split, market, field), not cards.
+- **Shadow Strategy:** None (see Elevation).
+- **Border:** 1–2px rules between bands.
+- **Internal Padding:** Plates 1.4rem / 1.35rem / 1.2rem. Chyrons 1.35rem / 1.25rem / 2rem.
 
 ### Inputs / Fields
 
-- **Style:** White field, 1px Field Stroke, 6px corners, 600 ink, padding 0.55rem / 0.7rem, width 20rem (full width when stacked).
-- **Focus:** 2px Focus Blue outline, 1px offset. No glow, no navy border swap.
-- **Error / Disabled:** Invalid lookup is not a red input; it is a banner in the result sheet.
+- **Style:** Matte Charcoal fill, hard corners, Broadcast White 700 at 1.15rem, padding 0.48rem / 0.55rem, width 7.5rem (flexes full remaining width at 720px).
+- **Focus:** 2px Ice Cyan outline, 2px offset. No glow.
+- **Error / Disabled:** Invalid lookup is the error banner, not a red input.
 
 ### Navigation
 
-- **Style:** Full-bleed League Navy mast, min-height 3.5rem, space-between brand and Health, padding 0 1.35rem (tighter on small screens). Brand is Display weight with the Q in League Red. No extra nav links. Skip link is a white chip with navy type that appears on focus.
+- **Producer:** Full-bleed Producer Black, min-height 4.5rem, wrapping row, 2px Ice Cyan bottom border. Brand is ATHLETIQ at title size. Tools are league, Health, pin chips; lookup is Game ID + TAKE on the right. No extra nav links. Skip link is a Broadcast White chip with Plate Ink, uppercase, that appears on focus.
+- **League switch:** Hard segmented control, 1px Broadcast White stroke at 45% on Producer Black. Cells are 700 / 0.85rem / 0.08em / uppercase. Pressed cell inverts to Broadcast White / Plate Ink. Hover on an idle cell is white at 12%. Focus-visible is a 2px Ice Cyan ring.
 
-### Box-score table
+### Win-probability split
 
-Navy uppercase heads with a near-white vertical rule between columns. White cells, Hairline row rules, 0.65rem / 0.8rem padding, 0.95rem body (0.82rem on small screens). Home win is 700 Desk Ink. P(home win) is a percent, a Track Mist bar, a League Navy fill, and a 100% cap in Quiet Slate.
+Two flex plates. Idle, loading, and error: equal 50% Dormant Plate, Dormant Type, dashes for percents, implied caption hidden. Live: Home flex-basis is model P (Ice Cyan, Plate Ink); Away is 1−P (Away Amber, Plate Ink). Abbr, role, and percent stack to the bottom. Away may show an uppercase implied caption at the bottom-right.
+
+### Market ribbon
+
+Full-bleed Market Ribbon band under the split. Uppercase Quiet Steel label (`Market P · Synthetic · not a book` when that is the source) and percent. Echo bar is 0.85rem tall: dormant until live, then the same cyan/amber width split as the plates.
 
 ### Error banner
 
-6px sheet, Alert Wash field, 1px League Red stroke. Strong line is League Red, 0.8rem, 0.04em, uppercase (the API code). Body is Mast Ink. Used in the result sheet and, on model failure, in both disclose columns.
+Full-bleed Fault Wash, 1px Fault Pink bottom stroke, padding 0.75rem / 1.25rem. Strong line is Fault Pink, 0.82rem, 0.08em, uppercase (the API code). Body is Broadcast White.
 
-### Disclose medals
+### Legal chyrons
 
-32px navy discs with white glyphs (bar chart for Methodology, shield for Limitations). They sit in the section heading row, 0.55rem from the uppercase navy title. Do not replace them with icon fonts.
+Two columns on the field. Titles are 800 uppercase with a 1px Broadcast White underline. Prose is 400 Broadcast White, max 75ch. Empty and meta lines are Quiet Steel. No medals, no cards, no kickers.
 
 ### Named Rules
 
-**The Linear Probability Rule.** P(home win) is a percent plus a navy fill in a cool rectangular track. No gauges, rings, or pie meters.
+**The Market Echo Rule.** Market P is a labeled ribbon echo of the split (synthetic, not a book). It is not a box-score cell, not a sportsbook line, and not unlabeled.
 
-**The Medal Pair Rule.** Methodology and Limitations are a paired heading-plus-medal on the paper. Do not promote them into cards or kickers.
+**The Chyron Pair Rule.** Methodology and Limitations are two underlined chyron columns on the field. Do not promote them into cards, medals, or kickers.
+
+**The Waveform Health Rule.** Health is a labeled hard chip with an authored waveform. Color never carries the state alone. Pulse OK green stays on the waveform.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** keep the navy mast, red Q, Cool Paper field, and two white 6px sheets.
-- **Do** set Game ID, Predict, and Health in title case.
-- **Do** set Yes/No in Desk Ink and P(home win) as a linear navy bar.
-- **Do** show a 2px Focus Blue ring on keyboard focus.
-- **Do** pair disclose titles with the navy circular medals and leave those columns on the paper.
+- **Do** keep the matte charcoal field, Producer Black bar with a 2px Ice Cyan underline, Barlow Condensed, and hard edges.
+- **Do** paint live Home ice cyan and live Away amber, widths from model P vs 1−P, with Plate Ink type.
+- **Do** keep TAKE uppercase and outlined in the producer bar, with Game ID beside it.
+- **Do** label Market P as Synthetic · not a book on the ribbon when that is the source.
+- **Do** show a 2px Ice Cyan focus ring, and name Health in type — not by color alone.
+- **Do** set Methodology / Limitations as two underlined chyron columns on the field.
 
 ### Don't:
 
-- **Don't** color the home-win call green or red, or wrap it in a success/fail badge.
-- **Don't** use a circular win meter, gauge, or pie for probability.
-- **Don't** lift Methodology/Limitations into a third card or add a sidebar/odds rail.
-- **Don't** all-caps Game ID, Predict, or Health, or add eyebrow kickers above titles.
+- **Don't** round corners, pill Health, or lift white 6px sheets.
+- **Don't** revive the NBA.com/Stats desk (league navy/red, Source Sans, STATS lockup, red Q disc, identity band, box-score table, circular medals).
+- **Don't** use franchise palettes, a scorebug clock/score/quarter, or PRE-GAME kickers.
+- **Don't** use sportsbook language or treat Market P as a book line.
+- **Don't** color a Yes/No call green or red; this surface has no Yes/No cell.
+- **Don't** spread Pulse OK green beyond the health waveform.
 - **Don't** introduce a second display face or a glyph-icon font.
-- **Don't** spread Pulse OK green beyond the Health dot.

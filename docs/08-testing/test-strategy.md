@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.1
+Last Updated: 2026-08-15  
+Version: 1.1.0
 
 > How we verify AthletIQ. Tests are requirement-driven (`test-plan.md`), not invented solely because code exists.  
 > **Gate 7 test strategy Approved.** Prefer Test Plan Approved before first Gate 6 slice (`gates.md` §22).
@@ -82,7 +82,7 @@ Canonical names only (see `glossary.md`). **One primary `Level` per TEST suite.*
 | Load / soak / SLA tests | NFR-004 |
 | Live provider in CI | NFR-003 |
 | Auth / multi-tenant beyond ADR-009 | ADR-009 / NFR-002 |
-| Post-MVP models, UI, GCP | Out of scope |
+| Post-MVP remaining (NN, live WNBA HTTP, live odds, GCP) | Out of CR-004 |
 | ML-005 as mandatory flaky PR unit fail | Quality gate / attestation instead |
 
 ## Boundary: TEST-010 vs TEST-011

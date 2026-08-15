@@ -26,8 +26,10 @@ def test_compose_file_declares_architecture_topology() -> None:
     assert "artifacts:" in text
     assert "pgdata:" in text or "pgdata" in text
 
-    # Postgres 16 (ADR-001)
+    # Postgres 16 (ADR-001) + CR-004 forward migration on fresh volumes
     assert "postgres:16" in text
+    assert "001_initial.sql" in text
+    assert "002_cr004_league_players_odds.sql" in text
 
     # Localhost publish for demo API (ADR-009 / NFR-002)
     assert "127.0.0.1:8000:8000" in text

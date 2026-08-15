@@ -3,7 +3,7 @@
 Status: Approved  
 Owner: Project owner  
 Last Updated: 2026-08-15  
-Version: 1.5.5
+Version: 1.6.2
 
 ## Direction
 
@@ -22,11 +22,11 @@ Do **not** set Implementation from a passing test, or Verification from an IMP D
 | Implementation | IMP task Status + code (not pytest) | `Implemented` · `Partial` · `Not started` |
 | Verification | TEST plan Status; OPS-001/CON-005 remote is GitHub Actions | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Passing (remote)` · `Deferred (remote CI)` · `Planned` |
 
-IMP-001…012 **Done** is Gate 6 code complete for listed modules. It is **not** Gate 8/9 and **not** PRD MVP-complete. Code-review DoD boxes remain open. IMP-011 remote CI is recorded green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
+IMP-001…012 **Done** is Gate 6 code complete for listed MVP modules. IMP-013–018 (CR-004) are **In progress**: listed modules exist locally; CI and code-review DoD boxes remain open. IMP-011 remote CI is recorded green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)) — that SHA is pre-CR-004.
 
 **Partial** means the mapped IMP exists but the requirement’s product bar is not attested. DR-001 / ML-005 local live bars were owner-reported **2026-08-14** (not PRD-ticked; TEST-007 remains synthetic).
 
-CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players` / `player_game_stats` are **reserved schema**, not a pipeline load outcome.
+CR-001 (Accepted): MVP persist/ingest was teams/games/team statistics. **CR-004** loads players, WNBA fixtures, synthetic odds, per-league pins.
 
 ## Matrix
 
@@ -46,10 +46,16 @@ CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players
 | FR-012 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (static topology) |
 | FR-013 | data | error | IMP-004 | TEST-004 | Active | Implemented | Passing (in-memory) |
 | FR-014 | api | api | IMP-008 | TEST-008, TEST-014 | Active | Implemented | Passing (local) |
-| FR-015 | api | — | CR-003 | TEST-008 | Active | Implemented | Passing (local) |
-| DR-001 | data | ml | IMP-003, IMP-004 | TEST-003, TEST-004 | Active | Implemented | Passing (local) |
-| DR-002 | data | database | IMP-002, IMP-004 | TEST-002, TEST-004 | Amended (CR-001) | Implemented | Passing (local) / Passing (in-memory) |
-| DR-003 | data | database | IMP-004 | TEST-004 | Amended (CR-001) | Implemented | Passing (in-memory) |
+| FR-015 | api | PRODUCT.md + gamecast Comp A | IMP-018 | TEST-008, TEST-019 | Amended (2026-08-15 UI grill) | In progress | Passing (local) |
+| FR-016 | data | database | IMP-014 | TEST-015 | Active | Implemented | Passing (local) |
+| FR-017 | data | database | IMP-014 | TEST-016 | Active | Implemented | Passing (local) |
+| FR-018 | api/data | api + ADR-012 | IMP-014, IMP-017 | TEST-017 | Active | Implemented | Passing (local) |
+| FR-019 | api | api + ADR-013 | IMP-016, IMP-017 | TEST-018 | Active | Implemented | Passing (local) |
+| FR-020 | api | api-design | IMP-017 | TEST-008 | Active | Implemented | Passing (local) |
+| DR-001 | data | ml | IMP-003, IMP-004, IMP-014 | TEST-003, TEST-004, TEST-015 | Amended (CR-004) | Implemented | Passing (local) |
+| DR-002 | data | database | IMP-002, IMP-004, IMP-013 | TEST-002, TEST-004, TEST-015 | Amended (CR-004) | Implemented | Passing (local) |
+| DR-003 | data | database | IMP-004, IMP-014 | TEST-004, TEST-016, TEST-017 | Amended (CR-004) | Implemented | Passing (local) |
+| DR-004 | data | database | IMP-013, IMP-014 | TEST-017 | Active | Implemented | Passing (local) |
 | ML-001 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
 | ML-002 | system | ml | IMP-006, IMP-007 | TEST-006, TEST-007 | Active | Implemented | Passing (local) / Passing (synthetic) |
 | ML-003 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
@@ -58,7 +64,8 @@ CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players
 | ML-006 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ML-007 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ML-008 | system | ml | IMP-006 | TEST-006 | Active | Implemented | Passing (local) |
-| ML-009 | system | ml | IMP-007 | TEST-007, TEST-013, TEST-014 | Active | Implemented | Passing (synthetic) / Passing (local) |
+| ML-010 | system | ml + ADR-013 | IMP-016 | TEST-007, TEST-018 | Active | Implemented | Passing (local) |
+| ML-011 | system/data | ml | IMP-015 | TEST-006, TEST-016 | Active | Implemented | Passing (local) |
 | SEC-001 | system | error | IMP-001, IMP-003 | TEST-001, TEST-003 | Active | Implemented | Passing (local) |
 | SEC-002 | system | — | IMP-001, IMP-011 | TEST-001, TEST-011 | Active | Implemented | Passing (local) |
 | NFR-001 | system | ml | IMP-001, IMP-007 | TEST-001, TEST-013 | Active | Implemented | Passing (local) |
@@ -78,7 +85,9 @@ CR-001 (Accepted): MVP persist/ingest is teams, games, team statistics. `players
 | CON-008 | system | ml | IMP-007 | TEST-007 | Active | Implemented | Passing (synthetic) |
 | ADR-008 | system/api/data | ADR-008 + api/ml | IMP-006, IMP-008 | TEST-006, TEST-008, TEST-014 | Accepted | Implemented | Passing (local) |
 | ADR-009 | api | ADR-009 + api | IMP-008 | TEST-008 | Accepted | Implemented | Passing (local) |
-| ADR-010 | data | database + ADR-010 | IMP-002 | TEST-002 | Accepted | Implemented | Passing (local) |
+| CON-009 | api | api + ADR-012 | IMP-017, IMP-018 | TEST-017, TEST-019 | Active | Implemented | Passing (local) |
+| ADR-012 | data/api | ADR-012 | IMP-013, IMP-014, IMP-017 | TEST-017 | Accepted | Implemented | Passing (local) |
+| ADR-013 | system/api | ADR-013 | IMP-016, IMP-017 | TEST-018 | Accepted | Implemented | Passing (local) |
 
 ## Code annotation rule
 

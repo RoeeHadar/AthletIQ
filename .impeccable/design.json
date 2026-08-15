@@ -1,147 +1,162 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-15T01:03:00+03:00",
+  "generatedAt": "2026-08-15T20:20:00Z",
   "title": "Design System: AthletIQ",
   "extensions": {
     "colorMeta": {
-      "navy": { "role": "primary", "displayName": "League Navy", "canonical": "oklch(39.0% 0.133 261.2)", "tonalRamp": ["#000729", "#001b56", "#143d88", "#3560ae", "#5785d6", "#7aaaff", "#a4ceff", "#d3f0ff"] },
-      "navy-ink": { "role": "neutral", "displayName": "Mast Ink", "canonical": "oklch(23.1% 0.062 260.8)", "tonalRamp": ["#040b19", "#12213b", "#2f4264", "#4f6487", "#7187ac", "#95acd3", "#bacff1", "#e2efff"] },
-      "red": { "role": "secondary", "displayName": "League Red", "canonical": "oklch(53.0% 0.207 22.3)", "tonalRamp": ["#2c0000", "#5c0000", "#920000", "#bd0025", "#e93d48", "#ff686c", "#ff9a98", "#ffd0cc"] },
-      "paper": { "role": "neutral", "displayName": "Cool Paper", "canonical": "oklch(93.7% 0.006 264.5)", "tonalRamp": ["#0a0b0d", "#202224", "#414245", "#616367", "#84868a", "#a9abae", "#ccced1", "#edeef1"] },
-      "white": { "role": "neutral", "displayName": "Sheet White", "canonical": "oklch(100.0% 0.000 89.9)", "tonalRamp": ["#0b0b0b", "#222222", "#424242", "#636363", "#868686", "#ababab", "#cecece", "#eeeeee"] },
-      "rule": { "role": "neutral", "displayName": "Hairline Rule", "canonical": "oklch(88.7% 0.012 259.8)", "tonalRamp": ["#090b0e", "#1f2227", "#3f4349", "#5f636a", "#82868e", "#a6abb3", "#caced5", "#eceff3"] },
-      "ink": { "role": "neutral", "displayName": "Desk Ink", "canonical": "oklch(19.9% 0.014 258.4)", "tonalRamp": ["#090b0e", "#1e2227", "#3e434a", "#5f646b", "#81878f", "#a6abb4", "#c9ced5", "#ebeff4"] },
-      "muted": { "role": "neutral", "displayName": "Quiet Slate", "canonical": "oklch(40.5% 0.035 256.6)", "tonalRamp": ["#060b13", "#182230", "#364355", "#576477", "#79879b", "#9dacc1", "#c2cfe1", "#e6effc"] },
-      "focus": { "role": "tertiary", "displayName": "Focus Blue", "canonical": "oklch(48.8% 0.217 264.4)", "tonalRamp": ["#01003c", "#020078", "#0427b3", "#2052dc", "#417aff", "#64a1ff", "#90c9ff", "#c6eeff"] },
-      "banner-wash": { "role": "neutral", "displayName": "Alert Wash", "canonical": "oklch(95.7% 0.019 9.3)", "tonalRamp": ["#0f090a", "#291f20", "#4c3e40", "#6d5f61", "#918284", "#b6a6a8", "#d8cacb", "#f5eced"] },
-      "input-stroke": { "role": "neutral", "displayName": "Field Stroke", "canonical": "oklch(66.7% 0.026 259.8)", "tonalRamp": ["#080b11", "#1b222d", "#3a4351", "#5b6473", "#7d8797", "#a1acbc", "#c5cedd", "#e9eff9"] },
-      "bar-track": { "role": "neutral", "displayName": "Track Mist", "canonical": "oklch(91.3% 0.017 256.3)", "tonalRamp": ["#090b0f", "#1d2229", "#3c434c", "#5d646d", "#808791", "#a4abb6", "#c8ced8", "#eaeff5"] },
-      "health-idle": { "role": "neutral", "displayName": "Pulse Idle", "canonical": "oklch(71.5% 0.045 260.4)", "tonalRamp": ["#060b16", "#172234", "#34435b", "#54647d", "#7787a2", "#9bacc8", "#c0cfe8", "#e5efff"] },
-      "health-ok": { "role": "neutral", "displayName": "Pulse OK", "canonical": "oklch(72.3% 0.192 149.6)", "tonalRamp": ["#001400", "#003200", "#005a00", "#007e13", "#00a43e", "#2ccb63", "#76eb92", "#bcffc9"] },
-      "health-down": { "role": "neutral", "displayName": "Pulse Down", "canonical": "oklch(71.1% 0.166 22.2)", "tonalRamp": ["#260000", "#520000", "#850013", "#ae2c35", "#d85456", "#ff7a7a", "#ffa7a3", "#ffd7d3"] }
+      "field": { "role": "neutral", "displayName": "Matte Charcoal", "canonical": "oklch(17.6% 0.014 258.4)", "tonalRamp": ["#0e1218", "#252930", "#43484f", "#646971", "#878d95", "#acb1ba", "#cbd1da", "#e6ecf5"] },
+      "producer": { "role": "neutral", "displayName": "Producer Black", "canonical": "oklch(13.9% 0.008 255.5)", "tonalRamp": ["#0f1215", "#26292d", "#45484c", "#66696d", "#898c91", "#aeb1b6", "#ced1d6", "#e8ebf0"] },
+      "home": { "role": "primary", "displayName": "Ice Cyan", "canonical": "oklch(77.9% 0.139 230.9)", "tonalRamp": ["#00141f", "#002d3f", "#004f6b", "#00739a", "#0099cc", "#35c0f9", "#96dcff", "#d4f0ff"] },
+      "away": { "role": "secondary", "displayName": "Away Amber", "canonical": "oklch(81.3% 0.165 75.0)", "tonalRamp": ["#1b0f00", "#3a2400", "#624000", "#8d5e00", "#bb7e00", "#eba000", "#ffc673", "#ffe7c8"] },
+      "ink-fill": { "role": "neutral", "displayName": "Plate Ink", "canonical": "oklch(15.4% 0.009 264.3)", "tonalRamp": ["#101216", "#27292e", "#45484d", "#66696e", "#898c92", "#aeb1b7", "#ced1d7", "#e8ebf2"] },
+      "type": { "role": "neutral", "displayName": "Broadcast White", "canonical": "oklch(97.5% 0.006 255.5)", "tonalRamp": ["#101214", "#27292c", "#45484b", "#67696d", "#8a8c90", "#aeb1b5", "#ced1d5", "#e8ebef"] },
+      "muted": { "role": "neutral", "displayName": "Quiet Steel", "canonical": "oklch(72.6% 0.028 251.7)", "tonalRamp": ["#08121e", "#1f2a37", "#3d4957", "#5d6a79", "#808e9d", "#a5b3c3", "#c4d3e3", "#deedfe"] },
+      "rule": { "role": "neutral", "displayName": "Hairline Graphite", "canonical": "oklch(31.1% 0.022 259.4)", "tonalRamp": ["#0c121b", "#222934", "#414854", "#616976", "#848d9a", "#a9b2bf", "#c9d2e0", "#e3ecfa"] },
+      "market": { "role": "neutral", "displayName": "Market Ribbon", "canonical": "oklch(19.9% 0.014 258.4)", "tonalRamp": ["#0e1218", "#252930", "#43484f", "#646971", "#878d95", "#acb1ba", "#ccd1da", "#e6ecf5"] },
+      "track": { "role": "neutral", "displayName": "Track Slate", "canonical": "oklch(25.4% 0.022 257.3)", "tonalRamp": ["#0b121b", "#222934", "#404854", "#616a76", "#848d9a", "#a9b2bf", "#c8d2df", "#e2ecfa"] },
+      "dormant": { "role": "neutral", "displayName": "Dormant Plate", "canonical": "oklch(24.6% 0.022 257.3)", "tonalRamp": ["#0b121b", "#222934", "#404854", "#616a76", "#848d9a", "#a9b2bf", "#c8d2e0", "#e2ecfa"] },
+      "dormant-type": { "role": "neutral", "displayName": "Dormant Type", "canonical": "oklch(89.9% 0.015 260.7)", "tonalRamp": ["#0e1218", "#252931", "#434850", "#646972", "#878c96", "#acb1bb", "#cbd1db", "#e5ecf6"] },
+      "error": { "role": "neutral", "displayName": "Fault Pink", "canonical": "oklch(76.1% 0.142 20.9)", "tonalRamp": ["#2a0004", "#53000e", "#831724", "#ac3f44", "#d56466", "#fe8a8a", "#ffbebc", "#ffe4e2"] },
+      "error-wash": { "role": "neutral", "displayName": "Fault Wash", "canonical": "oklch(21.9% 0.040 15.6)", "tonalRamp": ["#20090c", "#3a2122", "#5b3f40", "#7e6061", "#a38384", "#c9a7a9", "#eac7c8", "#ffe4e4"] },
+      "health-ok": { "role": "neutral", "displayName": "Wave OK", "canonical": "oklch(72.3% 0.192 149.6)", "tonalRamp": ["#001705", "#003312", "#005723", "#007f37", "#00a84b", "#37d16a", "#61f389", "#baffc7"] },
+      "health-down": { "role": "neutral", "displayName": "Wave Down", "canonical": "oklch(71.1% 0.166 22.2)", "tonalRamp": ["#2a0003", "#53000c", "#8a001b", "#b5333a", "#df5a5c", "#ff8987", "#ffbebb", "#ffe4e2"] },
+      "health-idle": { "role": "neutral", "displayName": "Wave Idle", "canonical": "oklch(68.4% 0.036 255.3)", "tonalRamp": ["#061221", "#1d2a3a", "#3b495b", "#5b6a7e", "#7e8ea2", "#a2b3c8", "#c2d3e9", "#dfedff"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "AthletIQ wordmark in the navy mast." },
-      "headline": { "displayName": "Headline", "purpose": "Uppercase Methodology / Limitations titles beside navy medals." },
-      "title": { "displayName": "Title", "purpose": "Title-case Game ID and Predict controls." },
-      "body": { "displayName": "Body", "purpose": "Page default and disclose prose." },
-      "label": { "displayName": "Label", "purpose": "Uppercase navy box-score column heads." }
+      "display": { "displayName": "Display", "purpose": "Giant uppercase team abbr on each win-probability plate." },
+      "headline": { "displayName": "Headline", "purpose": "Live probability numerals on the plates." },
+      "title": { "displayName": "Title", "purpose": "ATHLETIQ wordmark in the producer bar." },
+      "body": { "displayName": "Body", "purpose": "Page default and chyron prose." },
+      "label": { "displayName": "Label", "purpose": "Uppercase producer chrome, chips, market copy, and TAKE." }
     },
-    "shadows": [
-      { "name": "sheet", "value": "0 2px 8px rgba(15, 23, 42, 0.14)", "purpose": "Single ambient lift under the white lookup and result sheets." }
+    "shadows": [],
+    "motion": [
+      { "name": "plate-slam", "value": "220ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Live plate and market-echo width/fill slam after TAKE. Off unless prefers-reduced-motion: no-preference." }
     ],
     "breakpoints": [
-      { "name": "stack", "value": "640px" }
+      { "name": "stack", "value": "720px" }
     ]
   },
   "components": [
     {
-      "name": "Primary Button",
+      "name": "TAKE Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Title-case Predict control: navy fill, 6px corners, mast-ink hover.",
-      "html": "<button class=\"ds-btn-primary\" type=\"submit\">Predict</button>",
-      "css": ".ds-btn-primary { font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; font-weight: 700; line-height: 1; letter-spacing: 0; text-transform: none; color: #ffffff; background: #17408b; border: 0; border-radius: 6px; padding: 0.7rem 1.35rem; cursor: pointer; } .ds-btn-primary:hover, .ds-btn-primary:active { background: #0b1c3a; } .ds-btn-primary:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+      "description": "Uppercase producer control: cyan outline on producer black, fills cyan on hover.",
+      "html": "<button class=\"ds-btn-primary\" type=\"submit\" aria-label=\"Predict\">TAKE</button>",
+      "css": ".ds-btn-primary { font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; font-size: 1rem; font-weight: 800; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; color: #3ec6ff; background: #07090c; border: 2px solid #3ec6ff; border-radius: 0; padding: 0.5rem 1.15rem; cursor: pointer; } .ds-btn-primary:hover { background: #3ec6ff; color: #0a0c10; } .ds-btn-primary:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.55; cursor: wait; }"
     },
     {
       "name": "Game ID Input",
       "kind": "input",
       "refersTo": "input-game",
-      "description": "Numeric game_id field: white sheet, field stroke, 6px corners, 600 ink.",
+      "description": "Numeric game_id field: charcoal fill, hard corners, 700 broadcast white.",
       "html": "<input class=\"ds-input-game\" id=\"game-id\" name=\"game_id\" inputmode=\"numeric\" placeholder=\"e.g. 48\" />",
-      "css": ".ds-input-game { box-sizing: border-box; width: 20rem; max-width: 100%; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; color: #12161c; border: 1px solid #8b95a5; border-radius: 6px; padding: 0.55rem 0.7rem; background: #ffffff; } .ds-input-game:hover { border-color: #8b95a5; } .ds-input-game:focus, .ds-input-game:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 1px; }"
+      "css": ".ds-input-game { box-sizing: border-box; width: 7.5rem; max-width: 100%; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.2; color: #f4f7fb; border: 1px solid #8b95a5; border-radius: 0; padding: 0.48rem 0.55rem; background: #0d1117; } .ds-input-game:focus, .ds-input-game:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; }"
     },
     {
-      "name": "Mast",
+      "name": "Producer Bar",
       "kind": "nav",
-      "refersTo": "nav-mast",
-      "description": "Full-bleed navy header with AthletIQ (red Q) and the Health pill.",
-      "html": "<header class=\"ds-mast\"><h1 class=\"ds-mast__brand\">AthletI<span class=\"ds-mast__q\">Q</span></h1><p class=\"ds-mast__health\" data-state=\"ok\"><span class=\"ds-mast__dot\" aria-hidden=\"true\"></span>Health</p></header>",
-      "css": ".ds-mast { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.5rem; padding: 0 1.35rem; background: #17408b; color: #ffffff; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-mast__brand { margin: 0; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1; } .ds-mast__q { color: #c8102e; } .ds-mast__health { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.22rem 0.7rem 0.22rem 0.5rem; font-size: 0.875rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: #ffffff; background: transparent; border: 1px solid #fff; border-radius: 999px; } .ds-mast__dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #22c55e; } .ds-mast__health:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+      "refersTo": "nav-producer",
+      "description": "Full-bleed producer strip: ATHLETIQ, league, Health waveform, pin, Game ID, TAKE, 2px cyan underline.",
+      "html": "<header class=\"ds-producer\"><p class=\"ds-producer__brand\">AthletIQ</p><div class=\"ds-producer__tools\"><div class=\"ds-seg\" role=\"group\" aria-label=\"League\"><button type=\"button\" class=\"ds-seg__btn\" aria-pressed=\"true\">NBA</button><button type=\"button\" class=\"ds-seg__btn\" aria-pressed=\"false\">WNBA</button></div><p class=\"ds-producer__health\" data-state=\"ok\"><svg class=\"ds-producer__wave\" viewBox=\"0 0 24 12\" width=\"24\" height=\"12\" aria-hidden=\"true\"><path d=\"M1 6h3l2-4 3 8 2-4h4l2 3 2-3h4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" stroke-linecap=\"square\"></path></svg><span>Health</span></p><span class=\"ds-chip-pin\">xgboost-v1</span></div><form class=\"ds-producer__lookup\"><label class=\"ds-producer__gid\" for=\"ds-gid\">Game ID</label><input class=\"ds-input-game\" id=\"ds-gid\" name=\"game_id\" inputmode=\"numeric\" placeholder=\"e.g. 48\" /><button class=\"ds-btn-primary\" type=\"submit\" aria-label=\"Predict\">TAKE</button></form></header>",
+      "css": ".ds-producer { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.1rem; min-height: 4.5rem; padding: 0.65rem 1.25rem; background: #07090c; color: #f4f7fb; border-bottom: 2px solid #3ec6ff; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; } .ds-producer__brand { margin: 0; font-size: 1.85rem; font-weight: 800; letter-spacing: 0.04em; line-height: 1; text-transform: uppercase; } .ds-producer__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem 0.75rem; } .ds-seg { display: flex; border: 1px solid rgba(244, 247, 251, 0.45); } .ds-seg__btn { margin: 0; padding: 0.38rem 0.7rem; border: 0; background: transparent; color: #f4f7fb; font: 700 0.85rem/1 \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; } .ds-seg__btn + .ds-seg__btn { border-left: 1px solid rgba(244, 247, 251, 0.45); } .ds-seg__btn[aria-pressed=\"true\"] { background: #f4f7fb; color: #0a0c10; } .ds-seg__btn:hover:not([aria-pressed=\"true\"]) { background: rgba(244, 247, 251, 0.12); } .ds-seg__btn:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; } .ds-producer__health { display: flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.28rem 0.65rem; border: 1px solid rgba(244, 247, 251, 0.55); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; } .ds-producer__wave { display: block; color: #8b9bb0; } .ds-producer__health[data-state=\"ok\"] .ds-producer__wave { color: #22c55e; } .ds-producer__health[data-state=\"down\"] .ds-producer__wave { color: #f87171; } .ds-chip-pin { display: inline-block; padding: 0.22rem 0.5rem; border: 1px solid #2a313c; background: #1c232d; color: #3ec6ff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; } .ds-producer__lookup { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.6rem; margin-left: auto; } .ds-producer__gid { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; } .ds-input-game { box-sizing: border-box; width: 7.5rem; font-family: inherit; font-size: 1.15rem; font-weight: 700; color: #f4f7fb; border: 1px solid #8b95a5; border-radius: 0; padding: 0.48rem 0.55rem; background: #0d1117; } .ds-input-game:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; } .ds-btn-primary { font-family: inherit; font-size: 1rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #3ec6ff; background: #07090c; border: 2px solid #3ec6ff; border-radius: 0; padding: 0.5rem 1.15rem; cursor: pointer; } .ds-btn-primary:hover { background: #3ec6ff; color: #0a0c10; } .ds-btn-primary:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; }"
+    },
+    {
+      "name": "League Segment",
+      "kind": "chip",
+      "refersTo": "seg-league",
+      "description": "NBA/WNBA switch: hard rectangle, white hairline on producer black, pressed cell inverts.",
+      "html": "<div class=\"ds-seg-wrap\"><div class=\"ds-seg\" role=\"group\" aria-label=\"League\"><button type=\"button\" class=\"ds-seg__btn\" aria-pressed=\"true\">NBA</button><button type=\"button\" class=\"ds-seg__btn\" aria-pressed=\"false\">WNBA</button></div></div>",
+      "css": ".ds-seg-wrap { display: inline-flex; background: #07090c; padding: 0.6rem; } .ds-seg { display: flex; border: 1px solid rgba(244, 247, 251, 0.45); } .ds-seg__btn { margin: 0; padding: 0.38rem 0.7rem; border: 0; background: transparent; color: #f4f7fb; font: 700 0.85rem/1 \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; } .ds-seg__btn + .ds-seg__btn { border-left: 1px solid rgba(244, 247, 251, 0.45); } .ds-seg__btn[aria-pressed=\"true\"] { background: #f4f7fb; color: #0a0c10; } .ds-seg__btn:hover:not([aria-pressed=\"true\"]) { background: rgba(244, 247, 251, 0.12); } .ds-seg__btn[aria-pressed=\"true\"]:hover { background: #f4f7fb; } .ds-seg__btn:focus-visible { outline: 2px solid #3ec6ff; outline-offset: 2px; }"
     },
     {
       "name": "Health Chip",
       "kind": "chip",
       "refersTo": "chip-health",
-      "description": "Title-case Health pill on navy: white outline, labeled pulse, green only for ok.",
-      "html": "<p class=\"ds-chip-health\" data-state=\"ok\"><span class=\"ds-chip-health__dot\" aria-hidden=\"true\"></span>Health</p>",
-      "css": ".ds-chip-health { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.22rem 0.7rem 0.22rem 0.5rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: #ffffff; background: #17408b; border: 1px solid #fff; border-radius: 999px; } .ds-chip-health__dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #93a4c0; } .ds-chip-health[data-state=\"ok\"] .ds-chip-health__dot { background: #22c55e; } .ds-chip-health[data-state=\"down\"] .ds-chip-health__dot { background: #f87171; } .ds-chip-health:hover { border-color: #fff; } .ds-chip-health:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }"
+      "description": "Hard Health chip on producer black: waveform SVG, labeled pulse, green only on the wave.",
+      "html": "<div class=\"ds-chip-health-wrap\"><p class=\"ds-chip-health\" data-state=\"ok\"><svg class=\"ds-chip-health__wave\" viewBox=\"0 0 24 12\" width=\"24\" height=\"12\" aria-hidden=\"true\"><path d=\"M1 6h3l2-4 3 8 2-4h4l2 3 2-3h4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" stroke-linecap=\"square\"></path></svg>Health</p></div>",
+      "css": ".ds-chip-health-wrap { display: inline-flex; background: #07090c; padding: 0.6rem; } .ds-chip-health { display: flex; align-items: center; gap: 0.4rem; margin: 0; padding: 0.28rem 0.65rem; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #f4f7fb; background: transparent; border: 1px solid rgba(244, 247, 251, 0.55); border-radius: 0; } .ds-chip-health__wave { display: block; color: #8b9bb0; } .ds-chip-health[data-state=\"ok\"] .ds-chip-health__wave { color: #22c55e; } .ds-chip-health[data-state=\"down\"] .ds-chip-health__wave { color: #f87171; }"
     },
     {
-      "name": "Sheet Card",
-      "kind": "card",
-      "refersTo": "card-sheet",
-      "description": "White lookup/result sheet: 6px corners, hairline rule, one ambient shadow.",
-      "html": "<div class=\"ds-card\"><label class=\"ds-card__label\">Game ID</label></div>",
-      "css": ".ds-card { background: #ffffff; border: 1px solid #d5dae2; border-radius: 6px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14); padding: 1.05rem 1.2rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #12161c; } .ds-card__label { font-size: 0.95rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: #0b1c3a; }"
+      "name": "Pin Chip",
+      "kind": "chip",
+      "refersTo": "chip-pin",
+      "description": "Producer meta chip: track fill, graphite hairline, ice-cyan uppercase.",
+      "html": "<span class=\"ds-chip-pin\">xgboost-v1</span>",
+      "css": ".ds-chip-pin { display: inline-block; padding: 0.22rem 0.5rem; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #3ec6ff; background: #1c232d; border: 1px solid #2a313c; border-radius: 0; }"
     },
     {
-      "name": "Box-score Table",
+      "name": "Win-probability Split",
       "kind": "custom",
-      "refersTo": "table-head",
-      "description": "Navy uppercase heads, white cells, ink Yes/No — not a green win badge.",
-      "html": "<table class=\"ds-box\"><thead><tr><th>Home win</th><th>P(home win)</th><th>Model</th></tr></thead><tbody><tr><td class=\"ds-box__win\">Yes</td><td>62.4%</td><td>xgboost-v1</td></tr></tbody></table>",
-      "css": ".ds-box { width: 100%; border-collapse: collapse; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; color: #12161c; } .ds-box th, .ds-box td { text-align: left; padding: 0.65rem 0.8rem; vertical-align: middle; } .ds-box th { background: #17408b; color: #ffffff; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; } .ds-box th + th { border-left: 1px solid rgba(255, 255, 255, 0.85); } .ds-box td { border-bottom: 1px solid #d5dae2; background: #ffffff; } .ds-box tr:last-child td { border-bottom: 0; } .ds-box__win { font-weight: 700; color: #12161c; }"
+      "refersTo": "split-home",
+      "description": "Giant Home/Away plates: live cyan/amber widths from model P vs 1−P, plate-ink gothic type.",
+      "html": "<section class=\"ds-split\" aria-label=\"Home win probability split\"><div class=\"ds-split__home\"><p class=\"ds-split__abbr\">HOME</p><p class=\"ds-split__role\">Home</p><p class=\"ds-split__pct\">58%</p></div><div class=\"ds-split__away\"><p class=\"ds-split__abbr\">AWAY</p><p class=\"ds-split__role\">Away</p><p class=\"ds-split__pct\">42%</p><p class=\"ds-split__implied\">Away implied</p></div></section>",
+      "css": ".ds-split { display: flex; min-height: 12rem; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; } .ds-split__home, .ds-split__away { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 0.15rem; min-width: 0; padding: 1.4rem 1.35rem 1.2rem; overflow: hidden; color: #0a0c10; } .ds-split__home { flex: 0 0 58%; background: #3ec6ff; border-right: 2px solid #07090c; } .ds-split__away { flex: 0 0 42%; background: #ffb020; } .ds-split__abbr { margin: 0; font-size: clamp(2.8rem, 9vw, 6rem); font-weight: 800; line-height: 0.85; letter-spacing: -0.02em; text-transform: uppercase; } .ds-split__role { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; } .ds-split__pct { margin: 0.35rem 0 0; font-size: clamp(2.4rem, 7vw, 5.2rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.03em; } .ds-split__implied { position: absolute; right: 1.1rem; bottom: 0.7rem; margin: 0; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }"
     },
     {
-      "name": "Probability Bar",
+      "name": "Market Ribbon",
       "kind": "custom",
-      "refersTo": "card-sheet",
-      "description": "Linear P(home win): percent, mist track, navy fill, 100% cap. Never a ring.",
-      "html": "<div class=\"ds-bar\"><span>62.4%</span><span class=\"ds-bar__track\" aria-hidden=\"true\"><span class=\"ds-bar__fill\" style=\"width:62.4%\"></span></span><span class=\"ds-bar__cap\">100%</span></div>",
-      "css": ".ds-bar { display: flex; align-items: center; gap: 0.55rem; min-width: 11rem; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; color: #12161c; } .ds-bar__track { flex: 1; height: 0.5rem; background: #dbe3ee; position: relative; } .ds-bar__fill { display: block; height: 100%; background: #17408b; } .ds-bar__cap { font-size: 0.72rem; font-weight: 700; color: #3d4a5c; }"
+      "refersTo": "market-ribbon",
+      "description": "Full-bleed synthetic Market P echo: label, cyan/amber bar, percent.",
+      "html": "<section class=\"ds-market\"><p class=\"ds-market__label\">Market P · Synthetic · not a book</p><div class=\"ds-market__echo\" aria-hidden=\"true\"><span class=\"ds-market__home\"></span><span class=\"ds-market__away\"></span></div><p class=\"ds-market__pct\">55%</p></section>",
+      "css": ".ds-market { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.1rem; min-height: 2.6rem; padding: 0.55rem 1.25rem; background: #12161c; border-bottom: 1px solid #2a313c; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; } .ds-market__label, .ds-market__pct { margin: 0; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9aa8b8; } .ds-market__echo { display: flex; flex: 1 1 14rem; height: 0.85rem; min-width: 10rem; } .ds-market__home { display: block; height: 100%; flex: 0 0 55%; background: #3ec6ff; } .ds-market__away { display: block; height: 100%; flex: 0 0 45%; background: #ffb020; }"
     },
     {
       "name": "Error Banner",
       "kind": "custom",
       "refersTo": "banner-error",
-      "description": "Alert-wash sheet, red stroke, uppercase API code, mast-ink recovery copy.",
+      "description": "Full-bleed fault wash, pink API code, broadcast-white recovery copy.",
       "html": "<p class=\"ds-banner\" role=\"alert\"><strong>game_not_found</strong> That game_id is not in this database. Use an id from the loaded pipeline.</p>",
-      "css": ".ds-banner { margin: 0; padding: 0.7rem 0.8rem; border: 1px solid #c8102e; border-radius: 6px; color: #0b1c3a; background: #fdecee; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.45; } .ds-banner strong { display: block; color: #c8102e; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }"
+      "css": ".ds-banner { margin: 0; padding: 0.75rem 1.25rem; border-bottom: 1px solid #ff8a8a; color: #f4f7fb; background: #2a1214; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; font-size: 1.05rem; line-height: 1.35; } .ds-banner strong { display: block; margin-bottom: 0.2rem; color: #ff8a8a; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; }"
     },
     {
-      "name": "Disclose Title",
+      "name": "Legal Chyron",
       "kind": "custom",
-      "refersTo": "nav-mast",
-      "description": "Uppercase navy section title with a 32px navy circular medal, on paper not a card.",
-      "html": "<h2 class=\"ds-disclose-title\"><svg class=\"ds-medal\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" aria-hidden=\"true\"><circle cx=\"16\" cy=\"16\" r=\"16\" fill=\"#17408B\"/><rect x=\"7\" y=\"18\" width=\"4\" height=\"8\" fill=\"#fff\"/><rect x=\"14\" y=\"12\" width=\"4\" height=\"14\" fill=\"#fff\"/><rect x=\"21\" y=\"8\" width=\"4\" height=\"18\" fill=\"#fff\"/></svg>Methodology</h2>",
-      "css": ".ds-disclose-title { display: flex; align-items: center; gap: 0.55rem; margin: 0; font-family: \"Source Sans 3\", \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #17408b; } .ds-medal { width: 2rem; height: 2rem; flex: 0 0 auto; display: block; }"
+      "refersTo": "chyron",
+      "description": "Underlined gothic title plus sentence-case disclosure copy on the charcoal field.",
+      "html": "<article class=\"ds-chyron\"><h2>Methodology</h2><p>Pre-tip team features only. The served pin is disclosed. This is an estimate, not a promise.</p></article>",
+      "css": ".ds-chyron { padding: 1.35rem 1.25rem; background: #0d1117; font-family: \"Barlow Condensed\", \"Arial Narrow\", \"Helvetica Neue\", sans-serif; color: #f4f7fb; } .ds-chyron h2 { margin: 0 0 0.65rem; padding-bottom: 0.25rem; border-bottom: 1px solid #f4f7fb; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; } .ds-chyron p { margin: 0; max-width: 75ch; font-size: 0.98rem; font-weight: 400; line-height: 1.4; }"
     }
   ],
   "narrative": {
-    "northStar": "The NBA.com/Stats Desk",
-    "overview": "AthletIQ is a local stats-desk query: enter a loaded `game_id`, read the home-win call, then read the pin, methodology, and limitations. The craft is NBA.com/Stats executed straight — navy mast, a single red Q in the AthletIQ wordmark, white sheets on cool gray paper, navy box-score heads, Source Sans 3. It is not a betting board, not a live odds rail, and not a circular win meter.\n\nDensity is compact and tabular. Interactive labels stay title case. The page is one centered desk column, not an app shell with side rails. Probability is a numeric percent plus a linear navy fill. The home-win call is the words Yes or No in desk ink. Health is a labeled pill on the mast; color never carries that state alone.\n\nThis is a category-standard sports-analytics dashboard. Copy is English and names real endpoints. Focus rings are visible. The prediction is a disclosed estimate, not a scoreboard celebration.",
+    "northStar": "The Powered-On Gamecast",
+    "overview": "AthletIQ is a local lookup instrument drawn as a powered-on broadcast win-probability graphic. Pick NBA or WNBA, enter a loaded `game_id`, TAKE, and read Home versus Away as a full-bleed horizontal split of model P against implied 1−P, then a labeled synthetic Market P ribbon, the served pin, and legal Methodology / Limitations chyrons. The craft is matte charcoal, ice-cyan Home plates, amber Away plates, Barlow Condensed gothic, hard edges, and a producer bar. It is not an NBA.com/Stats desk, not a scorebug, and not a sportsbook.\n\nDensity is broadcast-tight: all lookup chrome lives in one full-bleed producer strip. Idle plates sit dormant with em dashes; a successful TAKE slams them into cyan and amber widths. Type on live plates is near-black plate ink. Health is a labeled hard chip with an authored waveform; color never carries that state alone. Copy is English and names real endpoints. The prediction is a disclosed estimate, not a scoreboard celebration.\n\nThis is sports-broadcast graphic language on a local demo. Keyboard focus is a 2px ice-cyan ring. There is no second display face and no rounded sheet.",
     "keyCharacteristics": [
-      "Full-bleed navy mast: AthletIQ with a red Q, white-outline Health pill",
-      "Cool gray paper field; exactly two white lifted sheets (lookup + result)",
-      "Source Sans 3 at 400 / 600 / 700; no second display face",
-      "Title-case Game ID, Predict, and Health; uppercase reserved for table heads, disclose titles, and error codes",
-      "Ink Yes/No; navy linear P(home win) bar; 32px navy circular medals on the paper, not on a third card"
+      "Full-bleed producer bar: ATHLETIQ, NBA/WNBA, Health waveform, pin chips, Game ID, TAKE, 2px ice-cyan underline",
+      "Giant horizontal split: dormant charcoal and dashes at rest; live ice-cyan / amber widths equal model P vs 1−P",
+      "Market ribbon under the split, labeled Synthetic · not a book, echoing the same two-color split",
+      "Two legal chyron columns on the field (Methodology | Limitations) with underlined gothic titles",
+      "Barlow Condensed at 400 / 500 / 700 / 800; producer chrome uppercase; chyron body sentence case",
+      "Hard edges (0 radius); flat band stack; no lifted sheets"
     ],
     "rules": [
-      { "name": "The Red Q Rule", "body": "Red is the Q and fault chrome. It is never a win, probability, or health-success fill.", "section": "colors" },
-      { "name": "The Ink Call Rule", "body": "Home-win Yes/No is desk ink on a white cell. Never green, never red, never a filled badge.", "section": "colors" },
-      { "name": "The Title-Case Controls Rule", "body": "Game ID, Predict, and Health stay title case with no tracking. Uppercase is only for box-score heads, disclose section titles, and error codes.", "section": "typography" },
-      { "name": "The Desk Column Rule", "body": "One stats-desk column. No sidebar, no betting rail, no app-shell navigation beyond the mast.", "section": "layout" },
-      { "name": "The Two-Sheet Rule", "body": "Only the lookup row and the result sheet lift. Methodology and Limitations stay on the paper, not in a third card.", "section": "elevation" },
-      { "name": "The Soft Sheet Rule", "body": "6px on sheets and controls. The Health chip is the only pill. Probability is a sharp rectangular bar, never a circular meter.", "section": "shapes" },
-      { "name": "The Linear Probability Rule", "body": "P(home win) is a percent plus a navy fill in a cool rectangular track. No gauges, rings, or pie meters.", "section": "components" },
-      { "name": "The Medal Pair Rule", "body": "Methodology and Limitations are a paired heading-plus-medal on the paper. Do not promote them into cards or kickers.", "section": "components" }
+      { "name": "The Two-Plate Rule", "body": "Live Home is ice cyan; live Away is amber. Width is model P versus implied 1−P. Type on live plates is plate ink. Idle plates are dormant charcoal with dashes — never franchise colors, never a third meter language.", "section": "colors" },
+      { "name": "The Ice-Cyan Chrome Rule", "body": "Ice cyan is Home’s live fill, the producer underline, TAKE, pin type, idle-hint links, and focus rings. It is not Away, not a page field, and not health-success.", "section": "colors" },
+      { "name": "The Gothic Case Rule", "body": "Producer chrome, TAKE, league codes, Health, chips, market copy, disclose titles, and plate abbr/role stay uppercase condensed. Chyron body stays sentence case at 400. Visible TAKE is the word TAKE (accessible name Predict).", "section": "typography" },
+      { "name": "The Producer Bar Rule", "body": "Lookup lives in the producer bar. Do not reintroduce a white identity band, a lifted lookup sheet, or a second header.", "section": "layout" },
+      { "name": "The Band Stack Rule", "body": "Surfaces are flat. Separate regions with fill change and 1–2px rules, never shadow or rounded lift.", "section": "elevation" },
+      { "name": "The Hard-Edge Rule", "body": "Radius is 0. No pills, no 6px sheets, no stadium tracks, no circular meters.", "section": "shapes" },
+      { "name": "The Market Echo Rule", "body": "Market P is a labeled ribbon echo of the split (synthetic, not a book). It is not a box-score cell, not a sportsbook line, and not unlabeled.", "section": "components" },
+      { "name": "The Chyron Pair Rule", "body": "Methodology and Limitations are two underlined chyron columns on the field. Do not promote them into cards, medals, or kickers.", "section": "components" },
+      { "name": "The Waveform Health Rule", "body": "Health is a labeled hard chip with an authored waveform. Color never carries the state alone. Pulse OK green stays on the waveform.", "section": "components" }
     ],
     "dos": [
-      "Do keep the navy mast, red Q, Cool Paper field, and two white 6px sheets.",
-      "Do set Game ID, Predict, and Health in title case.",
-      "Do set Yes/No in Desk Ink and P(home win) as a linear navy bar.",
-      "Do show a 2px Focus Blue ring on keyboard focus.",
-      "Do pair disclose titles with the navy circular medals and leave those columns on the paper."
+      "Do keep the matte charcoal field, Producer Black bar with a 2px Ice Cyan underline, Barlow Condensed, and hard edges.",
+      "Do paint live Home ice cyan and live Away amber, widths from model P vs 1−P, with Plate Ink type.",
+      "Do keep TAKE uppercase and outlined in the producer bar, with Game ID beside it.",
+      "Do label Market P as Synthetic · not a book on the ribbon when that is the source.",
+      "Do show a 2px Ice Cyan focus ring, and name Health in type — not by color alone.",
+      "Do set Methodology / Limitations as two underlined chyron columns on the field."
     ],
     "donts": [
-      "Don't color the home-win call green or red, or wrap it in a success/fail badge.",
-      "Don't use a circular win meter, gauge, or pie for probability.",
-      "Don't lift Methodology/Limitations into a third card or add a sidebar/odds rail.",
-      "Don't all-caps Game ID, Predict, or Health, or add eyebrow kickers above titles.",
-      "Don't introduce a second display face or a glyph-icon font.",
-      "Don't spread Pulse OK green beyond the Health dot."
+      "Don't round corners, pill Health, or lift white 6px sheets.",
+      "Don't revive the NBA.com/Stats desk (league navy/red, Source Sans, STATS lockup, red Q disc, identity band, box-score table, circular medals).",
+      "Don't use franchise palettes, a scorebug clock/score/quarter, or PRE-GAME kickers.",
+      "Don't use sportsbook language or treat Market P as a book line.",
+      "Don't color a Yes/No call green or red; this surface has no Yes/No cell.",
+      "Don't spread Pulse OK green beyond the health waveform.",
+      "Don't introduce a second display face or a glyph-icon font."
     ]
   }
 }

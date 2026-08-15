@@ -31,13 +31,27 @@ class ApiSportsProvider:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
 
+    def leagues(self) -> list[str]:
+        return ["nba"]
+
     def fetch_teams(self) -> list[dict[str, Any]]:
         payload = self._get("/teams", {"league": "12"})  # NBA league id on API-Sports basketball
         return list(payload.get("response", []))
 
-    def fetch_games(self, season: int) -> list[dict[str, Any]]:
+    def fetch_games(self, season: int, league: str = "nba") -> list[dict[str, Any]]:
+        if league != "nba":
+            return []
         payload = self._get("/games", {"league": "12", "season": str(season)})
         return list(payload.get("response", []))
+
+    def fetch_players(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_player_game_stats(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_odds_snapshots(self) -> list[dict[str, Any]]:
+        return []
 
     def _get(self, path: str, params: dict[str, str]) -> dict[str, Any]:
         url = f"{self._base_url}{path}?{urlencode(params)}"

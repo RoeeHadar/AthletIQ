@@ -124,7 +124,7 @@ class NbaStatsApiProvider:
         self,
         *,
         seasons: list[int] | None = None,
-        season_depth: int = 2,
+        season_depth: int = 3,
         base_url: str = DEFAULT_BASE,
         page_size: int = PAGE_SIZE,
         get_json: Callable[[str], dict[str, Any]] | None = None,
@@ -139,13 +139,27 @@ class NbaStatsApiProvider:
         self._teams: list[dict[str, Any]] = []
         self._loaded = False
 
+    def leagues(self) -> list[str]:
+        return ["nba"]
+
     def fetch_teams(self) -> list[dict[str, Any]]:
         self._ensure_loaded()
         return list(self._teams)
 
-    def fetch_games(self, season: int) -> list[dict[str, Any]]:
+    def fetch_games(self, season: int, league: str = "nba") -> list[dict[str, Any]]:
+        if league != "nba":
+            return []
         self._ensure_loaded()
         return list(self._games_by_season.get(season, []))
+
+    def fetch_players(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_player_game_stats(self) -> list[dict[str, Any]]:
+        return []
+
+    def fetch_odds_snapshots(self) -> list[dict[str, Any]]:
+        return []
 
     def _ensure_loaded(self) -> None:
         if self._loaded:

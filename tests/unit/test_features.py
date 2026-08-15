@@ -9,6 +9,7 @@ from athletiq.features import (
     FEATURE_VERSION,
     MIN_PRIOR_GAMES,
     InMemoryFeatureStore,
+    PlayerGameHistory,
     TeamGameHistory,
     build_feature_row,
     preprocess_for_model,
@@ -104,7 +105,7 @@ def test_train_serve_preprocess_contract() -> None:
         feature_version=FEATURE_VERSION,
     )
     assert v_train == v_api
-    assert len(v_train) == 18
+    assert len(v_train) == 22
 
 
 def test_feature_store_unique_key() -> None:
@@ -122,3 +123,36 @@ def test_feature_store_unique_key() -> None:
     store.upsert(row)  # idempotent same key
     assert store.count() == 1
     assert store.get(5, FEATURE_VERSION) is not None
+
+
+def test_player_aggregates_ignore_post_tip_lines() -> None:
+    tip = _tip(10)
+    history = [_hist(1, 1, won=True, pf=100, pa=90)]
+    players = [
+        PlayerGameHistory(
+            player_id=7,
+            team_id=1,
+            game_start_time=_tip(1),
+            minutes=30.0,
+            points=12.0,
+        ),
+        PlayerGameHistory(
+            player_id=7,
+            team_id=1,
+            game_start_time=_tip(15),
+            minutes=40.0,
+            points=40.0,
+        ),
+    ]
+    row = build_feature_row(
+        game_id=50,
+        tip=tip,
+        season=2023,
+        home_team_id=1,
+        away_team_id=2,
+        history=history,
+        player_history=players,
+    )
+    assert row.payload["home_top5_l5_pts"] == 12.0
+    assert row.payload["home_top5_l5_min"] == 30.0
+    assert row.payload["away_top5_l5_pts"] == 0.0

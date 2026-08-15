@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 1.0.2
+Last Updated: 2026-08-15  
+Version: 1.1.1
 
 > Requirement-driven cases. **Canonical** req↔test map: `../03-requirements/traceability.md`.  
 > **Approved** with Gate 7 strategy v1.0.0. Levels: one **primary** `Level` per suite; optional **Also** for nested cases (see `test-strategy.md`).
@@ -281,6 +281,84 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Artifact/API consistency invariant held.  
 - **Level:** integration  
 - **Status:** Passing (pin→artifact path identity; success + composite-key negatives)
+
+### TEST-015 — League/sport schema and WNBA fixtures
+
+- **Requirement IDs:** FR-016, DR-001, DR-002, ADR-013  
+- **IMP refs:** IMP-013, IMP-014  
+- **Dependencies:** TEST-002, TEST-003  
+- **Description:** Schema has sport/league; fixture ingest loads NBA depth 3 and overlapping WNBA; CI uses no live WNBA HTTP.  
+- **Preconditions:** `tests/fixtures/provider/`.  
+- **Steps:**
+  1. Apply migrations including 002 — `games.league`, `odds_snapshots` exist.  
+  2. Fixture ingest with depth 3 writes NBA 2022–2024 plus WNBA files.  
+  3. Load distinguishes `league=nba` vs `league=wnba`.  
+- **Expected result:** Both leagues present; no live HTTP.  
+- **Level:** integration  
+- **Also:** unit (fixture provider)  
+- **Status:** Passing (local unit; live migrate when `TEST_DATABASE_URL` set)
+
+### TEST-016 — Player load and aggregated features (no leakage)
+
+- **Requirement IDs:** FR-017, FR-004, ML-011, ML-001, DR-003  
+- **IMP refs:** IMP-014, IMP-015  
+- **Dependencies:** TEST-004, TEST-006  
+- **Description:** Players and player_game_stats upsert; top-5 L5 aggregates ignore post-tip lines; idempotent grain.  
+- **Preconditions:** Fixture players + box scores.  
+- **Steps:**
+  1. Load twice — no duplicate `(game_id, player_id)`.  
+  2. Build features; assert player keys present.  
+  3. Inject a post-tip player line — feature values unchanged.  
+- **Expected result:** Leakage guard holds; grain unique.  
+- **Level:** unit  
+- **Also:** integration (postgres upsert when DB available)  
+- **Status:** Passing (local)
+
+### TEST-017 — Synthetic odds labeled
+
+- **Requirement IDs:** FR-018, DR-004, CON-009, ADR-012  
+- **IMP refs:** IMP-014, IMP-017  
+- **Dependencies:** TEST-008  
+- **Description:** Snapshot load; predict returns `market_source=synthetic` or null if missing; no book HTTP.  
+- **Preconditions:** Fixture odds file.  
+- **Steps:**
+  1. Load odds_snapshots; rerun idempotent.  
+  2. Predict with snapshot → `market_p_home_win` in [0,1], source synthetic.  
+  3. Predict without snapshot → fields null/omitted.  
+- **Expected result:** Labeled comparison only.  
+- **Level:** unit  
+- **Status:** Passing (local)
+
+### TEST-018 — Per-league pin routing
+
+- **Requirement IDs:** FR-019, ML-010, ADR-013  
+- **IMP refs:** IMP-016, IMP-017  
+- **Dependencies:** TEST-007, TEST-008  
+- **Description:** NBA game uses NBA pin; WNBA game uses WNBA pin; missing pin → model_unavailable.  
+- **Preconditions:** Two published pins or one missing.  
+- **Steps:**
+  1. Train fixture both leagues.  
+  2. Predict NBA id → nba model_version prefix/league.  
+  3. Predict WNBA id → wnba pin.  
+  4. Drop wnba pin → WNBA predict 503 model_unavailable.  
+- **Expected result:** No pooled classifier.  
+- **Level:** unit  
+- **Status:** Passing (local)
+
+### TEST-019 — Gamecast UI reconstruction
+
+- **Requirement IDs:** FR-015, FR-020, CON-009  
+- **IMP refs:** IMP-018  
+- **Dependencies:** TEST-008  
+- **Description:** GET / HTML is the broadcast gamecast (producer bar + Home/Away split + Game ID lookup), league control, Market P labeled synthetic, no stakes/payouts/moneyline chrome.  
+- **Preconditions:** FastAPI TestClient.  
+- **Steps:**
+  1. GET / is HTML.  
+  2. Static JS/CSS reference league control, split, and Market P.  
+  3. Assert no wager/stake/payout/moneyline copy.  
+- **Expected result:** Gamecast surface present; not a book.  
+- **Level:** unit  
+- **Status:** Passing (local)
 
 ## Open (non-blocking)
 

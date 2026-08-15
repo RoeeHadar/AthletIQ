@@ -1,0 +1,11 @@
+{
+  "seed": "29c1a33a",
+  "scope": "direction",
+  "mode": "operate",
+  "source": "degraded",
+  "assignedIndex": 3,
+  "pinBeatsRoll": true,
+  "chosenWorld": "broadcast-gamecast",
+  "approvedComp": ".impeccable/mocks/gamecast-comp-a-horizontal-split.png",
+  "note": "User Grill-Me pin (ESPN-style WP gamecast, Comp A horizontal split) beats assigned index 3. Roll had no challengers or quality-bar boards."
+}

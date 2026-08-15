@@ -1,0 +1,318 @@
+{
+  "response": [
+    {
+      "id": 3001,
+      "date": "2023-05-15T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 78
+        },
+        "away": {
+          "total": 74
+        }
+      }
+    },
+    {
+      "id": 3002,
+      "date": "2023-05-18T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 79
+        },
+        "away": {
+          "total": 76
+        }
+      }
+    },
+    {
+      "id": 3003,
+      "date": "2023-05-21T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 80
+        },
+        "away": {
+          "total": 78
+        }
+      }
+    },
+    {
+      "id": 3004,
+      "date": "2023-05-24T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 81
+        },
+        "away": {
+          "total": 80
+        }
+      }
+    },
+    {
+      "id": 3005,
+      "date": "2023-05-27T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 82
+        },
+        "away": {
+          "total": 82
+        }
+      }
+    },
+    {
+      "id": 3006,
+      "date": "2023-05-30T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 83
+        },
+        "away": {
+          "total": 84
+        }
+      }
+    },
+    {
+      "id": 3007,
+      "date": "2023-06-02T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 84
+        },
+        "away": {
+          "total": 86
+        }
+      }
+    },
+    {
+      "id": 3008,
+      "date": "2023-06-05T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 85
+        },
+        "away": {
+          "total": 75
+        }
+      }
+    },
+    {
+      "id": 3009,
+      "date": "2023-06-08T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 86
+        },
+        "away": {
+          "total": 77
+        }
+      }
+    },
+    {
+      "id": 3010,
+      "date": "2023-06-11T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 87
+        },
+        "away": {
+          "total": 79
+        }
+      }
+    },
+    {
+      "id": 3011,
+      "date": "2023-06-14T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 88
+        },
+        "away": {
+          "total": 81
+        }
+      }
+    },
+    {
+      "id": 3012,
+      "date": "2023-06-17T23:00:00+00:00",
+      "season": 2023,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 78
+        },
+        "away": {
+          "total": 83
+        }
+      }
+    }
+  ],
+  "season": 2023,
+  "league": "wnba"
+}

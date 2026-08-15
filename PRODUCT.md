@@ -32,8 +32,8 @@ Local Docker Compose (or the NFR-001 attest clone) on `127.0.0.1:8000`. No appli
 
 ## Capabilities and Constraints
 
-- Lookup by `game_id` (required path). Show health, model metadata, methodology, limitations.
-- No betting, odds, live in-game, auth, multi-tenant, player ingest, GCP.
+- Lookup by `game_id` (required path). League control (NBA | WNBA). Show health, model metadata, methodology, limitations, labeled synthetic Market P.
+- No betting book (stakes, accounts, payouts). No live in-game, auth, multi-tenant, GCP.
 - Must not invent games, metrics, or win claims. Empty/error states from real API codes (`game_not_found`, `features_not_found`, `model_unavailable`, `db_unavailable`).
 - Compose demo must keep `--store postgres`. CI stays fixture-only.
 
@@ -41,7 +41,7 @@ Local Docker Compose (or the NFR-001 attest clone) on `127.0.0.1:8000`. No appli
 
 Name **AthletIQ**. Voice: honest ML, not hype. Product copy in English.
 
-Visual world (owner 2026-08-15): **category-standard sports-analytics dashboard**, executed straight. Craft bar: **NBA.com/Stats**. No film-room or novelty metaphor.
+Visual world (owner 2026-08-15 Grill-Me): **broadcast win-probability gamecast**. Craft bar: ESPN-style WP graphic language, not NBA.com/Stats. Producer bar + Home/Away split + synthetic Market P + legal chyrons. No film-room, no scorebug, no sportsbook language. Empty-desk convention is anti-reference.
 
 ## Evidence on Hand
 

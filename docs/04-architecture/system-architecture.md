@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.0.2
+Last Updated: 2026-08-15  
+Version: 1.1.0
 
 > Logical + deployment views. Data lifecycle: `data-architecture.md`. API: `api-architecture.md`.  
 > Sources: SRS v1.1+; architecture Grill-Me; owner reviews (2026-08-12).
@@ -17,7 +17,7 @@ Version: 1.0.2
 2. **Deterministic pipeline:** Same raw dataset + code version + config + seed → reproducible training within documented tolerances.
 3. **Idempotent curated loads:** Re-running transform/load on the same raw input does not duplicate logical curated/feature records.
 4. **Test isolation:** Test data is never used to select models, tune hyperparameters, or modify feature definitions.
-5. **Artifact/API consistency:** The API serves only a **published** model artifact with its compatible `feature_version` / preprocessing.
+5. **Artifact/API consistency:** The API serves only a **published** model artifact for the game’s `league` with its compatible `feature_version` / preprocessing (ADR-013).
 
 ## 1. System context
 
@@ -74,7 +74,7 @@ Source: `diagrams/deployment.mmd`.
 | Container | `etl` | **Packaging** of all batch logical components (below) |
 | Container | `api` | Synchronous prediction API |
 | Volume | raw | Immutable provider JSON |
-| Volume | artifacts | Models, metrics, lineage metadata, selection pin |
+| Volume | artifacts | Models, metrics, lineage metadata, **per-league** selection pins |
 | Host | `scripts/run_pipeline.sh` | Thin entry → Python CLI |
 | External | NBA Stats API, GitHub Actions | Provider; CI quality + image build |
 

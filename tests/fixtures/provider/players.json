@@ -1,0 +1,124 @@
+{
+  "response": [
+    {
+      "id": 11,
+      "name": "Bos Player 1",
+      "team_id": 1,
+      "league": "nba"
+    },
+    {
+      "id": 12,
+      "name": "Bos Player 2",
+      "team_id": 1,
+      "league": "nba"
+    },
+    {
+      "id": 13,
+      "name": "Bos Player 3",
+      "team_id": 1,
+      "league": "nba"
+    },
+    {
+      "id": 14,
+      "name": "Bos Player 4",
+      "team_id": 1,
+      "league": "nba"
+    },
+    {
+      "id": 15,
+      "name": "Bos Player 5",
+      "team_id": 1,
+      "league": "nba"
+    },
+    {
+      "id": 21,
+      "name": "Lal Player 1",
+      "team_id": 2,
+      "league": "nba"
+    },
+    {
+      "id": 22,
+      "name": "Lal Player 2",
+      "team_id": 2,
+      "league": "nba"
+    },
+    {
+      "id": 23,
+      "name": "Lal Player 3",
+      "team_id": 2,
+      "league": "nba"
+    },
+    {
+      "id": 24,
+      "name": "Lal Player 4",
+      "team_id": 2,
+      "league": "nba"
+    },
+    {
+      "id": 25,
+      "name": "Lal Player 5",
+      "team_id": 2,
+      "league": "nba"
+    },
+    {
+      "id": 111,
+      "name": "Nyl Player 1",
+      "team_id": 101,
+      "league": "wnba"
+    },
+    {
+      "id": 112,
+      "name": "Nyl Player 2",
+      "team_id": 101,
+      "league": "wnba"
+    },
+    {
+      "id": 113,
+      "name": "Nyl Player 3",
+      "team_id": 101,
+      "league": "wnba"
+    },
+    {
+      "id": 114,
+      "name": "Nyl Player 4",
+      "team_id": 101,
+      "league": "wnba"
+    },
+    {
+      "id": 115,
+      "name": "Nyl Player 5",
+      "team_id": 101,
+      "league": "wnba"
+    },
+    {
+      "id": 121,
+      "name": "Lva Player 1",
+      "team_id": 102,
+      "league": "wnba"
+    },
+    {
+      "id": 122,
+      "name": "Lva Player 2",
+      "team_id": 102,
+      "league": "wnba"
+    },
+    {
+      "id": 123,
+      "name": "Lva Player 3",
+      "team_id": 102,
+      "league": "wnba"
+    },
+    {
+      "id": 124,
+      "name": "Lva Player 4",
+      "team_id": 102,
+      "league": "wnba"
+    },
+    {
+      "id": 125,
+      "name": "Lva Player 5",
+      "team_id": 102,
+      "league": "wnba"
+    }
+  ]
+}

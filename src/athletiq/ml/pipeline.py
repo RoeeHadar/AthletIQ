@@ -1,4 +1,4 @@
-# Implements: FR-005…008, ML-003…007, ML-009, ADR-003, ADR-005
+# Implements: FR-005…008, ML-003…007, ML-009, ML-010, ADR-003, ADR-005, ADR-013
 """Train → validation select → test-once → publish."""
 
 from __future__ import annotations
@@ -52,6 +52,8 @@ def run_train_select_publish(
     feature_version: str = FEATURE_VERSION,
     model_version: str | None = None,
     evaluate_test: bool = True,
+    pin_name: str = "selected_pin.json",
+    model_version_prefix: str = "",
 ) -> TrainResult:
     """Full MVP ML batch. Selection never sees the test set."""
     n = len(y)
@@ -127,7 +129,7 @@ def run_train_select_publish(
             ml005_pass,
         )
 
-    version = model_version or f"{selection.selected.name}-v1"
+    version = model_version or f"{model_version_prefix}{selection.selected.name}-v1"
     meta = ModelMetadata(
         model_version=version,
         feature_version=feature_version,
@@ -149,6 +151,7 @@ def run_train_select_publish(
         artifacts_dir=artifacts_dir,
         model=selection.selected.model,
         metadata=meta,
+        pin_name=pin_name,
     )
     return TrainResult(
         model_version=version,

@@ -1,4 +1,4 @@
-# Implements: FR-002, DR-003, CON-002, ADR-001
+# Implements: FR-002, FR-017, FR-018, DR-003, DR-004, CON-002, ADR-001, CR-004
 """PostgreSQL curated store — persistence adapter only (no feature engineering)."""
 
 from __future__ import annotations
@@ -10,7 +10,13 @@ import psycopg
 from psycopg.rows import dict_row
 
 from athletiq.load.store import StoredGame, StoredTeam
-from athletiq.validate.parse import GameRecord, TeamRecord
+from athletiq.validate.parse import (
+    GameRecord,
+    OddsSnapshotRecord,
+    PlayerGameStatRecord,
+    PlayerRecord,
+    TeamRecord,
+)
 
 
 class PostgresCuratedStore:
@@ -34,13 +40,14 @@ class PostgresCuratedStore:
     def upsert_team(self, team: TeamRecord) -> int:
         row = self._conn.execute(
             """
-            INSERT INTO teams (provider_team_id, name, abbreviation, conference, division)
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (provider_team_id) DO UPDATE SET
+            INSERT INTO teams (provider_team_id, name, abbreviation, conference, division, sport, league)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (league, provider_team_id) DO UPDATE SET
                 name = EXCLUDED.name,
                 abbreviation = EXCLUDED.abbreviation,
                 conference = EXCLUDED.conference,
                 division = EXCLUDED.division,
+                sport = EXCLUDED.sport,
                 updated_at = NOW()
             RETURNING team_id
             """,
@@ -50,6 +57,8 @@ class PostgresCuratedStore:
                 team.abbreviation,
                 team.conference,
                 team.division,
+                team.sport,
+                team.league,
             ),
         ).fetchone()
         assert row is not None
@@ -61,10 +70,10 @@ class PostgresCuratedStore:
             INSERT INTO games (
                 provider_game_id, season, game_start_time,
                 home_team_id, away_team_id,
-                home_score, away_score, home_win, status
+                home_score, away_score, home_win, status, sport, league
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (provider_game_id) DO UPDATE SET
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (league, provider_game_id) DO UPDATE SET
                 season = EXCLUDED.season,
                 game_start_time = EXCLUDED.game_start_time,
                 home_team_id = EXCLUDED.home_team_id,
@@ -73,6 +82,7 @@ class PostgresCuratedStore:
                 away_score = EXCLUDED.away_score,
                 home_win = EXCLUDED.home_win,
                 status = EXCLUDED.status,
+                sport = EXCLUDED.sport,
                 updated_at = NOW()
             RETURNING game_id
             """,
@@ -86,6 +96,8 @@ class PostgresCuratedStore:
                 game.away_score,
                 game.home_win,
                 game.status,
+                game.sport,
+                game.league,
             ),
         ).fetchone()
         assert row is not None
@@ -137,9 +149,10 @@ class PostgresCuratedStore:
         rows = self._conn.execute(
             """
             SELECT game_id, provider_game_id, season, game_start_time,
-                   home_team_id, away_team_id, home_score, away_score, home_win, status
+                   home_team_id, away_team_id, home_score, away_score, home_win, status,
+                   sport, league
             FROM games
-            ORDER BY provider_game_id
+            ORDER BY league, provider_game_id
             """
         ).fetchall()
         out: list[StoredGame] = []
@@ -157,6 +170,8 @@ class PostgresCuratedStore:
                 away_score=r["away_score"],
                 home_win=r["home_win"],
                 status=str(r["status"] or "unknown"),
+                sport=str(r.get("sport") or "basketball"),
+                league=str(r.get("league") or "nba"),
             )
             out.append(
                 StoredGame(
@@ -185,13 +200,121 @@ class PostgresCuratedStore:
             "points_against": row["points_against"],
         }
 
-    def get_team_by_provider(self, provider_team_id: str) -> StoredTeam | None:
+    def upsert_player(self, player: PlayerRecord, team_id: int | None) -> int:
         row = self._conn.execute(
             """
-            SELECT team_id, provider_team_id, name, abbreviation, conference, division
-            FROM teams WHERE provider_team_id = %s
+            INSERT INTO players (provider_player_id, full_name, team_id, league)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (league, provider_player_id) DO UPDATE SET
+                full_name = EXCLUDED.full_name,
+                team_id = EXCLUDED.team_id,
+                updated_at = NOW()
+            RETURNING player_id
             """,
-            (provider_team_id,),
+            (player.provider_player_id, player.full_name, team_id, player.league),
+        ).fetchone()
+        assert row is not None
+        return int(row["player_id"])
+
+    def upsert_player_game_stats(
+        self,
+        *,
+        game_id: int,
+        player_id: int,
+        team_id: int,
+        stat: PlayerGameStatRecord,
+    ) -> None:
+        self._conn.execute(
+            """
+            INSERT INTO player_game_stats (
+                game_id, player_id, team_id, minutes, points,
+                rebounds, assists, steals, blocks, turnovers
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (game_id, player_id) DO UPDATE SET
+                team_id = EXCLUDED.team_id,
+                minutes = EXCLUDED.minutes,
+                points = EXCLUDED.points,
+                rebounds = EXCLUDED.rebounds,
+                assists = EXCLUDED.assists,
+                steals = EXCLUDED.steals,
+                blocks = EXCLUDED.blocks,
+                turnovers = EXCLUDED.turnovers,
+                updated_at = NOW()
+            """,
+            (
+                game_id,
+                player_id,
+                team_id,
+                stat.minutes,
+                stat.points,
+                stat.rebounds,
+                stat.assists,
+                stat.steals,
+                stat.blocks,
+                stat.turnovers,
+            ),
+        )
+
+    def upsert_odds_snapshot(self, game_id: int, snap: OddsSnapshotRecord) -> None:
+        self._conn.execute(
+            """
+            INSERT INTO odds_snapshots (
+                game_id, captured_at, source, implied_p_home_win
+            )
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (game_id, source, captured_at) DO UPDATE SET
+                implied_p_home_win = EXCLUDED.implied_p_home_win,
+                updated_at = NOW()
+            """,
+            (game_id, snap.captured_at, snap.source, snap.implied_p_home_win),
+        )
+
+    def iter_player_game_stats(self) -> list[dict]:
+        rows = self._conn.execute(
+            """
+            SELECT pgs.game_id, pgs.player_id, pgs.team_id, pgs.minutes, pgs.points,
+                   g.game_start_time
+            FROM player_game_stats pgs
+            JOIN games g ON g.game_id = pgs.game_id
+            """
+        ).fetchall()
+        return [
+            {
+                "game_id": int(r["game_id"]),
+                "player_id": int(r["player_id"]),
+                "team_id": int(r["team_id"]),
+                "minutes": float(r["minutes"]) if r["minutes"] is not None else None,
+                "points": r["points"],
+                "game_start_time": r["game_start_time"],
+            }
+            for r in rows
+        ]
+
+    def latest_synthetic_odds(self, game_id: int) -> float | None:
+        row = self._conn.execute(
+            """
+            SELECT implied_p_home_win
+            FROM odds_snapshots
+            WHERE game_id = %s AND source = 'synthetic'
+            ORDER BY captured_at DESC
+            LIMIT 1
+            """,
+            (game_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        return float(row["implied_p_home_win"])
+
+    def get_team_by_provider(
+        self, provider_team_id: str, league: str = "nba"
+    ) -> StoredTeam | None:
+        row = self._conn.execute(
+            """
+            SELECT team_id, provider_team_id, name, abbreviation, conference, division, league
+            FROM teams WHERE provider_team_id = %s AND league = %s
+            """,
+            (provider_team_id, league),
         ).fetchone()
         if row is None:
             return None
@@ -203,6 +326,7 @@ class PostgresCuratedStore:
                 abbreviation=row["abbreviation"],
                 conference=row["conference"],
                 division=row["division"],
+                league=str(row.get("league") or league),
             ),
         )
 
@@ -236,12 +360,14 @@ def verify_curated_constraints(conn: psycopg.Connection) -> dict[str, Any]:
         ).fetchall()
     }
 
-    teams_ok = any("provider_team" in n for n in by_table.get("teams", [])) or any(
-        "provider_team" in i for i in indexes
-    )
-    games_ok = any("provider_game" in n for n in by_table.get("games", [])) or any(
-        "provider_game" in i for i in indexes
-    )
+    def _unique_ok(table: str, *needles: str) -> bool:
+        names = by_table.get(table, [])
+        table_indexes = [i for i in indexes if i.startswith(f"{table}_") or table in i]
+        hay = list(names) + table_indexes
+        return any(any(n in item for n in needles) for item in hay)
+
+    teams_ok = _unique_ok("teams", "provider_team", "league_provider")
+    games_ok = _unique_ok("games", "provider_game", "league_provider")
     stats_ok = "team_game_stats_pkey" in by_table.get("team_game_stats", []) or any(
         "team_game_stats_pkey" == n for n in by_table.get("team_game_stats", [])
     )

@@ -1,11 +1,21 @@
 const healthEl = document.getElementById("health");
 const healthLabel = document.getElementById("health-label");
 const pinHint = document.getElementById("pin-hint");
-const resultEl = document.getElementById("result");
+const splitEl = document.getElementById("split");
+const homeAbbr = document.getElementById("home-abbr");
+const awayAbbr = document.getElementById("away-abbr");
+const homePct = document.getElementById("home-pct");
+const awayPct = document.getElementById("away-pct");
+const marketEl = document.getElementById("market");
+const marketPct = document.getElementById("market-pct");
+const marketLabel = document.querySelector(".market__label");
+const banner = document.getElementById("banner");
+const idleHint = document.getElementById("idle-hint");
 const methodologyBody = document.getElementById("methodology-body");
 const limitationsBody = document.getElementById("limitations-body");
 const form = document.getElementById("lookup");
 const go = form.querySelector(".lookup__go");
+const leagueSelect = document.getElementById("league");
 
 function apiError(payload, status) {
   const err = payload && payload.error;
@@ -47,6 +57,13 @@ function recovery(code) {
   }
 }
 
+function syncLeagueButtons() {
+  const value = leagueSelect.value;
+  document.querySelectorAll(".seg__btn").forEach((btn) => {
+    btn.setAttribute("aria-pressed", btn.dataset.league === value ? "true" : "false");
+  });
+}
+
 async function refreshHealth() {
   try {
     await getJson("/v1/health");
@@ -60,50 +77,92 @@ async function refreshHealth() {
 
 function pct(p) {
   if (typeof p !== "number" || Number.isNaN(p)) return "—";
-  return (p * 100).toFixed(1) + "%";
+  return Math.round(p * 100) + "%";
+}
+
+function barWidth(p) {
+  if (typeof p !== "number" || Number.isNaN(p)) return 0;
+  return Math.max(0, Math.min(100, p * 100));
+}
+
+function ident(name, abbreviation, fallback) {
+  const abbr = String(abbreviation || "").trim();
+  if (abbr) return abbr;
+  const full = String(name || "").trim();
+  if (full) return full;
+  return fallback;
+}
+
+function resetSplit() {
+  splitEl.dataset.state = "idle";
+  splitEl.style.removeProperty("--home-p");
+  homeAbbr.textContent = "HOME";
+  awayAbbr.textContent = "AWAY";
+  homePct.textContent = "—";
+  awayPct.textContent = "—";
+  splitEl.setAttribute("aria-label", "Home win probability split. Idle. Enter a game id.");
+  marketEl.dataset.state = "idle";
+  marketEl.style.removeProperty("--market-p");
+  marketPct.textContent = "—";
+  marketLabel.textContent = "Market P · Synthetic · not a book";
+  idleHint.hidden = false;
+  banner.hidden = true;
+  banner.textContent = "";
 }
 
 function renderPrediction(body) {
-  const win = Boolean(body.home_win_pred);
   const p = body.p_home_win;
-  const width = typeof p === "number" ? Math.max(0, Math.min(100, p * 100)) : 0;
-  const game = escapeHtml(String(body.game_id ?? "—"));
-  const features = escapeHtml(body.feature_version || "—");
-  resultEl.innerHTML = `
-    <p class="caption">Game ${game} · features ${features}</p>
-    <div class="table-wrap">
-      <table class="box">
-        <thead>
-          <tr>
-            <th>Home win</th>
-            <th>P(home win)</th>
-            <th>Model</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="win">${win ? "Yes" : "No"}</td>
-            <td>
-              <div class="bar">
-                <span>${pct(p)}</span>
-                <span class="bar__track" aria-hidden="true"><span class="bar__fill" style="width:${width}%"></span></span>
-                <span class="bar__cap">100%</span>
-              </div>
-            </td>
-            <td>${escapeHtml(body.model_version || "—")}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>`;
+  const awayP = typeof p === "number" ? 1 - p : null;
+  const home = ident(body.home_team_name, body.home_team_abbreviation, "HOME");
+  const away = ident(body.away_team_name, body.away_team_abbreviation, "AWAY");
+  splitEl.dataset.state = "live";
+  splitEl.style.setProperty("--home-p", barWidth(p).toFixed(2) + "%");
+  homeAbbr.textContent = home;
+  awayAbbr.textContent = away;
+  homePct.textContent = pct(p);
+  awayPct.textContent = pct(awayP);
+  splitEl.setAttribute(
+    "aria-label",
+    "Home win probability " +
+      pct(p) +
+      " for " +
+      home +
+      ". Away implied " +
+      pct(awayP) +
+      " for " +
+      away +
+      "."
+  );
+  const hasMarket = typeof body.market_p_home_win === "number";
+  marketEl.dataset.state = hasMarket ? "live" : "empty";
+  if (hasMarket) {
+    marketEl.style.setProperty("--market-p", barWidth(body.market_p_home_win).toFixed(2) + "%");
+  } else {
+    marketEl.style.removeProperty("--market-p");
+  }
+  marketPct.textContent = hasMarket ? pct(body.market_p_home_win) : "—";
+  marketLabel.textContent =
+    body.market_source === "synthetic"
+      ? "Market P · Synthetic · not a book"
+      : hasMarket
+        ? "Market P"
+        : "Market P · No snapshot";
+  idleHint.hidden = true;
+  banner.hidden = true;
+  banner.textContent = "";
 }
 
 function renderError(err) {
-  resultEl.innerHTML = `
-    <p class="banner" role="alert">
-      <strong>${escapeHtml(err.code)}</strong>
-      ${escapeHtml(err.message)}
-      ${escapeHtml(recovery(err.code))}
-    </p>`;
+  resetSplit();
+  splitEl.dataset.state = "error";
+  banner.hidden = false;
+  banner.innerHTML =
+    "<strong>" +
+    escapeHtml(err.code) +
+    "</strong>" +
+    escapeHtml(err.message) +
+    " " +
+    escapeHtml(recovery(err.code));
 }
 
 function escapeHtml(s) {
@@ -136,29 +195,28 @@ function methodologyCopy(model) {
 }
 
 async function refreshModel() {
+  const league = leagueSelect.value || "nba";
   try {
-    const model = await getJson("/v1/model");
+    const model = await getJson("/v1/model?league=" + encodeURIComponent(league));
     const pin = model.model_version || "unknown pin";
-    pinHint.textContent =
-      "Served pin: " + pin + (model.feature_version ? " · " + model.feature_version : "");
+    pinHint.innerHTML = `<span class="chip">${escapeHtml(pin)}</span>`;
     methodologyBody.innerHTML = `
       <p class="meta"><strong>${escapeHtml(pin)}</strong> · dataset ${escapeHtml(model.dataset_version || "—")}</p>
       <p class="methodology">${escapeHtml(methodologyCopy(model))}</p>
       <p class="meta">Model card: ${escapeHtml(model.model_card_ref || "docs/06-design/model-card.md")}</p>`;
     limitationsBody.innerHTML = `<p class="limitations">${escapeHtml(model.limitations || "")}</p>`;
   } catch (err) {
-    pinHint.textContent = "";
-    const banner = `<p class="banner" role="status"><strong>${escapeHtml(err.code)}</strong> ${escapeHtml(err.message)} ${escapeHtml(recovery(err.code))}</p>`;
-    methodologyBody.innerHTML = banner;
-    limitationsBody.innerHTML = banner;
+    pinHint.innerHTML = "";
+    const bannerHtml = `<p class="banner" role="status"><strong>${escapeHtml(err.code)}</strong> ${escapeHtml(err.message)} ${escapeHtml(recovery(err.code))}</p>`;
+    methodologyBody.innerHTML = bannerHtml;
+    limitationsBody.innerHTML = bannerHtml;
   }
 }
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const id = new FormData(form).get("game_id");
+async function runLookup(id) {
   go.disabled = true;
-  resultEl.innerHTML = `<div class="skeleton" role="status">Looking up game ${escapeHtml(String(id).trim())}…</div>`;
+  splitEl.dataset.state = "loading";
+  banner.hidden = true;
   try {
     const body = await getJson("/v1/predict?game_id=" + encodeURIComponent(String(id).trim()));
     renderPrediction(body);
@@ -167,7 +225,38 @@ form.addEventListener("submit", async (event) => {
   } finally {
     go.disabled = false;
   }
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const data = new FormData(form);
+  await runLookup(data.get("game_id"));
 });
 
+idleHint.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-fill]");
+  if (!btn) return;
+  const id = btn.getAttribute("data-fill");
+  const input = document.getElementById("game-id");
+  input.value = id;
+  input.focus();
+  runLookup(id);
+});
+
+document.querySelectorAll(".seg__btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    leagueSelect.value = btn.dataset.league;
+    syncLeagueButtons();
+    refreshModel();
+  });
+});
+
+leagueSelect.addEventListener("change", () => {
+  syncLeagueButtons();
+  refreshModel();
+});
+
+syncLeagueButtons();
+resetSplit();
 refreshHealth();
 refreshModel();

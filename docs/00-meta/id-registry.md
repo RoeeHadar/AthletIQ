@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 0.4.3
+Last Updated: 2026-08-15  
+Version: 0.5.0
 
 Append-only. Register an ID here **before** using it in any document. Do not reuse IDs.
 
@@ -94,6 +94,29 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 | ADR-011 | ADR | NBA Stats API (api.server.nbaapi.com) as MVP live provider | ADR-011-nba-stats-api-provider.md | 2026-08-14 |
 | CR-003 | CR | Pull FUTURE-004 minimal prediction UI (FastAPI static) | CR-003-minimal-prediction-ui.md | 2026-08-15 |
 | FR-015 | FR | Local same-origin prediction UI at GET / | SRS.md | 2026-08-15 |
+| CR-004 | CR | Post-MVP WNBA, players, synthetic odds, Comp A reconstruction | CR-004-post-mvp-wnba-players-odds-ui.md | 2026-08-15 |
+| ADR-012 | ADR | Fixture/synthetic odds snapshots; no live book | ADR-012-synthetic-odds-snapshots.md | 2026-08-15 |
+| ADR-013 | ADR | Separate served pins per league | ADR-013-per-league-selection-pins.md | 2026-08-15 |
+| FR-016 | FR | Ingest WNBA via fixture adapter (same basketball grain) | SRS.md | 2026-08-15 |
+| FR-017 | FR | Load players and player_game_stats | SRS.md | 2026-08-15 |
+| FR-018 | FR | Labeled synthetic Market P from odds_snapshots | SRS.md | 2026-08-15 |
+| FR-019 | FR | League-aware predict (sport/league + pin routing) | SRS.md | 2026-08-15 |
+| FR-020 | FR | Predict returns team name and abbreviation | SRS.md | 2026-08-15 |
+| DR-004 | DR | Odds snapshots grain (synthetic this CR) | SRS.md | 2026-08-15 |
+| ML-010 | ML | Per-league selection pins (no pooled classifier) | SRS.md | 2026-08-15 |
+| ML-011 | ML | Team-aggregated top-5 L5 player features | SRS.md | 2026-08-15 |
+| CON-009 | CON | No betting book; Market P is comparison only | SRS.md | 2026-08-15 |
+| IMP-013 | IMP | Schema: league/sport, activate players, odds_snapshots | implementation-plan.md | 2026-08-15 |
+| IMP-014 | IMP | Fixture WNBA + players + synthetic odds ingest/load | implementation-plan.md | 2026-08-15 |
+| IMP-015 | IMP | feature_version team_l5_l10_player_agg_v1 | implementation-plan.md | 2026-08-15 |
+| IMP-016 | IMP | Per-league train/select/publish | implementation-plan.md | 2026-08-15 |
+| IMP-017 | IMP | API league pin + market_p_home_win | implementation-plan.md | 2026-08-15 |
+| IMP-018 | IMP | Comp A UI reconstruction + league + Market P | implementation-plan.md | 2026-08-15 |
+| TEST-015 | TEST | League/sport schema + WNBA fixtures | test-plan.md | 2026-08-15 |
+| TEST-016 | TEST | Player load + aggregated features; no leakage | test-plan.md | 2026-08-15 |
+| TEST-017 | TEST | Synthetic odds labeled; predict omits if missing | test-plan.md | 2026-08-15 |
+| TEST-018 | TEST | Per-league pin routing | test-plan.md | 2026-08-15 |
+| TEST-019 | TEST | GET / reconstruction: Comp A, league, Market P, no book | test-plan.md | 2026-08-15 |
 
 ## Prefixes
 

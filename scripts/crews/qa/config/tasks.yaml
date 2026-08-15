@@ -2,8 +2,8 @@
 
 audit_coverage:
   description: >
-    Compare SRS Must requirements (FR/DR/ML/SEC/NFR/OPS/CON, CR-001-amended)
-    to TEST-001…014 in docs/08-testing/test-plan.md and the Test column in
+    Compare SRS Must requirements (FR/DR/ML/SEC/NFR/OPS/CON, including CR-004)
+    to TEST-001…019 in docs/08-testing/test-plan.md and the Test column in
     docs/03-requirements/traceability.md.
 
     Steps:
@@ -11,7 +11,7 @@ audit_coverage:
     2. Confirm each has at least one TEST id.
     3. Separate automated CI coverage from attestation (NFR-001 clean-machine,
        DR-001 two live seasons, ML-005 frozen NBA holdout, OPS-001 remote GHA).
-    4. Do not propose player ingest tests (CR-001) or Compose bring-up pytest
+    4. CR-004 player load is TEST-016. Do not propose Compose bring-up pytest
        (LEAD-001 closed that as not required).
   expected_output: >
     A coverage table: requirement id, TEST ids, automated vs attestation,
@@ -20,7 +20,7 @@ audit_coverage:
 
 run_documented_tests:
   description: >
-    Execute pytest for TEST-001…014 using the mapping in
+    Execute pytest for TEST-001…019 using the mapping in
     scripts/crews/qa/test_map.json. No API_SPORTS_KEY. Use TEST_DATABASE_URL
     only if it is already a disposable test database.
   expected_output: >

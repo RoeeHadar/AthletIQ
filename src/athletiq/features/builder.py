@@ -1,4 +1,4 @@
-# Implements: FR-004, ML-001, ML-002, ML-008, ADR-008
+# Implements: FR-004, ML-001, ML-002, ML-008, ML-011, ADR-008, CR-004
 """Feature builder — only pre-tip information; home designated team."""
 
 from __future__ import annotations
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-FEATURE_VERSION = "team_l5_l10_v1"
+FEATURE_VERSION = "team_l5_l10_player_agg_v1"
 MIN_PRIOR_GAMES = 5
 
 # Stable vector key order for train/serve (ML-008 contract).
@@ -30,6 +30,10 @@ FEATURE_KEYS: tuple[str, ...] = (
     "away_pts_against_l5",
     "away_pts_against_l10",
     "away_season_wr",
+    "home_top5_l5_pts",
+    "home_top5_l5_min",
+    "away_top5_l5_pts",
+    "away_top5_l5_min",
 )
 
 
@@ -43,6 +47,17 @@ class TeamGameHistory:
     points_for: int
     points_against: int
     season: int
+
+
+@dataclass(frozen=True)
+class PlayerGameHistory:
+    """One completed player box-score line before a tip."""
+
+    player_id: int
+    team_id: int
+    game_start_time: datetime
+    minutes: float
+    points: float
 
 
 @dataclass(frozen=True)
@@ -135,6 +150,43 @@ def _team_block(
     return block, False
 
 
+def _player_agg(
+    history: list[PlayerGameHistory],
+    *,
+    team_id: int,
+    tip: datetime,
+) -> dict[str, float]:
+    """Mean L5 pts/minutes of top-5 players by prior minutes (ML-011)."""
+    prior = [
+        h
+        for h in history
+        if h.team_id == team_id and h.game_start_time < tip
+    ]
+    if not prior:
+        return {"top5_l5_pts": 0.0, "top5_l5_min": 0.0}
+
+    by_player: dict[int, list[PlayerGameHistory]] = {}
+    for h in prior:
+        by_player.setdefault(h.player_id, []).append(h)
+
+    ranked: list[tuple[float, float, float]] = []
+    for lines in by_player.values():
+        lines.sort(key=lambda x: x.game_start_time)
+        total_min = sum(x.minutes for x in lines)
+        last5 = lines[-5:]
+        mean_pts = sum(x.points for x in last5) / len(last5)
+        mean_min = sum(x.minutes for x in last5) / len(last5)
+        ranked.append((total_min, mean_pts, mean_min))
+    ranked.sort(key=lambda t: t[0], reverse=True)
+    top = ranked[:5]
+    if not top:
+        return {"top5_l5_pts": 0.0, "top5_l5_min": 0.0}
+    return {
+        "top5_l5_pts": sum(t[1] for t in top) / len(top),
+        "top5_l5_min": sum(t[2] for t in top) / len(top),
+    }
+
+
 def build_feature_row(
     *,
     game_id: int,
@@ -145,13 +197,24 @@ def build_feature_row(
     history: list[TeamGameHistory],
     label_home_win: int | None = None,
     feature_version: str = FEATURE_VERSION,
+    player_history: list[PlayerGameHistory] | None = None,
 ) -> FeatureRow:
     """Build features using only games with tip strictly before `tip` (ML-001)."""
     home_prior = _prior_for_team(history, team_id=home_team_id, tip=tip)
     away_prior = _prior_for_team(history, team_id=away_team_id, tip=tip)
     home_block, cold_h = _team_block(home_prior, season=season, prefix="home")
     away_block, cold_a = _team_block(away_prior, season=season, prefix="away")
-    payload = {**home_block, **away_block}
+    players = player_history or []
+    home_p = _player_agg(players, team_id=home_team_id, tip=tip)
+    away_p = _player_agg(players, team_id=away_team_id, tip=tip)
+    payload = {
+        **home_block,
+        **away_block,
+        "home_top5_l5_pts": home_p["top5_l5_pts"],
+        "home_top5_l5_min": home_p["top5_l5_min"],
+        "away_top5_l5_pts": away_p["top5_l5_pts"],
+        "away_top5_l5_min": away_p["top5_l5_min"],
+    }
     return FeatureRow(
         game_id=game_id,
         feature_version=feature_version,

@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 0.3.0
+Last Updated: 2026-08-15  
+Version: 0.3.1
 
 ## Local (MVP)
 
@@ -11,7 +11,7 @@ Docker Compose (`docker-compose.yml`) services:
 
 | Service | Role |
 |---|---|
-| `database` | PostgreSQL 16 (ADR-001); init via `database/migrations/001_initial.sql` |
+| `database` | PostgreSQL 16 (ADR-001); init via `001_initial.sql` + `002_cr004_league_players_odds.sql`; pipeline/API also apply forward migrations |
 | `etl` | Batch image (`Dockerfile.etl`); shares `raw_data` + `artifacts` volumes. **Canonical Compose pipeline:** `docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider fixture` |
 | `api` | FastAPI (`api/Dockerfile`); publishes `127.0.0.1:8000` (ADR-009) |
 

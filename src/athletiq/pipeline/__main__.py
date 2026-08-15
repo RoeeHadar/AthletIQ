@@ -53,7 +53,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Override active seasons (else season_depth window)",
     )
-    p.add_argument("--season-depth", type=int, default=2)
+    p.add_argument("--season-depth", type=int, default=3)
     p.add_argument("--raw-path", type=Path, default=None)
     p.add_argument("--artifacts-path", type=Path, default=None)
     p.add_argument(

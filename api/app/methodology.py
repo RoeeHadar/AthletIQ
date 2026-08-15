@@ -33,7 +33,7 @@ METHODOLOGY: dict[str, Any] = {
         "served": False,
     },
     "candidates": ["logistic_regression", "xgboost"],
-    "feature_version_default": "team_l5_l10_v1",
+    "feature_version_default": "team_l5_l10_player_agg_v1",
     "min_prior_games": 5,
 }
 
@@ -41,8 +41,10 @@ LIMITATIONS_TEXT = (
     "Demo-grade local API (NFR-002). No hard latency/availability SLO (NFR-004). "
     "No application auth (ADR-009). Baselines are never served. "
     "Temporal ~70/15/15 split; selection on validation log loss only (tie → LR); "
-    "test set used once for ML-005. Team-level L5/L10 + season WR features only; "
-    "cold start uses season-to-date when prior games < 5. "
+    "test set used once for ML-005. Team L5/L10 + season WR plus team-aggregated "
+    "top-5-by-minutes L5 points/minutes; missing box scores cold-start to 0. "
+    "Separate served pins per league (NBA / WNBA). Market P is labeled synthetic, "
+    "not a book. "
     "Live NBA pin logistic_regression-v1: sklearn lbfgs max_iter=500 emitted "
     "ConvergenceWarning; reported test log loss is that fit, not full optimizer "
     "convergence (config not changed after inspecting test metrics). "

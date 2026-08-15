@@ -1,20 +1,33 @@
-# Implements: FR-002, DR-002, CON-002, NFR-005, ADR-001, ADR-010
+# Implements: FR-002, DR-002, CON-002, NFR-005, ADR-001, ADR-010, CR-004
 """Apply forward-only SQL migrations."""
 
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 
 import psycopg
 
 logger = logging.getLogger("athletiq.db")
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+# Dev checkout: src/athletiq/db/migrate.py → repo root. Installed wheel: site-packages.
+_SRC_REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 def migrations_dir() -> Path:
-    return REPO_ROOT / "database" / "migrations"
+    env = os.environ.get("ATHLETIQ_MIGRATIONS_DIR")
+    if env:
+        return Path(env)
+    candidates = [
+        Path.cwd() / "database" / "migrations",
+        Path("/app/database/migrations"),
+        _SRC_REPO_ROOT / "database" / "migrations",
+    ]
+    for path in candidates:
+        if path.is_dir() and any(path.glob("*.sql")):
+            return path
+    return candidates[0]
 
 
 def apply_migrations(database_url: str, *, directory: Path | None = None) -> list[str]:

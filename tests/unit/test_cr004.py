@@ -192,6 +192,74 @@ def test_per_league_pin_routing(tmp_path: Path) -> None:
     assert r.json()["error"]["code"] == "model_unavailable"
 
 
+def test_v2_pin_does_not_serve_wnba_artifact_for_nba(tmp_path: Path) -> None:
+    artifacts = tmp_path / "artifacts"
+    rng = np.random.default_rng(2)
+    X = rng.normal(size=(40, len(FEATURE_KEYS)))
+    y = (X[:, 0] > 0).astype(int)
+    wnba = LogisticRegression(max_iter=200).fit(X, y)
+    publish_artifacts(
+        artifacts_dir=artifacts,
+        model=wnba,
+        metadata=ModelMetadata(
+            model_version="wnba-lr-v1",
+            feature_version=FEATURE_VERSION,
+            dataset_version="t018b",
+            code_commit="t",
+            training_config={},
+            metrics={},
+            selection={"rule": "t", "used_test_for_selection": False},
+            model_family="logistic_regression",
+        ),
+        pin_name="wnba-lr-v1.pin.json",
+    )
+    (artifacts / "selected_pin.json").write_text(
+        json.dumps(
+            {
+                "schema": "athletiq.pins.v2",
+                "default_league": "nba",
+                "pins": {
+                    "wnba": {
+                        "model_version": "wnba-lr-v1",
+                        "feature_version": FEATURE_VERSION,
+                        "artifact": "wnba-lr-v1.joblib",
+                        "metadata": "wnba-lr-v1.json",
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    row = FeatureRow(
+        game_id=1,
+        feature_version=FEATURE_VERSION,
+        label_home_win=1,
+        payload={k: 0.0 for k in FEATURE_KEYS},
+        used_cold_start_home=False,
+        used_cold_start_away=False,
+    )
+    state = AppState(
+        artifacts_dir=artifacts,
+        games=InMemoryGameRepo(
+            games={
+                1: {"home_team_id": 1, "away_team_id": 2, "league": "nba"},
+                2: {"home_team_id": 3, "away_team_id": 4, "league": "wnba"},
+            }
+        ),
+        features=InMemoryFeatureRepo(
+            rows={(1, FEATURE_VERSION): row, (2, FEATURE_VERSION): row}
+        ),
+        db_ping=lambda: True,
+    )
+    state.load_pin()
+    client = TestClient(create_app(state))
+    nba = client.get("/v1/predict", params={"game_id": "1"})
+    assert nba.status_code == 503
+    assert nba.json()["error"]["code"] == "model_unavailable"
+    wnba_body = client.get("/v1/predict", params={"game_id": "2"}).json()
+    assert wnba_body["model_version"] == "wnba-lr-v1"
+
+
 def test_comp_a_ui_has_league_and_market_p_not_a_book() -> None:
     html = (STATIC / "index.html").read_text(encoding="utf-8")
     js = (STATIC / "app.js").read_text(encoding="utf-8")

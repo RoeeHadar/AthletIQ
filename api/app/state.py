@@ -77,6 +77,7 @@ class AppState:
     _loaded: LoadedModel | None = None
     _models: dict[str, LoadedModel] = field(default_factory=dict)
     _default_league: str = "nba"
+    _pin_v2: bool = False
 
     def _load_entry(self, pin: dict[str, Any]) -> LoadedModel | None:
         assert self.artifacts_dir is not None
@@ -107,7 +108,8 @@ class AppState:
             return None
         pin = json.loads(pin_path.read_text(encoding="utf-8"))
         self._models = {}
-        if "pins" in pin:
+        self._pin_v2 = "pins" in pin
+        if self._pin_v2:
             self._default_league = str(pin.get("default_league") or "nba")
             for league, entry in pin["pins"].items():
                 loaded = self._load_entry(entry)
@@ -131,7 +133,7 @@ class AppState:
             self.load_pin()
         lg = (league or self._default_league or "nba").lower()
         loaded = self._models.get(lg)
-        if loaded is None and lg == "nba":
+        if loaded is None and lg == "nba" and not self._pin_v2:
             loaded = self._loaded
         if loaded is None:
             raise ApiError(

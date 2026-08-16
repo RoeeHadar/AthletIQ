@@ -6,7 +6,7 @@ Last Updated: 2026-08-16
 Version: 1.1.1
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
-> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved** — Gate 6 coding may proceed (`gates.md` §22). IMP-001…012 **Done**. IMP-013–018 **In progress** (CR-004 **CI green** on `491c5c0`; code-review DoD still open).
+> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved**. IMP-001…012 **Done**. IMP-013–018 **Done** (CR-004 CI `491c5c0`; code review APPROVE 2026-08-16).
 
 ## Upstream
 
@@ -427,9 +427,9 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done
 
 ### IMP-014 — Fixture WNBA + players + synthetic odds ingest/load
 
@@ -453,9 +453,9 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done
 
 ### IMP-015 — Feature version team_l5_l10_player_agg_v1
 
@@ -475,9 +475,9 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done
 
 ### IMP-016 — Per-league train/select/publish
 
@@ -498,9 +498,9 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done
 
 ### IMP-017 — API league pin + Market P
 
@@ -521,9 +521,9 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done
 
 ### IMP-018 — Broadcast gamecast UI
 
@@ -545,6 +545,6 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - [x] Error handling addressed  
   - [x] Documentation updated  
   - [x] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`)  
   - [x] CI passed (`491c5c0` / [31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157))  
-- **Status:** In progress (CI green `491c5c0`; code-review DoD open)
+- **Status:** Done

@@ -22,7 +22,7 @@ Do **not** set Implementation from a passing test, or Verification from an IMP D
 | Implementation | IMP task Status + code (not pytest) | `Implemented` · `Partial` · `Not started` |
 | Verification | TEST plan Status; OPS-001/CON-005 remote is GitHub Actions | `Passing (local)` · `Passing (synthetic)` · `Passing (in-memory)` · `Passing (remote)` · `Deferred (remote CI)` · `Planned` |
 
-IMP-001…012 **Done** is Gate 6 code complete for listed MVP modules. IMP-013–018 (CR-004) are **In progress**: listed modules exist; **CI passed** on `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)); code-review DoD remains open. IMP-011 remote CI was previously green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
+IMP-001…012 **Done** is Gate 6 code complete for listed MVP modules. IMP-013–018 (CR-004) are **Done**: CI `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)); code review APPROVE 2026-08-16 (`docs/00-meta/reviews/2026-08-16-cr004-code-review.md`). IMP-011 was previously green on `4a2f713` ([31753742525](https://github.com/RoeeHadar/AthletIQ/actions/runs/31753742525)).
 
 **Partial** means the mapped IMP exists but the requirement’s product bar is not attested. DR-001 / ML-005 local live bars were owner-reported **2026-08-14** (not PRD-ticked; TEST-007 remains synthetic).
 
@@ -46,7 +46,7 @@ CR-001 (Accepted): MVP persist/ingest was teams/games/team statistics. **CR-004*
 | FR-012 | system | infrastructure | IMP-010 | TEST-010 | Active | Implemented | Passing (static topology) |
 | FR-013 | data | error | IMP-004 | TEST-004 | Active | Implemented | Passing (in-memory) |
 | FR-014 | api | api | IMP-008 | TEST-008, TEST-014 | Active | Implemented | Passing (local) |
-| FR-015 | api | PRODUCT.md + gamecast Comp A | IMP-018 | TEST-008, TEST-019 | Amended (2026-08-15 UI grill) | In progress | Passing (local) |
+| FR-015 | api | PRODUCT.md + gamecast Comp A | IMP-018 | TEST-008, TEST-019 | Amended (2026-08-15 UI grill) | Implemented | Passing (local) |
 | FR-016 | data | database | IMP-014 | TEST-015 | Active | Implemented | Passing (local) |
 | FR-017 | data | database | IMP-014 | TEST-016 | Active | Implemented | Passing (local) |
 | FR-018 | api/data | api + ADR-012 | IMP-014, IMP-017 | TEST-017 | Active | Implemented | Passing (local) |

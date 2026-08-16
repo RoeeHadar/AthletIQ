@@ -1,4 +1,4 @@
-# Implements: FR-002, DR-002, CON-002, NFR-005, ADR-001, ADR-010
+# Implements: FR-002, DR-002, DR-005, CON-002, NFR-005, ADR-001, ADR-010, CR-005
 """PostgreSQL access and forward-only migrations."""
 
 from __future__ import annotations

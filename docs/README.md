@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 0.3.2
+Last Updated: 2026-08-16  
+Version: 0.3.3
 
 Living documentation for AthletIQ. Read this index first; do not duplicate content across docs — follow the source-of-truth rules in `00-meta/documentation-guide.md`.
 
@@ -24,7 +24,7 @@ Root overview + local Compose demo: [`../README.md`](../README.md).
 | `08-testing/` | Test strategy and requirement-driven test plan |
 | `09-devops/` | CI/CD, infrastructure, deployment |
 | `10-operations/` | Observability, logging, incident response |
-| `11-change-management/` | Change requests (re-enter at requirements); **CR-001**–**CR-004** Accepted |
+| `11-change-management/` | Change requests (re-enter at requirements); **CR-001**–**CR-005** Accepted |
 | `12-releases/` | Release process and notes template |
 
 ## Machine-consumable contracts (alongside prose)

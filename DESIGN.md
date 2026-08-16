@@ -143,7 +143,7 @@ This is sports-broadcast graphic language on a local demo. Keyboard focus is a 2
 
 **Key Characteristics:**
 
-- Full-bleed producer bar: ATHLETIQ, NBA/WNBA, Health waveform, pin chips, Game ID, TAKE, 2px ice-cyan underline
+- Full-bleed producer bar: ATHLETIQ, NBA/WNBA, Health waveform, pin chips, Game ID, TAKE, Gamecast/Slate/Board switch, 2px ice-cyan underline
 - Giant horizontal split: dormant charcoal and dashes at rest; live ice-cyan / amber widths equal model P vs 1−P
 - Market ribbon under the split, labeled Synthetic · not a book, echoing the same two-color split
 - Two legal chyron columns on the field (Methodology | Limitations) with underlined gothic titles
@@ -260,8 +260,10 @@ Every control, chip, field, plate, and banner is a hard rectangle (`border-radiu
 
 ### Navigation
 
-- **Producer:** Full-bleed Producer Black, min-height 4.5rem, wrapping row, 2px Ice Cyan bottom border. Brand is ATHLETIQ at title size. Tools are league, Health, pin chips; lookup is Game ID + TAKE on the right. No extra nav links. Skip link is a Broadcast White chip with Plate Ink, uppercase, that appears on focus.
+- **Producer:** Full-bleed Producer Black, min-height 4.5rem, wrapping row, 2px Ice Cyan bottom border. Brand is ATHLETIQ at title size. Tools are league, Health, pin chips; lookup is Game ID + TAKE on the right. **CR-005:** a hard segmented surface switch (Gamecast / Slate / Board) sits in the producer bar on all three paths. Skip link is a Broadcast White chip with Plate Ink, uppercase, that appears on focus.
 - **League switch:** Hard segmented control, 1px Broadcast White stroke at 45% on Producer Black. Cells are 700 / 0.85rem / 0.08em / uppercase. Pressed cell inverts to Broadcast White / Plate Ink. Hover on an idle cell is white at 12%. Focus-visible is a 2px Ice Cyan ring.
+- **Slate (`/slate`):** Same producer family. Demo-user switch updates `?user=`. Next unplayed game uses the Home/Away split; remaining games are stacked lower-thirds (cyan/amber plates), not a gray table. LOCK places an integer e-coin stake. Copy may say stake/settle. Forbidden: odds/juice/moneyline/payout/wager.
+- **Board (`/board`):** Same producer family. In-progress plates may show provider scores. Clock only if the JSON included one — never invented. Gamecast still has no score/clock.
 
 ### Win-probability split
 

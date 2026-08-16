@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-12  
-Version: 1.0.0
+Last Updated: 2026-08-16  
+Version: 1.1.0
 
 Decision status: Accepted
 
@@ -25,7 +25,7 @@ MVP FastAPI has **no application-level authentication/authorization**. Safety as
 
 - Docs must not imply production-public exposure without a CR + auth ADR.  
 - Post-MVP cloud deploy (Gate 8) must revisit auth before public bind.  
-- OpenAPI documents security as empty / none for MVP.
+- Pick-a-demo-user (`?user=`) is **not** authentication (CR-005 / ADR-014).
 
 ## References
 

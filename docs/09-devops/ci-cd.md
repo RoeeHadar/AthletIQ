@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-13  
-Version: 0.3.0
+Last Updated: 2026-08-16  
+Version: 0.3.1
 
 ## MVP pipeline (OPS-001 / CON-005)
 
@@ -16,7 +16,7 @@ Workflow: `.github/workflows/ci.yml` (MVP workflow; not a stub).
 | Job | Role |
 |---|---|
 | `lint` | `ruff check` + `compileall` |
-| `unit` | `pytest tests/unit` — fixtures only (**NFR-003**; no `API_SPORTS_KEY`) |
+| `unit` | `pytest tests/unit` — fixtures only (**NFR-003**; no live `nba-stats` / no `API_SPORTS_KEY`). CR-005 TEST-020–028 stay fixture/injected-HTTP. |
 | `integration` | `needs: [lint, unit]`; Postgres 16 service + `TEST_DATABASE_URL` |
 | `image` | `needs: [integration]`; build `Dockerfile.etl` + `api/Dockerfile` (build-only) |
 

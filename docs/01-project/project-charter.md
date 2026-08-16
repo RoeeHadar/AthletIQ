@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-14  
-Version: 1.0.2
+Last Updated: 2026-08-16  
+Version: 1.0.3
 
 > Organizational / sponsorship / portfolio view. Product capabilities and users: `docs/02-product/PRD.md`.  
 > Deliberate **technical constraints** for the portfolio live here so the PRD can stay product-shaped.
@@ -35,9 +35,9 @@ No other organizational stakeholders. Known (Grill-Me). Product users and artifa
 
 ## High-level scope
 
-**In scope (effort boundary):** documentation lifecycle; NBA data ingestion from an external provider; relational storage and SQL analytics; feature engineering; ML win/lose prediction (baseline + LR + XGBoost in MVP; NumPy NN documented as stretch); demo HTTP API; containerized local multi-service deployment; CI through image build; shell pipeline orchestration.
+**In scope (effort boundary):** documentation lifecycle; NBA (and fixture WNBA) data ingestion from an external provider; relational storage and SQL analytics; feature engineering; ML win/lose prediction (baseline + LR + XGBoost in MVP; NumPy NN documented as stretch); demo HTTP API and same-origin UI surfaces; a **labeled e-coin simulation** (not a licensed book); containerized local multi-service deployment; CI through image build; shell pipeline orchestration.
 
-**Out of scope (effort boundary):** commercial productization, multi-tenant operations, betting products, mobile clients, production ML ops platforms. Detail in PRD non-goals.
+**Out of scope (effort boundary):** commercial productization, multi-tenant operations, **real-money betting products**, mobile clients, production ML ops platforms. A local fake-coin stake/settle demo is in the PRD (CR-005), not a Charter betting-product. Detail in PRD non-goals.
 
 ## Constraints
 
@@ -61,7 +61,7 @@ Still open from discovery:
 
 ## Known assumptions
 
-- NBA Stats API pagination is sufficient for MVP historical depth of 2 completed seasons. Confirmed 2026-08-14: 2640 finished NBA games (2023: 1319, 2024: 1321); API `pageSize` effectively 50.
+- NBA Stats API pagination is sufficient for historical ingest. Confirmed 2026-08-14: 2640 finished NBA games for 2023–2024 (2023: 1319, 2024: 1321); API `pageSize` effectively 50. **CR-005** removes the live NBA season cap (page everything the API returns).
 - Solo maintenance indefinitely is acceptable for portfolio scope. Known (Grill-Me).
 
 ## Success criteria
@@ -98,4 +98,4 @@ Exact dates: `[OPEN QUESTION: schedule not set]`.
 
 ## Source
 
-Grill-Me Rounds 1–4 (2026-08-12); aligned with PRD v0.2 revision (2026-08-12). Product detail: `docs/02-product/PRD.md`.
+Grill-Me Rounds 1–4 (2026-08-12); aligned with PRD v0.2 revision (2026-08-12); **CR-005** (2026-08-16) labeled e-coin simulation in effort boundary (real-money books remain out). Product detail: `docs/02-product/PRD.md`.

@@ -30,6 +30,7 @@ def test_compose_file_declares_architecture_topology() -> None:
     assert "postgres:16" in text
     assert "001_initial.sql" in text
     assert "002_cr004_league_players_odds.sql" in text
+    assert "003_cr005_ledger_game_lifecycle.sql" in text
 
     # Localhost publish for demo API (ADR-009 / NFR-002)
     assert "127.0.0.1:8000:8000" in text

@@ -1,0 +1,58 @@
+{
+  "response": [
+    {
+      "id": 3301,
+      "date": "2026-09-15T23:00:00+00:00",
+      "season": 2026,
+      "status": "scheduled",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": null
+        },
+        "away": {
+          "total": null
+        }
+      }
+    },
+    {
+      "id": 3302,
+      "date": "2026-09-18T23:00:00+00:00",
+      "season": 2026,
+      "status": "scheduled",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": null
+        },
+        "away": {
+          "total": null
+        }
+      }
+    }
+  ],
+  "season": 2026,
+  "league": "wnba"
+}

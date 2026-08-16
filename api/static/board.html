@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AthletIQ — Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/app.css?v=board" />
+  </head>
+  <body>
+    <!--
+      THESIS: An in-progress broadcast board, not a scorebug on the gamecast and not a book.
+      OWN-WORLD: Same charcoal field, Home ice-cyan / Away amber plates, Barlow Condensed, producer bar.
+      STORY: Show in-progress games only. Scores when the provider sent them. Clock only if present. Never invent a clock.
+      FIRST VIEWPORT: Producer bar (AthletIQ, Gamecast/Slate/Board) / live plates with scores.
+      FORM: Broadcast board (CR-005); same instrument family as gamecast.
+      FINISH: unreviewed and undocumented is unfinished
+    -->
+    <a class="skip" href="#live-games">Skip to in-progress games</a>
+    <header class="producer">
+      <p class="producer__brand">AthletIQ</p>
+      <nav class="producer__surfaces" aria-label="Surfaces">
+        <a href="/">Gamecast</a>
+        <a href="/slate">Slate</a>
+        <a href="/board" aria-current="page">Board</a>
+      </nav>
+      <div class="producer__tools">
+        <p class="producer__health" id="health" data-state="loading">
+          <svg class="producer__wave" viewBox="0 0 24 12" width="24" height="12" aria-hidden="true">
+            <path
+              d="M1 6h3l2-4 3 8 2-4h4l2 3 2-3h4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linejoin="round"
+              stroke-linecap="square"
+            />
+          </svg>
+          <span id="health-label">Board</span>
+        </p>
+      </div>
+    </header>
+    <main class="stage stage--board">
+      <p class="banner" id="banner" hidden role="alert"></p>
+      <section class="sim-ribbon">
+        <p>In-progress only · scores from the provider · clock only if sent</p>
+        <p id="board-count">0 live</p>
+      </section>
+      <p class="idle-hint" id="idle-hint">No in-progress games on this store.</p>
+      <section class="thirds" id="live-games" aria-label="In-progress games"></section>
+    </main>
+    <footer class="colophon">
+      Local demo · GET /v1/board · browser talks only to AthletIQ ·
+      <a href="/">Gamecast</a> · <a href="/slate">Slate</a>
+    </footer>
+    <script src="/static/board.js?v=board" type="module"></script>
+  </body>
+</html>

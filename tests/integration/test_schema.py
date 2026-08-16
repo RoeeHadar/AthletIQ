@@ -19,6 +19,7 @@ def test_migrations_dir_finds_sql() -> None:
     names = {p.name for p in migrations_dir().glob("*.sql")}
     assert "001_initial.sql" in names
     assert "002_cr004_league_players_odds.sql" in names
+    assert "003_cr005_ledger_game_lifecycle.sql" in names
     text = SCHEMA.read_text(encoding="utf-8")
     assert "BIGSERIAL" in text
     assert "game_id" in text
@@ -39,6 +40,8 @@ def test_schema_declares_required_indexes() -> None:
         "idx_features_version_game",
         "idx_games_league",
         "idx_odds_snapshots_game",
+        "idx_games_status_start",
+        "idx_stakes_one_open",
     ):
         assert name in text
 
@@ -54,6 +57,10 @@ def test_schema_declares_dr002_tables() -> None:
         "team_game_stats",
         "features",
         "odds_snapshots",
+        "users",
+        "wallets",
+        "stakes",
+        "ledger_entries",
     ):
         assert f"CREATE TABLE IF NOT EXISTS {table}" in text
 
@@ -61,6 +68,7 @@ def test_schema_declares_dr002_tables() -> None:
 def test_migration_001_and_002_exist() -> None:
     assert (MIGRATIONS / "001_initial.sql").is_file()
     assert (MIGRATIONS / "002_cr004_league_players_odds.sql").is_file()
+    assert (MIGRATIONS / "003_cr005_ledger_game_lifecycle.sql").is_file()
 
 
 def _pg_url() -> str | None:
@@ -88,6 +96,7 @@ def test_apply_migrations_idempotent(database_url: str) -> None:
     first = apply_migrations(database_url)
     assert "001_initial" in first
     assert "002_cr004_league_players_odds" in first
+    assert "003_cr005_ledger_game_lifecycle" in first
 
     second = apply_migrations(database_url)
     assert second == first
@@ -114,6 +123,10 @@ def test_apply_migrations_idempotent(database_url: str) -> None:
             "odds_snapshots",
             "model_registry",
             "schema_migrations",
+            "users",
+            "wallets",
+            "stakes",
+            "ledger_entries",
         ):
             assert name in tables
 
@@ -138,3 +151,22 @@ def test_apply_migrations_idempotent(database_url: str) -> None:
         }
         assert "idx_games_start" in indexes
         assert "idx_features_version_game" in indexes
+        assert "idx_stakes_one_open" in indexes
+
+        balances = {
+            r[0]: int(r[1])
+            for r in conn.execute(
+                """
+                SELECT u.slug, w.balance
+                FROM users u
+                JOIN wallets w ON w.user_id = u.user_id AND w.kind = 'user'
+                """
+            ).fetchall()
+        }
+        assert balances.get("demo-1") == 1000
+        assert balances.get("demo-2") == 1000
+        house = conn.execute(
+            "SELECT balance FROM wallets WHERE kind = 'house'"
+        ).fetchone()
+        assert house is not None
+        assert int(house[0]) >= 1000

@@ -1,4 +1,4 @@
-# Implements: FR-002, FR-013, FR-017, FR-018, DR-002, DR-003, OPS-002, CR-004
+# Implements: FR-002, FR-013, FR-017, FR-018, FR-021, DR-002, DR-003, OPS-002, CR-004, CR-005
 """Validate raw batch → curated upserts + validation report."""
 
 from __future__ import annotations

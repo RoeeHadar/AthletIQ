@@ -1,4 +1,4 @@
-# Implements: DR-001 — prune too-old curated seasons
+# Implements: DR-001, ADR-006, ADR-017 — fixture-window helper only (live NBA is not age-pruned)
 """Prune curated games/stats outside the active season window."""
 
 from __future__ import annotations

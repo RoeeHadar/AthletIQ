@@ -2,8 +2,8 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 0.5.0
+Last Updated: 2026-08-16  
+Version: 0.6.0
 
 Append-only. Register an ID here **before** using it in any document. Do not reuse IDs.
 
@@ -22,7 +22,7 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 | FR-011 | FR | Pipeline orchestration script | SRS.md | 2026-08-12 |
 | FR-012 | FR | Containerized local multi-service deployment | SRS.md | 2026-08-12 |
 | FR-013 | FR | ETL validation report | SRS.md | 2026-08-12 |
-| DR-001 | DR | MVP season depth (2 Must / 3 Should) | SRS.md | 2026-08-12 |
+| DR-001 | DR | Season window (CR-005: live NBA uncapped; CI small; WNBA fixture 2021–2025 + 2026 scheduled). Original mint: MVP 2 Must / 3 Should. | SRS.md | 2026-08-12 |
 | DR-002 | DR | Required entity themes | SRS.md | 2026-08-12 |
 | ML-001 | ML | Temporal boundary (no leakage) | SRS.md | 2026-08-12 |
 | ML-002 | ML | Designated team = home | SRS.md | 2026-08-12 |
@@ -117,6 +117,38 @@ Append-only. Register an ID here **before** using it in any document. Do not reu
 | TEST-017 | TEST | Synthetic odds labeled; predict omits if missing | test-plan.md | 2026-08-15 |
 | TEST-018 | TEST | Per-league pin routing | test-plan.md | 2026-08-15 |
 | TEST-019 | TEST | GET / reconstruction: Comp A, league, Market P, no book | test-plan.md | 2026-08-15 |
+| CR-005 | CR | Platform slice: e-coin ledger, /slate, /board, uncapped live NBA, live player boxes, retrain | CR-005-platform-slice-ledger-slate-board.md | 2026-08-16 |
+| ADR-014 | ADR | Demo identity + e-coin ledger (no auth) | ADR-014-demo-identity-ecoin-ledger.md | 2026-08-16 |
+| ADR-015 | ADR | Game lifecycle: scheduled persist, board poll, pipeline settle | ADR-015-game-lifecycle-board-poll-settle.md | 2026-08-16 |
+| ADR-016 | ADR | Three FastAPI surfaces: /, /slate, /board | ADR-016-three-ui-surfaces.md | 2026-08-16 |
+| ADR-017 | ADR | Uncapped live NBA ingest + live player boxes | ADR-017-uncapped-nba-live-player-boxes.md | 2026-08-16 |
+| FR-021 | FR | Persist scheduled/unplayed games; P from prior completed history | SRS.md | 2026-08-16 |
+| FR-022 | FR | Demo users and e-coin wallets | SRS.md | 2026-08-16 |
+| FR-023 | FR | Even-money stake/cancel/replace/settle | SRS.md | 2026-08-16 |
+| FR-024 | FR | GET /slate upcoming table | SRS.md | 2026-08-16 |
+| FR-025 | FR | GET /board in-progress gameboard | SRS.md | 2026-08-16 |
+| FR-026 | FR | Adapter-only newest-page board poll | SRS.md | 2026-08-16 |
+| FR-027 | FR | Live NBA player boxes via nba-stats | SRS.md | 2026-08-16 |
+| FR-028 | FR | Retrain NBA and WNBA pins this CR | SRS.md | 2026-08-16 |
+| DR-005 | DR | Users, wallets, ledger, stakes grain | SRS.md | 2026-08-16 |
+| DR-006 | DR | Unplayed and in-progress game rows | SRS.md | 2026-08-16 |
+| ML-012 | ML | CR-005 retrain: new split, test once, CI pin unchanged | SRS.md | 2026-08-16 |
+| IMP-019 | IMP | Schema: users/wallets/stakes + unplayed/in-progress games | implementation-plan.md | 2026-08-16 |
+| IMP-020 | IMP | Provider: scheduled/in-progress, uncapped NBA, live player boxes | implementation-plan.md | 2026-08-16 |
+| IMP-021 | IMP | WNBA fixtures 2021–2025 + 2026 scheduled; NBA scheduled CI rows | implementation-plan.md | 2026-08-16 |
+| IMP-022 | IMP | Ledger settle in pipeline + Compose board poll | implementation-plan.md | 2026-08-16 |
+| IMP-023 | IMP | API: user/slate/board/stake + UI surfaces | implementation-plan.md | 2026-08-16 |
+| IMP-024 | IMP | Retrain/select/publish NBA+WNBA; disclose | implementation-plan.md | 2026-08-16 |
+| IMP-025 | IMP | Tests TEST-020–028 + CI fixture-only | implementation-plan.md | 2026-08-16 |
+| TEST-020 | TEST | Scheduled/unplayed persist; P from prior history only | test-plan.md | 2026-08-16 |
+| TEST-021 | TEST | Even-money settle idempotent; pre-tip cancel/replace | test-plan.md | 2026-08-16 |
+| TEST-022 | TEST | Integer stake bounds; one open stake per (user, game) | test-plan.md | 2026-08-16 |
+| TEST-023 | TEST | /slate next-20 + open stakes + ?user= | test-plan.md | 2026-08-16 |
+| TEST-024 | TEST | /board in-progress; gamecast still no score/clock; no sportsbook copy | test-plan.md | 2026-08-16 |
+| TEST-025 | TEST | nba-stats maps null scores, in-progress, player boxes (injected HTTP) | test-plan.md | 2026-08-16 |
+| TEST-026 | TEST | WNBA fixture 2021–2025 + 2026 scheduled | test-plan.md | 2026-08-16 |
+| TEST-027 | TEST | Retrain protocol: val select, test once; CI pin unchanged | test-plan.md | 2026-08-16 |
+| TEST-028 | TEST | Producer-bar three-way links; no book language on /slate and /board | test-plan.md | 2026-08-16 |
 
 ## Prefixes
 

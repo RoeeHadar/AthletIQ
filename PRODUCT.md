@@ -12,9 +12,9 @@ static HTML/CSS/JS served by the existing FastAPI app (same origin). Owner chose
 
 ## Users
 
-Primary: a sports/data analyst or developer running AthletIQ locally. Job: check that the demo API can return a pre-game home-win prediction for a known `game_id`, and read the served model's methodology and limitations.
+Primary: a sports/data analyst or developer running AthletIQ locally. Job: check pre-game home-win prediction for a known `game_id`, read methodology/limitations, and (CR-005) use the labeled e-coin slate plus in-progress board.
 
-Stakeholder: project owner doing manual MVP check. Artifact audience: technical reviewers. Not a betting customer.
+Stakeholder: project owner doing manual check. Artifact audience: technical reviewers. Not a real-money betting customer.
 
 ## Product Purpose
 
@@ -24,7 +24,7 @@ Success: look up a loaded game by id, see prediction + probability, see health a
 
 ## Positioning
 
-Prediction is keyed to an already-ingested game (`game_id` / optional `provider_game_id`), uses only pre-tip team features, and always discloses the served pin and known limitations. It is not a live odds board.
+Prediction is keyed to an already-ingested game (`game_id` / optional `provider_game_id`), uses only pre-tip team features, and always discloses the served pin and known limitations. It is not a live odds board and not a real-money book.
 
 ## Operating Context
 
@@ -33,8 +33,9 @@ Local Docker Compose (or the NFR-001 attest clone) on `127.0.0.1:8000`. No appli
 ## Capabilities and Constraints
 
 - Lookup by `game_id` (required path). League control (NBA | WNBA). Show health, model metadata, methodology, limitations, labeled synthetic Market P.
-- No betting book (stakes, accounts, payouts). No live in-game, auth, multi-tenant, GCP.
-- Must not invent games, metrics, or win claims. Empty/error states from real API codes (`game_not_found`, `features_not_found`, `model_unavailable`, `db_unavailable`).
+- Three same-origin surfaces (CR-005 / ADR-016): gamecast `GET /` (no score/clock, no stake chrome); `GET /slate` (upcoming + labeled e-coin stake/settle); `GET /board` (in-progress display only). Producer-bar links among them.
+- No real-money betting book (payments, juice, moneyline-as-price). Labeled e-coin simulation is allowed on `/slate` only. No live in-game *prediction* features. No auth, multi-tenant, GCP.
+- Must not invent games, metrics, clocks, or win claims. Empty/error states from real API codes (`game_not_found`, `features_not_found`, `model_unavailable`, `db_unavailable`, plus ledger codes in api-design).
 - Compose demo must keep `--store postgres`. CI stays fixture-only.
 
 ## Brand Commitments

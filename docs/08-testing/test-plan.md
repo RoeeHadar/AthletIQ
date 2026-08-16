@@ -3,7 +3,7 @@
 Status: Approved  
 Owner: Project owner  
 Last Updated: 2026-08-16  
-Version: 1.1.1
+Version: 1.2.0
 
 > Requirement-driven cases. **Canonical** req↔test map: `../03-requirements/traceability.md`.  
 > **Approved** with Gate 7 strategy v1.0.0. Levels: one **primary** `Level` per suite; optional **Also** for nested cases (see `test-strategy.md`).
@@ -45,38 +45,38 @@ Status: Planned | Implemented | Passing
 ### TEST-002 — Schema and migrations
 
 - **Requirement IDs:** FR-002 (contract), DR-002, CON-002, NFR-005, ADR-001, ADR-010  
-- **IMP refs:** IMP-002  
+- **IMP refs:** IMP-002, IMP-019  
 - **Dependencies:** none  
-- **Description:** Migrations/schema apply; DR-002 **MVP** themes plus reserved player tables; indexes; BIGINT (**ADR-010**); `schema_migrations`; second apply is idempotent.  
+- **Description:** Migrations/schema apply; DR-002 themes including loaded players; CR-005 ledger tables after 003; indexes; BIGINT (**ADR-010**); `schema_migrations`; second apply is idempotent.  
 - **Preconditions:** Ephemeral Postgres.  
 - **Steps:**
   1. Apply migration set to empty DB — succeeds.  
-  2. Assert required tables exist (teams, games, team_game_stats, features; reserved players / player_game_stats; optional model_registry; schema_migrations).  
-  3. Assert database-design indexes present.  
-  4. Assert `game_id` / `team_id` / `player_id` are BIGINT-compatible.  
+  2. Assert required tables exist (teams, games, team_game_stats, features, players, player_game_stats; optional model_registry; schema_migrations). After **003**: `users`, `wallets`, `ledger_entries`, `stakes`.  
+  3. Assert database-design indexes present (including partial unique open stakes).  
+  4. Assert `game_id` / `team_id` / `player_id` / `user_id` are BIGINT-compatible.  
   5. Apply the **same** migration set again — succeeds; schema unchanged; no duplicate objects / corrupted state.  
-- **Expected result:** Idempotent migrate; contract + ADR-010 hold. Empty reserved player tables after migrate-only is expected (CR-001).  
+- **Expected result:** Idempotent migrate; contract + ADR-010 hold. Empty player tables after migrate-only (no load) is expected. Seed demo users after 003 (TEST-022).  
 - **Level:** integration  
-- **Status:** Passing (contract/static always; live migrate when `TEST_DATABASE_URL` set)
+- **Status:** Passing (001/002 contract); 003 ledger tables **Planned** (IMP-019)
 
 ### TEST-003 — Provider adapter and raw ingest (fixtures)
 
-- **Requirement IDs:** FR-001, CON-007, DR-001, SEC-001, ADR-011, ADR-006, CR-002  
-- **IMP refs:** IMP-003  
+- **Requirement IDs:** FR-001, FR-021, CON-007, DR-001, SEC-001, ADR-011, ADR-006, CR-002  
+- **IMP refs:** IMP-003, IMP-020  
 - **Dependencies:** TEST-001  
-- **Description:** Fixture-backed ingest to immutable raw FS; season window; retries without live network; mocked NBA Stats API pagination.  
+- **Description:** Fixture-backed ingest to immutable raw FS; season window; retries without live network; mocked NBA Stats API pagination. **CR-005:** live mapper **keeps** null-score games (FR-021); does not hardcode `Finished`.  
 - **Preconditions:** `tests/fixtures/provider/`; no API key required.  
 - **Steps:**
   1. Ingest via fixture backend → raw files under configured path.  
   2. Re-run; assert immutability / batch layout per design.  
-  3. Seasons outside active 2–3 window not ingested (or pruned).  
+  3. Fixture path loads only authored fixture seasons (not a historical dump). Live NBA has **no** age cap (DR-001 / TEST-025) — do not assert a 3-season live prune.  
   4. API key only from env (unused API-Sports fallback).  
   5. **Also (unit):** retry helper — max 5, backoff+jitter, honor `Retry-After` (mocked HTTP/clock).  
-  6. **Also (unit):** `NbaStatsApiProvider` with injected GET — multi-page newest-first, season filter, alias map, skip missing scores / non-NBA teams; no live HTTP.  
-- **Expected result:** No live HTTP; raw landing correct.  
+  6. **Also (unit):** `NbaStatsApiProvider` with injected GET — multi-page newest-first; alias map; **keep** games whose points are null (status not hardcoded `Finished`); still skip non-NBA / unmappable teams; no live HTTP. In-progress + player boxes: TEST-025.  
+- **Expected result:** No live HTTP; raw landing correct; null-score NBA rows are not dropped solely for missing scores.  
 - **Level:** integration  
 - **Also:** unit (retry helper; mocked nba-stats pages)  
-- **Status:** Passing
+- **Status:** Passing (fixture ingest/raw); nba-stats keep-null-score mapper **Planned** (IMP-020)
 
 ### TEST-004 — Validate, load, report, idempotency
 
@@ -92,7 +92,7 @@ Status: Planned | Implemented | Passing
      - `team_game_stats`: `(game_id, team_id)`  
      - `features`: `(game_id, feature_version)`  
      - games/teams: `provider_*` unique  
-     - `player_game_stats` is **reserved** (CR-001) — not an MVP load grain; do not require player upserts.  
+     - `player_game_stats`: `(game_id, player_id)` when player fixtures are loaded (CR-004 / TEST-016). Live NBA boxes: TEST-025. Not reserved.  
   4. Zero games for a required season → non-zero exit + inspectable log.  
 - **Expected result:** DR-003 + FR-013 satisfied.  
 - **Level:** integration  
@@ -287,7 +287,7 @@ Status: Planned | Implemented | Passing
 - **Requirement IDs:** FR-016, DR-001, DR-002, ADR-013  
 - **IMP refs:** IMP-013, IMP-014  
 - **Dependencies:** TEST-002, TEST-003  
-- **Description:** Schema has sport/league; fixture ingest loads NBA depth 3 and overlapping WNBA; CI uses no live WNBA HTTP.  
+- **Description:** Schema has sport/league; fixture ingest loads a small NBA set and WNBA files; CI uses no live WNBA HTTP. CR-005 expands WNBA seasons via TEST-026; this suite still proves `league` split.  
 - **Preconditions:** `tests/fixtures/provider/`.  
 - **Steps:**
   1. Apply migrations including 002 — `games.league`, `odds_snapshots` exist.  
@@ -350,15 +350,165 @@ Status: Planned | Implemented | Passing
 - **Requirement IDs:** FR-015, FR-020, CON-009  
 - **IMP refs:** IMP-018  
 - **Dependencies:** TEST-008  
-- **Description:** GET / HTML is the broadcast gamecast (producer bar + Home/Away split + Game ID lookup), league control, Market P labeled synthetic, no stakes/payouts/moneyline chrome.  
+- **Description:** GET / HTML is the broadcast gamecast (producer bar + Home/Away split + Game ID lookup), league control, Market P labeled synthetic, **no** stake/payout/moneyline chrome **on this page**. CR-005 stake/settle copy lives on `/slate` (TEST-023/028). Producer-bar links to `/slate` and `/board` (TEST-028).  
 - **Preconditions:** FastAPI TestClient.  
 - **Steps:**
   1. GET / is HTML.  
   2. Static JS/CSS reference league control, split, and Market P.  
   3. Assert no wager/stake/payout/moneyline copy.  
-- **Expected result:** Gamecast surface present; not a book.  
+- **Expected result:** Gamecast surface present; not a book; no stake chrome on `GET /`.  
 - **Level:** unit  
 - **Status:** Passing (local)
+
+---
+
+## CR-005 cases (Planned)
+
+### TEST-020 — Scheduled/unplayed persist; P from prior history only
+
+- **Requirement IDs:** FR-001, FR-021, DR-006, ML-001  
+- **IMP refs:** IMP-019, IMP-020, IMP-021  
+- **Dependencies:** TEST-002, TEST-004, TEST-006  
+- **Description:** Scheduled games persist with null scores and status not Finished. Feature/`P(home_win)` rows use prior **completed** history only.  
+- **Preconditions:** Fixture includes at least one scheduled NBA row and one scheduled WNBA row.  
+- **Steps:**
+  1. Load fixtures — scheduled rows exist; scores null; status ≠ Finished.  
+  2. Build features for a scheduled game — values do not use that game’s missing box.  
+  3. Training labels exclude non-Finished games.  
+- **Expected result:** Unplayed rows stored; no leakage from the unplayed game itself.  
+- **Level:** integration  
+- **Also:** unit (feature builder)  
+- **Status:** Planned
+
+### TEST-021 — Even-money settle idempotent; pre-tip cancel/replace
+
+- **Requirement IDs:** FR-023, DR-003, DR-005, CON-009, ADR-014, ADR-015  
+- **IMP refs:** IMP-022  
+- **Dependencies:** TEST-020, TEST-022  
+- **Description:** Pipeline settles when a game is ingested as Finished. Correct pick returns stake + equal house credit; wrong pick forfeits stake. Second run does not double-credit. Cancel/replace allowed only before tip. `/slate` does not settle.  
+- **Preconditions:** Seeded demo user; scheduled then Finished fixture/load.  
+- **Steps:**
+  1. `demo-1` starts at **1000**. Place amount **10** (`replace=false`). Unlocked balance is **990**. Cancel restores **1000**.  
+  2. Place **10** again; then `POST /v1/stakes` with `replace=true`, amount **20**, same game — still one open stake; unlocked **980**.  
+  3. Ingest that game Finished with **matching** side → `demo-1` balance = **pre-lock 1000 + 20 = 1020** (equivalently unlocked 980 + 2×20). House decreases by 20.  
+  4. `demo-2` starts at **1000**. Place **10**; ingest Finished with **opposite** side → balance = **990** (stake gone). House unchanged for a loss.  
+  5. Re-run pipeline — neither balance nor ledger totals change (no double-credit).  
+  6. After tip, cancel / new stake / replace rejected (`stake_window_closed`).  
+  7. `/slate` does not settle (display only).  
+- **Expected result:** Even-money win and lose; replace works before tip; idempotent settle; copy stake/settle not odds/juice/moneyline.  
+- **Level:** integration  
+- **Also:** unit (settle math)  
+- **Status:** Planned
+
+### TEST-022 — Integer stake bounds; one open stake per (user, game)
+
+- **Requirement IDs:** FR-022, FR-023, DR-005, ADR-014  
+- **IMP refs:** IMP-019, IMP-023  
+- **Dependencies:** TEST-002  
+- **Description:** Seed `demo-1`/`demo-2` at 1000 e-coins; house wallet exists; unknown user rejected; amount integer min 1 max unlocked; one open stake per `(user, game)`.  
+- **Preconditions:** Migration 003 applied.  
+- **Steps:**
+  1. After migrate, balances are 1000; house ≥ enough for even-money.  
+  2. Amount 0 / non-integer / over unlocked → `invalid_request` or `insufficient_balance`.  
+  3. Second open stake with `replace=false` → `duplicate_open_stake`. `replace=true` is TEST-021.  
+  4. Unknown slug and `house` → `user_not_found`.  
+- **Expected result:** Bounds and uniqueness hold; no passwords/cookies.  
+- **Level:** integration  
+- **Also:** unit  
+- **Status:** Planned
+
+### TEST-023 — `/slate` next-20 + open stakes + `?user=`
+
+- **Requirement IDs:** FR-024, FR-022, ADR-016  
+- **IMP refs:** IMP-023  
+- **Dependencies:** TEST-020, TEST-022  
+- **Description:** `GET /slate` HTML + JSON: next 20 unplayed pre-tip games (NBA+WNBA mixed) plus that user’s open stakes; switcher updates `?user=`.  
+- **Preconditions:** FastAPI TestClient; seeded users; mixed scheduled fixtures.  
+- **Steps:**
+  1. GET `/slate?user=demo-1` is HTML; JSON slate has ≤20 upcoming plus open stakes.  
+  2. Switch to `demo-2` — URL query changes; balances differ if stakes differ.  
+  3. Finished games are absent from the upcoming table.  
+- **Expected result:** Next-20 rule; query-param identity; stake/settle copy allowed.  
+- **Level:** unit  
+- **Also:** integration  
+- **Status:** Planned
+
+### TEST-024 — `/board` in-progress; gamecast still no score/clock
+
+- **Requirement IDs:** FR-025, FR-015, FR-026, CON-009, ADR-016  
+- **IMP refs:** IMP-022, IMP-023  
+- **Dependencies:** TEST-019, TEST-025  
+- **Description:** `GET /board` shows in-progress only (scores allowed; clock only if provided). `GET /` still has no score/clock/quarter. No invented clock.  
+- **Preconditions:** Fixture or injected in-progress row.  
+- **Steps:**
+  1. GET `/board` is HTML; in-progress scores visible when present.  
+  2. GET `/` HTML/JS still has no score/clock/quarter.  
+  3. Scheduled-only dataset → board empty (or no in-progress rows).  
+- **Expected result:** Third surface is the board; gamecast lock holds.  
+- **Level:** unit  
+- **Also:** integration  
+- **Status:** Planned
+
+### TEST-025 — nba-stats maps null scores, in-progress, player boxes (injected HTTP)
+
+- **Requirement IDs:** FR-001, FR-017, FR-021, FR-026, FR-027, DR-001, ADR-017, NFR-003  
+- **IMP refs:** IMP-020, IMP-022  
+- **Dependencies:** TEST-003  
+- **Description:** Injected `get_json` payloads: persist null-score scheduled games; upsert in-progress; persist player boxes. **No live HTTP.**  
+- **Preconditions:** Unit inject of provider HTTP.  
+- **Steps:**
+  1. Payload with null points → game stored, not dropped; status not hardcoded Finished.  
+  2. Payload with scores + non-Finished status → in-progress upsert.  
+  3. Payload with `playerGameBasicStats` (or equivalent) → `player_game_stats` rows.  
+  4. Board-poll helper uses newest-page mapping, not full-history paging.  
+- **Expected result:** Live mapper no longer returns `[]` for NBA boxes; CI never calls the host.  
+- **Level:** unit  
+- **Status:** Planned
+
+### TEST-026 — WNBA fixture 2021–2025 + 2026 scheduled
+
+- **Requirement IDs:** FR-016, DR-001, NFR-003  
+- **IMP refs:** IMP-021  
+- **Dependencies:** TEST-015  
+- **Description:** Fixture provider loads five completed WNBA seasons 2021–2025 plus 2026 scheduled rows. No live WNBA HTTP.  
+- **Preconditions:** Authored fixture files.  
+- **Steps:**
+  1. Load fixture — WNBA seasons 2021–2025 present; 2026 scheduled rows have null scores.  
+  2. Assert no network call.  
+- **Expected result:** Authored window only; CI stays fixture.  
+- **Level:** integration  
+- **Also:** unit (fixture provider)  
+- **Status:** Planned
+
+### TEST-027 — Retrain protocol: val select, test once; CI pin unchanged
+
+- **Requirement IDs:** FR-028, ML-005, ML-007, ML-012, ADR-003  
+- **IMP refs:** IMP-024  
+- **Dependencies:** TEST-007  
+- **Description:** CR-005 retrain uses validation for selection and test once. Same `feature_version`. CI 48-game fixture pin identity is not replaced. Old live log loss 0.623 is not an assert.  
+- **Preconditions:** Fixture train path (small) plus documented pin-map shape.  
+- **Steps:**
+  1. Selection reads validation metrics only.  
+  2. Test metrics written once; no second test pass in the same job.  
+  3. Fixture `selected_pin.json` for the 48-game toy remains the existing pin identity (or a documented distinct CI pin).  
+- **Expected result:** Protocol holds; CI pin unchurned.  
+- **Level:** unit  
+- **Status:** Planned
+
+### TEST-028 — Producer-bar three-way links; no book language on `/slate` and `/board`
+
+- **Requirement IDs:** FR-015, FR-024, FR-025, CON-009, ADR-016  
+- **IMP refs:** IMP-023  
+- **Dependencies:** TEST-019  
+- **Description:** Producer bar on `/`, `/slate`, `/board` links the three. `/slate` and `/board` forbid odds/juice/moneyline/payout/wager. `/slate` **may** contain stake/settle. `GET /` still forbids stake chrome (TEST-019).  
+- **Preconditions:** FastAPI TestClient; static HTML/JS.  
+- **Steps:**
+  1. Each surface HTML contains links to the other two paths.  
+  2. `/slate` and `/board` have no odds/juice/moneyline/payout/wager copy.  
+  3. `/slate` may include stake/settle; `/` must not.  
+- **Expected result:** Three-way instrument family; not a book.  
+- **Level:** unit  
+- **Status:** Planned
 
 ## Open (non-blocking)
 

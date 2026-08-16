@@ -1,4 +1,4 @@
-# Implements: FR-001, FR-016, FR-017, FR-018, CON-007, ADR-006, CR-004
+# Implements: FR-001, FR-016, FR-017, FR-018, FR-021, CON-007, ADR-006, CR-004, CR-005
 """Recorded-payload provider for CI / local offline ingest (NFR-003)."""
 
 from __future__ import annotations
@@ -28,6 +28,24 @@ class FixtureProvider:
                 found.add("wnba")
                 break
         return sorted(found)
+
+    def available_seasons(self, league: str = "nba") -> list[int]:
+        seasons: list[int] = []
+        if league == "nba":
+            for path in self.fixtures_dir.glob("games_*.json"):
+                if path.name.startswith("games_wnba_"):
+                    continue
+                try:
+                    seasons.append(int(path.stem.rsplit("_", 1)[-1]))
+                except ValueError:
+                    continue
+        else:
+            for path in self.fixtures_dir.glob(f"games_{league}_*.json"):
+                try:
+                    seasons.append(int(path.stem.rsplit("_", 1)[-1]))
+                except ValueError:
+                    continue
+        return sorted(set(seasons))
 
     def fetch_teams(self) -> list[dict[str, Any]]:
         return _read(self.fixtures_dir / "teams.json")

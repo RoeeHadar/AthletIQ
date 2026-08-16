@@ -48,7 +48,10 @@ LIMITATIONS_TEXT = (
     "Live NBA pin logistic_regression-v1: sklearn lbfgs max_iter=500 emitted "
     "ConvergenceWarning; reported test log loss is that fit, not full optimizer "
     "convergence (config not changed after inspecting test metrics). "
-    "Does not claim to accurately predict NBA games — see model card."
+    "Does not claim to accurately predict NBA games — see model card. "
+    "CR-005 live retrain uses the same protocol and feature_version; "
+    "the CI 48-game fixture pin identity is not replaced; "
+    "prior live test log loss 0.623 does not bind a new live pin."
 )
 
 

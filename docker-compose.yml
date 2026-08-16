@@ -1,4 +1,4 @@
-# Implements: FR-012, CON-003, ADR-001, ADR-004, ADR-006, CR-004
+# Implements: FR-012, FR-026, CON-003, ADR-001, ADR-004, ADR-006, ADR-015, CR-004, CR-005
 # AthletIQ local multi-service topology (database + etl + api).
 # Credentials via env / .env — local demo defaults only (ADR-009: bind localhost).
 
@@ -15,6 +15,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./database/migrations/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
       - ./database/migrations/002_cr004_league_players_odds.sql:/docker-entrypoint-initdb.d/002_cr004_league_players_odds.sql:ro
+      - ./database/migrations/003_cr005_ledger_game_lifecycle.sql:/docker-entrypoint-initdb.d/003_cr005_ledger_game_lifecycle.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-athletiq} -d ${POSTGRES_DB:-athletiq}"]
       interval: 5s
@@ -40,6 +41,8 @@ services:
         condition: service_healthy
     # Batch image: keep container up for `compose exec`; run pipeline via:
     #   docker compose run --rm etl python -m athletiq.pipeline --store postgres --provider fixture
+    # Board poll (same image, not a fourth service; newest pages only):
+    #   docker compose exec etl python -m athletiq.board_poll --interval 30
     command: ["sleep", "infinity"]
     restart: unless-stopped
 

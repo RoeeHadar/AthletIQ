@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-12  
-Version: 1.1.0
+Last Updated: 2026-08-16  
+Version: 1.1.1
 
 Decision status: Accepted
 
@@ -27,7 +27,7 @@ Need replayability without ambiguous “filesystem or Postgres raw schema”. Ow
 
 - Compose mounts a raw volume into the etl service.  
 - Reprocessing can run without re-calling API-Sports.  
-- **Prune policy (design):** delete obsolete season batches / dedupe / drop noisy — do not mutate JSON in place. Active window = 2–3 completed seasons (“too old” outside that window).
+- **Prune policy (design):** delete obsolete season batches / dedupe / drop noisy — do not mutate JSON in place. **CR-005 / ADR-017:** live NBA seasons are **not** age-pruned. CI fixtures and WNBA authored files stay small (not a dump).
 
 ## References
 

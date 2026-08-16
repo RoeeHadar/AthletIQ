@@ -1,4 +1,4 @@
-# Implements: FR-001, FR-016, FR-017, FR-018, DR-001, ADR-006, CR-004
+# Implements: FR-001, FR-016, FR-017, FR-018, FR-021, DR-001, ADR-006, ADR-017, CR-004, CR-005
 """Immutable raw JSON landing (filesystem)."""
 
 from __future__ import annotations
@@ -36,24 +36,33 @@ def ingest_raw(
     seasons: list[int] | None = None,
     batch_id: str | None = None,
 ) -> Path:
-    """Fetch teams + in-window seasons and land immutable JSON under raw_root/batch_id/.
+    """Fetch teams + seasons and land immutable JSON under raw_root/batch_id/.
 
-    Seasons outside the active window are skipped (DR-001 / too-old prune at ingest).
+    When `seasons` is omitted, use the provider's `available_seasons` (fixture files
+    or uncapped live NBA). Explicit `seasons` still limits the loop (tests).
     """
     batch_id = batch_id or new_batch_id()
     batch_dir = Path(raw_root) / batch_id
     if batch_dir.exists() and any(batch_dir.iterdir()):
         raise FileExistsError(f"raw batch already exists: {batch_dir}")
 
-    active = seasons if seasons is not None else active_season_years(depth=season_depth)
     leagues = list(provider.leagues())
-    logger.info("ingest batch=%s active_seasons=%s leagues=%s", batch_id, active, leagues)
+    logger.info("ingest batch=%s leagues=%s", batch_id, leagues)
 
     teams = provider.fetch_teams()
     write_raw_json(batch_dir / "teams.json", {"response": teams})
 
+    written_seasons: list[int] = []
     for league in leagues:
-        for season in active:
+        if seasons is not None:
+            league_seasons = list(seasons)
+        else:
+            avail = getattr(provider, "available_seasons", None)
+            if callable(avail):
+                league_seasons = list(avail(league))
+            else:
+                league_seasons = active_season_years(depth=season_depth)
+        for season in league_seasons:
             games = provider.fetch_games(season, league=league)
             if league == "nba":
                 name = f"games_{season}.json"
@@ -63,6 +72,7 @@ def ingest_raw(
                 batch_dir / name,
                 {"response": games, "season": season, "league": league},
             )
+            written_seasons.append(season)
 
     write_raw_json(batch_dir / "players.json", {"response": provider.fetch_players()})
     write_raw_json(
@@ -76,7 +86,7 @@ def ingest_raw(
 
     meta = {
         "batch_id": batch_id,
-        "active_seasons": active,
+        "active_seasons": sorted(set(written_seasons)),
         "season_depth": season_depth,
         "leagues": leagues,
     }

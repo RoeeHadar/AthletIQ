@@ -3,6 +3,7 @@ flowchart TD
   R --> V[Validate]
   V -->|valid| C[(Curated PostgreSQL)]
   V -->|invalid| VR[Validation report]
+  C --> Settle[Settle open stakes on Finished]
   C --> F[Feature tables]
   F --> T[Train]
   F --> Val[Validation]

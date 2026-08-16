@@ -1,0 +1,56 @@
+{
+  "response": [
+    {
+      "id": 4001,
+      "date": "2026-10-22T23:30:00+00:00",
+      "season": 2026,
+      "status": "scheduled",
+      "league": "nba",
+      "teams": {
+        "home": {
+          "id": 1,
+          "name": "Boston Celtics"
+        },
+        "away": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": null
+        },
+        "away": {
+          "total": null
+        }
+      }
+    },
+    {
+      "id": 4002,
+      "date": "2026-10-23T23:30:00+00:00",
+      "season": 2026,
+      "status": "scheduled",
+      "league": "nba",
+      "teams": {
+        "home": {
+          "id": 2,
+          "name": "Los Angeles Lakers"
+        },
+        "away": {
+          "id": 1,
+          "name": "Boston Celtics"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": null
+        },
+        "away": {
+          "total": null
+        }
+      }
+    }
+  ],
+  "season": 2026,
+  "league": "nba"
+}

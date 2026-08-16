@@ -1,4 +1,4 @@
-# Implements: FR-012, FR-009, FR-018, ADR-001, ADR-004, ADR-009, CR-004
+# Implements: FR-012, FR-009, FR-018, FR-022, ADR-001, ADR-004, ADR-009, ADR-014, CR-004, CR-005
 """Uvicorn ASGI entry — explicit store selection; DATABASE_URL is connection only."""
 
 from __future__ import annotations
@@ -29,14 +29,19 @@ def build_app():
     if store_kind == "postgres":
         from athletiq.db.api_repos import PostgresFeatureRepo, PostgresGameRepo
         from athletiq.db.migrate import apply_migrations
+        from athletiq.ledger.postgres import PostgresLedger
 
         apply_migrations(url)
         games = PostgresGameRepo.connect(url)
         features = PostgresFeatureRepo.connect(url)
+        ledger = PostgresLedger(games._conn)
         db_ping = lambda: _db_ping(url)  # noqa: E731
     else:
+        from athletiq.ledger.memory import MemoryLedger
+
         games = InMemoryGameRepo()
         features = InMemoryFeatureRepo()
+        ledger = MemoryLedger()
         # Optional health ping when URL configured; empty in-memory repos still need explicit ping
         # only if ATHLETIQ_STORE requests postgres. Memory mode: ping if caller wants DB check via env.
         db_ping = (lambda: _db_ping(url)) if os.environ.get("ATHLETIQ_DB_PING") == "1" else None
@@ -46,6 +51,7 @@ def build_app():
         games=games,
         features=features,
         db_ping=db_ping,
+        ledger=ledger,
     )
     state.load_pin()
     return create_app(state)

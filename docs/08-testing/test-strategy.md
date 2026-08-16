@@ -2,20 +2,20 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.0
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > How we verify AthletIQ. Tests are requirement-driven (`test-plan.md`), not invented solely because code exists.  
-> **Gate 7 test strategy Approved.** Prefer Test Plan Approved before first Gate 6 slice (`gates.md` §22).
+> **Gate 7 test strategy Approved.** Prefer Test Plan Approved before first Gate 6 slice (`gates.md` §22). CR-005 TEST-020–028 are Planned until IMP-025.
 
 ## Upstream
 
 | Artifact | Status |
 |---|---|
-| SRS v1.4.1, traceability 1.5.1 | Approved (CR-001) |
-| Architecture + binding ADRs (incl. ADR-010) | Accepted / Approved docs |
+| SRS v1.6.1, traceability 1.7.0 | Approved (CR-005) |
+| Architecture + binding ADRs (incl. ADR-010, ADR-014–017) | Accepted / Approved docs |
 | Design + contracts | Approved |
-| Implementation plan v1.0.x | Approved |
+| Implementation plan v1.2.0 | Approved |
 
 ## Levels
 
@@ -43,7 +43,7 @@ Canonical names only (see `glossary.md`). **One primary `Level` per TEST suite.*
 ## Principles
 
 1. **Requirement-driven** — every Must SRS id maps to ≥1 TEST via `traceability.md` (**canonical**).  
-2. **No live API-Sports in CI** (NFR-003) — recorded fixtures only.  
+2. **No live NBA Stats HTTP in CI** (NFR-003) — recorded fixtures and injected `get_json` only. No live book HTTP.  
 3. **NFR-004 falsifiable** — docs/OpenAPI cite “no hard SLO” (TEST-008); no load suite.  
 4. **Training-repeatability is verified, not merely configured** — **TEST-013** runs identical inputs twice (features/splits/selection/metrics). That is **not** the NFR-001 clean-machine / Compose demo (documented in root README; attested 2026-08-14 on a clean clone of `4a2f713`). TEST-001 only proves seed/path knobs exist.  
 5. **Train/serve consistency (ML-008)** — API preprocessing **conforms to the same `feature_version` / feature contract** as training. Do **not** require “same Python import” unless design later mandates a shared module (current design prefers shared module, but the *requirement* is contract equivalence).  
@@ -69,6 +69,14 @@ Canonical names only (see `glossary.md`). **One primary `Level` per TEST suite.*
 | IMP-001…012 | TEST-001…012 |
 | IMP-001 + IMP-007 (repro) | **TEST-013** |
 | IMP-007 + IMP-008 (pin↔serve) | **TEST-014** |
+| IMP-013–018 | TEST-015–019 |
+| IMP-019 | TEST-002, TEST-020, TEST-022 |
+| IMP-020 | TEST-025 |
+| IMP-021 | TEST-026 |
+| IMP-022 | TEST-021, TEST-024 |
+| IMP-023 | TEST-023, TEST-024, TEST-028 |
+| IMP-024 | TEST-027 |
+| IMP-025 | TEST-020–028 + TEST-011 |
 
 ## ID minting
 
@@ -82,7 +90,9 @@ Canonical names only (see `glossary.md`). **One primary `Level` per TEST suite.*
 | Load / soak / SLA tests | NFR-004 |
 | Live provider in CI | NFR-003 |
 | Auth / multi-tenant beyond ADR-009 | ADR-009 / NFR-002 |
-| Post-MVP remaining (NN, live WNBA HTTP, live odds, GCP) | Out of CR-004 |
+| Post-MVP remaining (NN, live WNBA HTTP, live odds, GCP) | Out of CR-005 |
+| Live `nba-stats` HTTP in GHA | NFR-003 |
+| Real-money book / payments | CON-009 |
 | ML-005 as mandatory flaky PR unit fail | Quality gate / attestation instead |
 
 ## Boundary: TEST-010 vs TEST-011

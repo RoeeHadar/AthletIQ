@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AthletIQ — Slate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/app.css?v=slate" />
+  </head>
+  <body>
+    <!--
+      THESIS: A broadcast upcoming strip, not a sportsbook ticket or a gray admin table.
+      OWN-WORLD: Same charcoal field, Home ice-cyan / Away amber plates, Barlow Condensed, producer bar.
+      STORY: Pick demo-1 or demo-2 in the URL, lock an integer e-coin stake on a pre-tip game, cancel or replace before tip.
+      FIRST VIEWPORT: Producer bar (AthletIQ, Gamecast/Slate/Board, demo user, balance, LOCK) / next-up split / remaining lower-thirds.
+      FORM: Broadcast slate (user-pinned CR-005); same instrument family as gamecast.
+      FINISH: unreviewed and undocumented is unfinished
+    -->
+    <a class="skip" href="#lock-amount">Skip to stake form</a>
+    <header class="producer">
+      <p class="producer__brand">AthletIQ</p>
+      <nav class="producer__surfaces" aria-label="Surfaces">
+        <a href="/">Gamecast</a>
+        <a href="/slate" aria-current="page">Slate</a>
+        <a href="/board">Board</a>
+      </nav>
+      <div class="producer__tools">
+        <div class="seg" role="group" aria-label="Demo user">
+          <a class="seg__btn" id="user-demo-1" href="/slate?user=demo-1">demo-1</a>
+          <a class="seg__btn" id="user-demo-2" href="/slate?user=demo-2">demo-2</a>
+        </div>
+        <p class="producer__balance" id="balance">Balance —</p>
+      </div>
+      <form id="lock" class="producer__lookup lock-form" action="/v1/stakes" method="post">
+        <label for="lock-game">Game ID</label>
+        <input id="lock-game" name="game_id" inputmode="numeric" required />
+        <label for="lock-side">Side</label>
+        <select id="lock-side" name="side">
+          <option value="home">Home</option>
+          <option value="away">Away</option>
+        </select>
+        <label for="lock-amount">Stake</label>
+        <input id="lock-amount" name="amount" inputmode="numeric" min="1" step="1" required />
+        <button class="producer__take" type="submit">LOCK</button>
+      </form>
+    </header>
+    <main class="stage stage--slate">
+      <p class="banner" id="banner" hidden role="alert"></p>
+      <section class="split" id="next-split" data-state="idle" aria-label="Next unplayed game">
+        <div class="split__home">
+          <p class="split__abbr" id="next-home">HOME</p>
+          <p class="split__role">Home</p>
+          <p class="split__pct" id="next-home-tip">—</p>
+        </div>
+        <div class="split__away">
+          <p class="split__abbr" id="next-away">AWAY</p>
+          <p class="split__role">Away</p>
+          <p class="split__pct" id="next-away-league">—</p>
+        </div>
+      </section>
+      <section class="sim-ribbon">
+        <p>Labeled e-coin simulation · stake / settle · not a book</p>
+        <p id="slate-count">Upcoming 0 · Open 0</p>
+      </section>
+      <p class="idle-hint" id="idle-hint">
+        Next 20 unplayed pre-tip games. Switch demo user with the producer links (updates
+        <code>?user=</code>). Settle happens in the pipeline, not here.
+      </p>
+      <section class="thirds" id="upcoming" aria-label="Upcoming games"></section>
+      <section class="locks" id="open-stakes" aria-label="Open stakes"></section>
+    </main>
+    <footer class="colophon">
+      Local demo · GET /v1/slate · POST /v1/stakes · no auth ·
+      <a href="/">Gamecast</a> · <a href="/board">Board</a>
+    </footer>
+    <script src="/static/slate.js?v=slate" type="module"></script>
+  </body>
+</html>

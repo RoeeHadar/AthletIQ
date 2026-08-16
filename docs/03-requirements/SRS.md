@@ -2,20 +2,21 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.5.1
+Last Updated: 2026-08-16  
+Version: 1.6.1
 
-> Gate 2 **Approved** (amended 1.4.0 / **CR-001**: team-level persist; **CR-002**: live provider ADR-011; **CR-003**: local prediction UI; **CR-004**: WNBA fixtures, player load, synthetic odds, per-league pins, Comp A reconstruction; **2026-08-15 UI grill:** FR-015 gamecast world + FR-020 team identity on predict).
+> Gate 2 **Approved** (amended **CR-005**: e-coin ledger, `/slate`, `/board`, uncapped live NBA, live player boxes, retrain; prior CR-001–004 still bind).
 
 ## Sources
 
-- `docs/01-project/project-charter.md` (Approved 1.0.1)
-- `docs/02-product/PRD.md` (Approved 1.1.0; CR-004)
+- `docs/01-project/project-charter.md` (Approved 1.0.3)
+- `docs/02-product/PRD.md` (Approved 1.2.0; CR-005)
 - Grill-Me requirements Q1–Q6 (accepted as recommended)
 - `docs/11-change-management/CR-001-mvp-team-stats-not-players.md` (Accepted; player *load* reopened by CR-004)
 - `docs/11-change-management/CR-002-nba-stats-api-provider.md` (Accepted)
 - `docs/11-change-management/CR-003-minimal-prediction-ui.md` (Accepted)
 - `docs/11-change-management/CR-004-post-mvp-wnba-players-odds-ui.md` (Accepted)
+- `docs/11-change-management/CR-005-platform-slice-ledger-slate-board.md` (Accepted; Grill-Me Q1–Q27 confirmed 2026-08-16)
 
 ## Conventions
 
@@ -23,7 +24,7 @@ Each requirement includes: ID, Description, Rationale, Priority (`Must` | `Shoul
 
 Unresolved items use `[OPEN QUESTION: …]` only after Grill-Me.
 
-Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud deploy): **Could** / Future — not required for CR-004 Must set.
+Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud deploy): **Could** / Future — not required for CR-005 Must set. Live *display* of in-progress scores is FR-025 (not live-in-game prediction features).
 
 ---
 
@@ -37,13 +38,14 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Source:** PRD features; Charter CON provider  
 - **Acceptance Criteria:**
   - Adapter can fetch teams, games, and team statistics needed for DR-002 **loaded** themes for the configured seasons and leagues.
-  - Player fetch/persist is **in scope for CR-004** (FR-017); CI uses fixtures. Live NBA Stats API remains games/teams (no per-game box score / WNBA on that host).
+  - Player fetch/persist is **in scope** (FR-017 / FR-027). CI uses fixtures. Live NBA Stats API **shall** load per-game player boxes when the host returns them (CR-005). Live WNBA HTTP remains out.
+  - Live ingest **shall not drop** games solely because scores are null (FR-021). In-progress games with scores and status not Finished are kept (FR-026).
   - Core ETL transform/load does not embed provider-specific URLs/auth beyond configuration injected at the adapter.
   - Ingestion is runnable via the documented pipeline (FR-011).
 - **Dependencies:** CON-001, CON-007, DR-001  
 - **Architecture refs:** `docs/04-architecture/system-architecture.md`; `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/error-handling.md`; `docs/05-decisions/ADR-006-raw-landing.md`  
-- **Tests:** TEST-003  
+- **Tests:** TEST-003, TEST-020, TEST-025  
 
 ### FR-002 — Persist core entities and statistics
 
@@ -53,8 +55,8 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Source:** PRD; CR-001; CR-004  
 - **Acceptance Criteria:**
   - After a successful **fixture** pipeline run, DR-002 themes including players and player_game_stats have stored rows for configured fixture seasons (allowing documented gaps).
-  - Game records include home/away, league, and final winner for completed games used in training/eval.
-  - Empty player tables after **live** `--provider nba-stats` (no box-score endpoint) is expected; quality of player features on that path uses documented cold-start (ML-011).
+  - Game records include home/away, league, and final winner for **completed** games used in training/eval. Unplayed games may have null scores and non-Finished status (FR-021).
+  - Empty player tables after live `--provider nba-stats` is **not** expected after CR-005 when boxes are present (FR-027); fixture/WNBA gaps remain documented cold-start (ML-011).
 - **Dependencies:** CON-002, FR-001, DR-002, FR-017  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
@@ -175,15 +177,15 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 
 ### FR-015 — Local prediction UI
 
-- **Description:** The demo API shall serve a same-origin English web UI at `GET /` as a powered-on broadcast win-probability graphic (not a stats desk, not a scorebug). Producer bar holds league (NBA | WNBA), health, pin, integer `game_id` lookup, and Predict. Hero is a Home/Away split of model `P(home_win)` vs implied `1−P`. Thinner labeled synthetic Market P. Methodology and limitations stay on-screen as legal chyrons. No application auth. Not a betting book.
-- **Rationale:** PRD; CR-003; CR-004; 2026-08-15 UI Grill-Me (empty-desk convention rejected).  
+- **Description:** The demo API shall serve a same-origin English web UI at `GET /` as a powered-on broadcast win-probability graphic (not a stats desk, not a scorebug). Producer bar holds league (NBA | WNBA), health, pin, integer `game_id` lookup, Predict, and **links to `/slate` and `/board`**. Hero is a Home/Away split of model `P(home_win)` vs implied `1−P`. Thinner labeled synthetic Market P. Methodology and limitations stay on-screen as legal chyrons. No application auth. Not a betting book. No score/clock/quarter on this page.
+- **Rationale:** PRD; CR-003; CR-004; CR-005 (third surfaces exist; gamecast stays an instrument).  
 - **Priority:** Must  
-- **Source:** CR-003; CR-004; owner Grill-Me 2026-08-15  
-- **Acceptance Criteria:** `GET /` returns HTML; UI calls `/v1/health`, `/v1/model`, `/v1/predict`; errors use API `error.code`; Market P labeled synthetic when present; no stakes/accounts/payouts chrome; no score/clock/quarter; Comp A desk, Comp B/C, and film-room are out.
-- **Dependencies:** FR-009, FR-010, FR-018, FR-019, FR-020, ADR-009  
+- **Source:** CR-003; CR-004; CR-005; owner Grill-Me 2026-08-15 / 2026-08-16  
+- **Acceptance Criteria:** `GET /` returns HTML; UI calls `/v1/health`, `/v1/model`, `/v1/predict`; errors use API `error.code`; Market P labeled synthetic when present; no stakes/accounts/payouts chrome **on this page**; no score/clock/quarter; Comp A desk, Comp B/C, and film-room are out; producer bar links to `/slate` and `/board`.
+- **Dependencies:** FR-009, FR-010, FR-018, FR-019, FR-020, FR-024, FR-025, ADR-009, ADR-016  
 - **Architecture refs:** `docs/04-architecture/api-architecture.md`  
 - **Design refs:** `PRODUCT.md`; `.impeccable/mocks/gamecast-comp-a-horizontal-split.png`  
-- **Tests:** TEST-008, TEST-019
+- **Tests:** TEST-008, TEST-019, TEST-028
 
 ### FR-020 — Predict team identity
 
@@ -199,27 +201,27 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 
 ### FR-016 — WNBA ingest (fixture this CR)
 
-- **Description:** The system shall ingest **WNBA** games on the same basketball grain (`sport=basketball`, `league=wnba`) through the adapter. This CR’s Must path is the **fixture** provider (NFR-003). Live WNBA HTTP is out (no named no-key provider; do not add BALLDONTLIE/keys).
-- **Rationale:** PRD CR-004; FUTURE-003 pulled.  
+- **Description:** The system shall ingest **WNBA** games on the same basketball grain (`sport=basketball`, `league=wnba`) through the adapter. This CR’s Must path is the **fixture** provider (NFR-003): **five completed seasons 2021–2025 plus 2026 scheduled** rows. Live WNBA HTTP is out (do not add BALLDONTLIE/keys).
+- **Rationale:** PRD CR-004; CR-005 Q16–Q17.  
 - **Priority:** Must  
-- **Source:** CR-004  
-- **Acceptance Criteria:** Fixture pipeline loads WNBA teams/games for overlapping seasons; games are distinguishable from NBA via `league`; CI does not call a live WNBA API.
-- **Dependencies:** FR-001, FR-002, CON-007, NFR-003  
+- **Source:** CR-004; CR-005  
+- **Acceptance Criteria:** Fixture pipeline loads WNBA teams/games for 2021–2025 plus 2026 scheduled rows; games are distinguishable from NBA via `league`; CI does not call a live WNBA API.
+- **Dependencies:** FR-001, FR-002, CON-007, NFR-003, DR-001  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
-- **Tests:** TEST-015
+- **Tests:** TEST-015, TEST-026
 
 ### FR-017 — Player load
 
-- **Description:** The pipeline shall upsert `players` and `player_game_stats` from adapter payloads (fixture Must). Inference remains `game_id`-keyed (ADR-008). No injury feed.
-- **Rationale:** CR-004 reopens CR-001 reserved tables.  
+- **Description:** The pipeline shall upsert `players` and `player_game_stats` from adapter payloads. **CI and WNBA** Must path remains **fixture**. **Live NBA** Must path loads boxes via `nba-stats` (FR-027). Inference remains `game_id`-keyed (ADR-008). No injury feed.
+- **Rationale:** CR-004 reopens CR-001 reserved tables; CR-005 fills live NBA boxes.  
 - **Priority:** Must  
-- **Source:** CR-004  
-- **Acceptance Criteria:** After fixture load, player_game_stats rows exist for fixture games; rerun does not duplicate grain `(game_id, player_id)` (DR-003).
-- **Dependencies:** FR-002, DR-002, DR-003  
+- **Source:** CR-004; CR-005  
+- **Acceptance Criteria:** After fixture load, player_game_stats rows exist for fixture games; rerun does not duplicate grain `(game_id, player_id)` (DR-003). Injected live adapter tests persist NBA boxes when the payload includes them (TEST-025).
+- **Dependencies:** FR-002, DR-002, DR-003, FR-027  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
-- **Tests:** TEST-016
+- **Tests:** TEST-016, TEST-025
 
 ### FR-018 — Labeled synthetic Market P
 
@@ -244,6 +246,102 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Architecture refs:** `docs/04-architecture/api-architecture.md`  
 - **Design refs:** `docs/06-design/api-design.md`  
 - **Tests:** TEST-018
+
+### FR-021 — Persist scheduled and unplayed games
+
+- **Description:** The system shall persist scheduled/unplayed games as real rows (null scores, status not Finished). `P(home_win)` and training features for a game shall use **prior completed history only** (ML-001). CI fixtures include scheduled NBA and WNBA rows. Live ingest keeps null-score rows when the provider sends them.
+- **Rationale:** PRD slate; CR-005 Q4.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Fixture load stores at least one scheduled NBA row and one scheduled WNBA row with null scores; feature rows for those games do not use that game’s (missing) box; live adapter mapping does not drop solely for missing scores (TEST-025).
+- **Dependencies:** FR-001, FR-002, ML-001, DR-006  
+- **Architecture refs:** `docs/04-architecture/data-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`; `docs/05-decisions/ADR-015-game-lifecycle-board-poll-settle.md`  
+- **Tests:** TEST-020, TEST-025
+
+### FR-022 — Demo users and e-coin wallets
+
+- **Description:** The system shall seed two demo users (`demo-1`, `demo-2`) with **1000** e-coins each, a house wallet large enough to pay even-money wins, and no refill this CR. Identity is `?user=` (no passwords). ADR-009 stays.
+- **Rationale:** PRD simulation semantics; CR-005 Q3/Q7/Q20.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Seed balances are 1000; unknown `user` is rejected; no cookie/login middleware; house wallet exists.
+- **Dependencies:** DR-005, ADR-009, ADR-014, CON-009  
+- **Architecture refs:** `docs/04-architecture/data-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`  
+- **Tests:** TEST-022
+
+### FR-023 — Even-money stake, cancel, replace, settle
+
+- **Description:** A demo user may place one open stake per `(user, game)`: home or away, positive integer, min 1, max unlocked balance. New stakes only if scores are still null and `game_start_time` is in the future (UTC). Before tip: cancel (unlock) or replace. After tip: frozen. When ingest writes the game Finished, the pipeline settles: correct → stake returned + equal credit from house; wrong → stake gone. Re-runs are idempotent. `/slate` does not settle.
+- **Rationale:** PRD; CR-005 Q5/Q8–Q10/Q22.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Below-zero rejected; after-tip new stake rejected; cancel before tip restores balance; second pipeline run does not double-credit; copy in API/UI is stake/settle not odds/juice/moneyline.
+- **Dependencies:** FR-021, FR-022, DR-005, ADR-014, ADR-015, CON-009  
+- **Architecture refs:** `docs/04-architecture/system-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`; `docs/06-design/api-design.md`  
+- **Tests:** TEST-021, TEST-022
+
+### FR-024 — GET /slate
+
+- **Description:** Same-origin UI at `GET /slate` shows the next **20** unplayed pre-tip games by `game_start_time` (NBA+WNBA mixed) **plus** the selected user’s open stakes, a demo-user switcher that updates `?user=`, balance, and stake/cancel/replace controls. Same broadcast-instrument family as gamecast; dramatic-improvement bar; no sportsbook chrome; not a gray admin table.
+- **Rationale:** PRD; CR-005 Q6/Q11/Q19–Q21.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** HTML at `/slate`; next-20 rule with open-stake pin; `?user=demo-1` and `demo-2` work; Finished games leave the upcoming table; no odds/juice/moneyline/payout copy.
+- **Dependencies:** FR-015, FR-022, FR-023, ADR-016  
+- **Architecture refs:** `docs/04-architecture/api-architecture.md`  
+- **Design refs:** `docs/06-design/api-design.md`  
+- **Tests:** TEST-023, TEST-028
+
+### FR-025 — GET /board
+
+- **Description:** Same-origin UI at `GET /board` shows **in-progress** games only (score + status; clock only if the provider sent one — do not invent). Gamecast stays no score/clock. Same instrument family; no sportsbook chrome. Producer-bar links include `/board`.
+- **Rationale:** PRD; CR-005 Q24.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** HTML at `/board`; in-progress rows can show scores; `GET /` still has no score/clock/quarter; no invented clock field.
+- **Dependencies:** FR-015, FR-026, ADR-016, ADR-015  
+- **Architecture refs:** `docs/04-architecture/api-architecture.md`  
+- **Design refs:** `docs/06-design/api-design.md`  
+- **Tests:** TEST-024, TEST-028
+
+### FR-026 — Adapter-only board poll
+
+- **Description:** A Compose loop shall poll **newest** `nba-stats` pages through the adapter and upsert in-progress NBA games (scores may be non-null, status not Finished). Full unbounded history remains the pipeline job. The browser polls AthletIQ only. No Kafka, no WebSockets, no browser-to-nbaapi.com.
+- **Rationale:** PRD; CR-005 Q25.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Documented poll command/service exists; injected adapter tests upsert in-progress without paging the full history window; CI does not call live HTTP (NFR-003).
+- **Dependencies:** FR-001, FR-025, ADR-015, ADR-017, NFR-003  
+- **Architecture refs:** `docs/04-architecture/system-architecture.md`  
+- **Design refs:** `docs/09-devops/infrastructure.md`  
+- **Tests:** TEST-024, TEST-025
+
+### FR-027 — Live NBA player boxes
+
+- **Description:** Live `--provider nba-stats` shall load NBA `players` / `player_game_stats` from the same no-key host (per-game boxes). CI and WNBA stay fixture. No keyed player provider.
+- **Rationale:** PRD; CR-005 Q26; ADR-017.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Injected `get_json` payloads with player boxes persist rows; live adapter no longer hard-returns `[]` for NBA player fetches.
+- **Dependencies:** FR-017, ADR-011, ADR-017  
+- **Architecture refs:** `docs/04-architecture/data-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`  
+- **Tests:** TEST-025, TEST-016
+
+### FR-028 — Retrain NBA and WNBA pins
+
+- **Description:** This CR shall retrain and reselect **NBA and WNBA** pins on the new history (new temporal split, new ML-005, test once). Same protocol, hyperparameters, and `feature_version`. CI 48-game fixture pin unchanged. Old live test log loss 0.623 does not bind the new NBA pin.
+- **Rationale:** PRD; CR-005 Q14–Q18; ML-012.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Pipeline publishes new nba and wnba artifacts; selection uses validation only; test evaluated once; fixture CI pin identity for the 48-game toy remains distinct and unchurned.
+- **Dependencies:** FR-007, FR-008, ML-003, ML-007, ML-010, ML-012, ADR-003, ADR-013  
+- **Architecture refs:** `docs/04-architecture/system-architecture.md`  
+- **Design refs:** `docs/06-design/ml-design.md`; `docs/06-design/model-card.md`  
+- **Tests:** TEST-007, TEST-027
 
 ### FR-010 — Methodology and limitations disclosure
 
@@ -303,41 +401,42 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 
 ### DR-001 — Season depth
 
-- **Description:** The system shall ingest **3** recent completed **NBA** seasons (**Must**, CR-004; was 2 Must / 3 Should). It shall also ingest **overlapping WNBA** seasons in that calendar window (**Must** on fixture path). Older seasons are pruned.
-- **Rationale:** PRD; Grill-Me Q4 amended by CR-004.  
+- **Description:** **Live NBA** ingest has **no season cap**: the adapter pages everything `nba-stats` returns (CR-005). **CI fixtures stay small** (not a historical dump). **WNBA fixture Must** is five completed seasons **2021–2025 plus 2026 scheduled** rows. Live NBA seasons are **not** age-pruned.
+- **Rationale:** PRD; CR-004 3-season window superseded for *live NBA* by CR-005 Q13; WNBA Q17.  
 - **Priority:** Must  
-- **Source:** PRD; CR-004  
+- **Source:** PRD; CR-004; CR-005  
 - **Acceptance Criteria:**
-  - Configuration documents which seasons were ingested per league.
-  - Must fails if fewer than 3 completed NBA seasons are configured on the CR-004 fixture/live NBA path without an approved CR.
-- **Dependencies:** FR-001, CON-007, FR-016  
+  - Configuration documents live vs fixture windows per league.
+  - Live adapter does not clamp `season_depth` at 3.
+  - CI still loads a small fixture set including scheduled rows (TEST-020/026).
+- **Dependencies:** FR-001, CON-007, FR-016, ADR-017  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/ml-design.md` (active window)  
-- **Tests:** TEST-003, TEST-004, TEST-015  
+- **Tests:** TEST-003, TEST-004, TEST-015, TEST-025, TEST-026  
 
 ### DR-002 — Entity themes
 
-- **Description:** System of record shall support teams, games, team statistics, **players, player_game_stats**, and **odds_snapshots** (CR-004). `sport`/`league` columns on teams and games.
-- **Rationale:** PRD; CR-001 schema; CR-004 load.  
+- **Description:** System of record shall support teams, games, team statistics, **players, player_game_stats**, **odds_snapshots** (CR-004), and **users / wallets / ledger entries / stakes** (CR-005). `sport`/`league` columns on teams and games.
+- **Rationale:** PRD; CR-001 schema; CR-004 load; CR-005 ledger.  
 - **Priority:** Must  
-- **Source:** PRD; CR-001; CR-004  
-- **Acceptance Criteria:** Schema/design lists themes; FR-002/FR-017/FR-018 persistence verified on fixture path.  
-- **Dependencies:** FR-002, FR-017, FR-018  
+- **Source:** PRD; CR-001; CR-004; CR-005  
+- **Acceptance Criteria:** Schema/design lists themes; FR-002/FR-017/FR-018/FR-022 persistence verified on fixture path.  
+- **Dependencies:** FR-002, FR-017, FR-018, FR-022, DR-005  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
-- **Tests:** TEST-002, TEST-004, TEST-015, TEST-016, TEST-017  
+- **Tests:** TEST-002, TEST-004, TEST-015, TEST-016, TEST-017, TEST-022  
 
 ### DR-003 — Idempotent curated loads
 
-- **Description:** ETL load into curated tables shall be idempotent so rerunning the pipeline does not create duplicate teams/games/team statistics/players/player_game_stats/odds_snapshots.
-- **Rationale:** Architecture review; NFR-001; CR-004 grains.  
+- **Description:** ETL load into curated tables shall be idempotent so rerunning the pipeline does not create duplicate teams/games/team statistics/players/player_game_stats/odds_snapshots/**users/wallets/stakes**.
+- **Rationale:** Architecture review; NFR-001; CR-004/CR-005 grains.  
 - **Priority:** Must  
-- **Source:** Architecture review 2026-08-12; CR-004  
-- **Acceptance Criteria:** Running transform/load twice against the same raw batch does not duplicate curated grain rows.  
-- **Dependencies:** FR-002, FR-001, FR-017, FR-018, ADR-006  
+- **Source:** Architecture review 2026-08-12; CR-004; CR-005  
+- **Acceptance Criteria:** Running transform/load twice against the same raw batch does not duplicate curated grain rows; settle re-run does not double-credit (FR-023).
+- **Dependencies:** FR-002, FR-001, FR-017, FR-018, FR-023, ADR-006  
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
-- **Tests:** TEST-004, TEST-016, TEST-017
+- **Tests:** TEST-004, TEST-016, TEST-017, TEST-021
 
 ### DR-004 — Odds snapshots
 
@@ -350,6 +449,30 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/database-design.md`  
 - **Tests:** TEST-017  
+
+### DR-005 — Ledger grain
+
+- **Description:** Curated tables shall store demo `users`, `wallets`, append-only `ledger_entries`, and `stakes` (one open stake per `(user_id, game_id)`). E-coins are integers.
+- **Rationale:** ADR-014; FR-022; FR-023.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Schema lists grains; seed users exist after migrate; ledger rows explain balance changes.
+- **Dependencies:** FR-022, FR-023, ADR-014  
+- **Architecture refs:** `docs/04-architecture/data-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`  
+- **Tests:** TEST-002, TEST-021, TEST-022
+
+### DR-006 — Unplayed and in-progress games
+
+- **Description:** `games.status` and nullable scores shall represent scheduled (null scores, future tip), in-progress (scores may be non-null, not Finished), and Finished. Training/eval labeled sets use Finished games only.
+- **Rationale:** ADR-015; FR-021; FR-025.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Fixture includes scheduled rows; in-progress upsert does not mark Finished; settle runs only on Finished.
+- **Dependencies:** FR-021, FR-023, FR-025, ADR-015  
+- **Architecture refs:** `docs/04-architecture/data-architecture.md`  
+- **Design refs:** `docs/06-design/database-design.md`  
+- **Tests:** TEST-020, TEST-021, TEST-024
 
 ---
 
@@ -416,7 +539,7 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Dependencies:** FR-006, FR-007, FR-008, ML-004  
 - **Architecture refs:** `docs/04-architecture/system-architecture.md`  
 - **Design refs:** `docs/06-design/ml-design.md`  
-- **Tests:** TEST-007 (quality gate; CI synthetic). Local live NBA holdout owner-reported 2026-08-14 (`ml005=True`, pin `logistic_regression-v1`, test log loss 0.623) — not a PRD tick.  
+- **Tests:** TEST-007 (quality gate; CI synthetic); TEST-027 (CR-005 new split). Local live NBA holdout owner-reported 2026-08-14 (`ml005=True`, pin `logistic_regression-v1`, test log loss 0.623) — **does not bind** the CR-005 retrained pin (ML-012).  
 
 ### ML-006 — Baseline definitions
 
@@ -491,6 +614,18 @@ Post-MVP remaining (NumPy NN, score/spread, live WNBA HTTP, live odds, cloud dep
 - **Architecture refs:** `docs/04-architecture/data-architecture.md`  
 - **Design refs:** `docs/06-design/ml-design.md`  
 - **Tests:** TEST-006, TEST-016  
+
+### ML-012 — CR-005 retrain protocol
+
+- **Description:** Retrain/select NBA and WNBA pins on the new history using the **same** families, hyperparameters, and `feature_version` as CR-004. Selection on validation log loss (tie → LR). Test once (ML-005 on the **new** split). CI 48-game fixture pin is not replaced. The previous live NBA test log loss 0.623 does not bind the new pin.
+- **Rationale:** CR-005 Q14–Q18; ADR-003 still binds.  
+- **Priority:** Must  
+- **Source:** CR-005  
+- **Acceptance Criteria:** Lineage records new dataset/split; TEST-027 asserts val-only selection and a single test evaluation path; fixture `xgboost-v1` attest pin is not retrained as the CI toy.
+- **Dependencies:** ML-003, ML-005, ML-007, ML-010, FR-028  
+- **Architecture refs:** `docs/04-architecture/system-architecture.md`  
+- **Design refs:** `docs/06-design/ml-design.md`; `docs/06-design/model-card.md`  
+- **Tests:** TEST-007, TEST-027  
 
 ---
 
@@ -706,16 +841,16 @@ Cloud deploy/CD after image build: **out of MVP** (Grill-Me Q6). Future Consider
 - **Design refs:** `docs/06-design/ml-design.md`  
 - **Tests:** TEST-007  
 
-### CON-009 — No betting book
+### CON-009 — No real-money book
 
-- **Description:** The system shall not implement stakes, wagering accounts, payouts, or a live book. Market P is a labeled comparison only (ADR-012).
+- **Description:** The system shall not implement real-money stakes, payments, licensed gambling, juice, moneyline-as-price, or a live book. A **labeled e-coin simulation** (FR-022/023) is allowed. Market P remains a labeled **synthetic** comparison (ADR-012). When the simulation is mentioned, copy is **stake/settle** — not odds/juice/moneyline/payout/wager. `GET /` has **no** stake chrome (TEST-019). `/slate` may use stake/settle. `/board` has no sportsbook chrome. Predict does not call a book.
 - **Priority:** Must  
-- **Source:** PRD non-goals; CR-004  
-- **Acceptance Criteria:** No betting chrome beyond labeled Market P; predict does not call a book.
-- **Dependencies:** FR-018, ADR-012  
+- **Source:** PRD non-goals; CR-004; CR-005 Q23/Q27  
+- **Acceptance Criteria:** No payments; TEST-019/024/028 forbid sportsbook words; Market P `source=synthetic`; e-coin ledger exists (TEST-021).
+- **Dependencies:** FR-018, FR-022, FR-023, ADR-012, ADR-014  
 - **Architecture refs:** `docs/04-architecture/api-architecture.md`  
 - **Design refs:** `docs/06-design/api-design.md`  
-- **Tests:** TEST-017, TEST-019
+- **Tests:** TEST-017, TEST-019, TEST-021, TEST-024, TEST-028
 
 ---
 
@@ -728,8 +863,9 @@ Cloud deploy/CD after image build: **out of MVP** (Grill-Me Q6). Future Consider
 | FUTURE-003 | Second league adapter — **pulled** as WNBA fixtures via CR-004 / FR-016 (live WNBA HTTP still Future) |
 | FUTURE-004 | Minimal prediction UI — **pulled** via CR-003 / FR-015; reconstruction via CR-004 |
 | FUTURE-005 | Deploy/CD beyond image build — platform TBD at Gate 8 (GCP was a candidate only; no binding ADR) |
-| FUTURE-006 | Live odds adapter when a provider is named |
-| FUTURE-007 | Live WNBA HTTP adapter when a no-key or named provider is chosen |
+| FUTURE-006 | Live odds adapter when a provider is named — **not pulled** (CR-005 Q27 = keep synthetic) |
+| FUTURE-007 | Live WNBA HTTP adapter when a no-key or named provider is chosen — **not pulled** |
+| FUTURE-008 | Live in-progress **display** — **pulled** as FR-025 / FR-026 (not live-in-game prediction features) |
 
 No requirement IDs minted for these until pulled into scope via CR.
 
@@ -745,10 +881,10 @@ No requirement IDs minted for these until pulled into scope via CR.
 | Validation invalid-record policy (fail vs skip) | **Resolved** — `docs/06-design/error-handling.md` (skip+count; fail if zero teams/games for a required season) |
 | Raw directory layout / retention | **Resolved** — ADR-006; ingest writes `teams.json`, `games_{season}.json`, `manifest.json` under an immutable batch path |
 | Numeric ML success threshold | **Resolved** — ML-005 (strictly lower **test** log loss vs domain-informed baseline; no absolute accuracy/AUC Must) |
-| Player persist/ingest | **Resolved** — CR-001 reserved for MVP; **CR-004** loads players on fixture path |
-| WNBA live HTTP | Future — fixture Must this CR |
-| Live odds provider | Future — synthetic Must this CR (ADR-012) |
-| Reconstruction visual | **Resolved** — broadcast win-probability gamecast (owner Grill-Me 2026-08-15); Comp A desk is anti-reference |
+| Player persist/ingest | **Resolved** — CR-001 reserved for MVP; **CR-004** loads players on fixture path; **CR-005** loads live NBA boxes |
+| WNBA live HTTP | Future — fixture Must this CR (2021–2025 + 2026 scheduled) |
+| Live odds provider | Future — synthetic Must this CR (ADR-012; CR-005 Q27) |
+| Reconstruction visual | **Resolved** — broadcast win-probability gamecast (owner Grill-Me 2026-08-15); Comp A desk is anti-reference; `/slate` and `/board` share the instrument family (CR-005) |
 | API-Sports free-tier vs DR-001 | Assumption — still needs live confirmation |
 | Cloud deploy platform | Future — not binding (ADR-007 Proposed only) |
 

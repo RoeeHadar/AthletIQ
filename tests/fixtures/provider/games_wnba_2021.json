@@ -1,0 +1,110 @@
+{
+  "response": [
+    {
+      "id": 2801,
+      "date": "2021-05-15T23:00:00+00:00",
+      "season": 2021,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 70
+        },
+        "away": {
+          "total": 68
+        }
+      }
+    },
+    {
+      "id": 2802,
+      "date": "2021-05-18T23:00:00+00:00",
+      "season": 2021,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 72
+        },
+        "away": {
+          "total": 71
+        }
+      }
+    },
+    {
+      "id": 2803,
+      "date": "2021-05-21T23:00:00+00:00",
+      "season": 2021,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 101,
+          "name": "New York Liberty"
+        },
+        "away": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 74
+        },
+        "away": {
+          "total": 69
+        }
+      }
+    },
+    {
+      "id": 2804,
+      "date": "2021-05-24T23:00:00+00:00",
+      "season": 2021,
+      "status": "Finished",
+      "league": "wnba",
+      "sport": "basketball",
+      "teams": {
+        "home": {
+          "id": 102,
+          "name": "Las Vegas Aces"
+        },
+        "away": {
+          "id": 101,
+          "name": "New York Liberty"
+        }
+      },
+      "scores": {
+        "home": {
+          "total": 66
+        },
+        "away": {
+          "total": 75
+        }
+      }
+    }
+  ],
+  "season": 2021,
+  "league": "wnba"
+}

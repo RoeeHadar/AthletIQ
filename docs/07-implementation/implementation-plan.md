@@ -3,19 +3,19 @@
 Status: Approved  
 Owner: Project owner  
 Last Updated: 2026-08-16  
-Version: 1.1.1
+Version: 1.2.0
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
-> **Gate 5 Approved.** **Gate 7 test strategy v1.1.0 + test plan v1.1.1 Approved**. IMP-001…012 **Done**. IMP-013–018 **Done** (CR-004 CI `491c5c0`; code review APPROVE 2026-08-16).
+> **Gate 5 Approved.** **Gate 7 test strategy v1.2.0 + test plan v1.2.0 Approved**. IMP-001…012 **Done**. IMP-013–018 **Done** (CR-004 CI `491c5c0`; code review APPROVE 2026-08-16). IMP-019–025 **Not started** (CR-005) — Gate 6 coding starts only after lead-developer **docs** review APPROVE.
 
 ## Upstream
 
 | Artifact | Status |
 |---|---|
-| Charter 1.0.1, PRD 1.1.0, SRS v1.5.0, traceability 1.6.1 | Approved (CR-004) |
-| Architecture + ADRs 001–006, 008–013 | Approved / Accepted (ADR-002 superseded; ADR-007 Proposed) |
-| Design: ML / DB / API / errors + contracts | Approved (CR-004) |
-| Test strategy / test plan | **Approved** (strategy v1.1.0; plan **v1.1.1**) — Gate 6 coding allowed (§22) |
+| Charter 1.0.3, PRD 1.2.0, SRS v1.6.1, traceability 1.7.0 | Approved (CR-005) |
+| Architecture + ADRs 001–006, 008–017 | Approved / Accepted (ADR-002 superseded; ADR-007 Proposed; ADR-017 extends ADR-011) |
+| Design: ML / DB / API / errors + contracts | Approved (CR-005) |
+| Test strategy / test plan | **Approved** (strategy v1.2.0; plan **v1.2.0**) — Gate 6 coding allowed after lead-developer docs APPROVE (§22) |
 | ADR-007 GCP | Proposed / non-binding — **out of MVP scope** |
 
 ## Deliberate skips (not IMP-scoped)
@@ -25,6 +25,7 @@ Version: 1.1.1
 - Post-MVP remaining: NumPy NN, score/spread, live WNBA HTTP, live odds, automated retrain, drift dashboards, Comp B/C  
 - Public auth / internet-safe bind (MVP keeps ADR-009 no-auth demo)  
 - Cloud deploy / GCP (ADR-007 Proposed only)
+- Real-money book / payments (CON-009)
 
 ### Explicitly prohibited or not required by design
 
@@ -80,6 +81,15 @@ IMP-001 bootstrap
   → IMP-010 Compose
   → IMP-011 CI
   → IMP-012 methodology (after IMP-007 + IMP-008)
+
+CR-005:
+IMP-019 schema
+  → IMP-020 provider  ∥  IMP-021 WNBA/scheduled fixtures
+        ↘___________↙
+              → IMP-022 settle + board poll
+              → IMP-023 API/UI (after IMP-019; settle semantics IMP-022)
+              → IMP-024 retrain/disclose (after IMP-020/021)
+              → IMP-025 TEST-020–028 + CI fixture-only
 ```
 
 **Parallelism:** After IMP-001, **IMP-002 ∥ IMP-003** (raw ingest is filesystem-only per ADR-006 / database-design — no Postgres dependency). After IMP-004: **IMP-005 ∥ IMP-006**. API (IMP-008) may stub artifact load until IMP-007 lands.
@@ -105,6 +115,13 @@ IMP-001 bootstrap
 | SEC-001, SEC-002, NFR-001 | IMP-001 (+ secrets checks IMP-011) | |
 | NFR-005 | IMP-002 | |
 | CON-002 | IMP-002 | |
+| FR-021, DR-006 | IMP-019, IMP-020, IMP-021 | Unplayed/in-progress rows |
+| FR-022, FR-023, DR-005, ADR-014 | IMP-019, IMP-022, IMP-023 | E-coin ledger; not a book |
+| FR-024, FR-025, ADR-016 | IMP-023 | `/slate`, `/board`; gamecast stays FR-015 |
+| FR-026 | IMP-022 | Board poll in etl image |
+| FR-027, ADR-017 | IMP-020 | Live NBA player boxes |
+| FR-028, ML-012 | IMP-024 | Retrain NBA+WNBA; CI 48-game pin unchanged |
+| CON-009 (amended) | IMP-023, IMP-018 | Simulation allowed; sportsbook copy forbidden |
 
 ---
 
@@ -402,6 +419,186 @@ IMP-001 bootstrap
 ## Post-MVP backlog (not minted)
 
 NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
+
+---
+
+## CR-005 tasks
+
+### IMP-019 — Schema: users/wallets/stakes + unplayed/in-progress games
+
+- **Requirement IDs:** FR-002, FR-021, FR-022, DR-002, DR-005, DR-006, NFR-005, CON-002, ADR-010, ADR-014, ADR-015  
+- **Architecture references:** data-architecture.md  
+- **Design references:** database-design.md; `database/schema.sql`  
+- **Dependencies:** IMP-013  
+- **Files/modules affected:**
+  - `database/schema.sql`
+  - `database/migrations/003_cr005_ledger_game_lifecycle.sql`
+  - `src/athletiq/db/`
+  - `docker-compose.yml`
+- **Implementation sequence notes:** Forward-only 003: `users`, `wallets` (user + house `1000000000`), `ledger_entries`, `stakes` with partial unique open `(user_id, game_id)`; seed `demo-1`/`demo-2` at 1000 e-coins; no password columns. Document `games.status` (`scheduled` \| `in_progress` \| `Finished` \| `unknown`) and nullable scores. Compose initdb mounts 003 for fresh volumes. Name may shift only if migrate-runner requires it — keep registry/design in sync.  
+- **Testing requirements:** TEST-002, TEST-020, TEST-022  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-020 — Provider: scheduled/in-progress, uncapped NBA, live player boxes
+
+- **Requirement IDs:** FR-001, FR-017, FR-021, FR-027, DR-001, DR-006, CON-007, ADR-011, ADR-015, ADR-017, NFR-003  
+- **Architecture references:** data-architecture.md; system-architecture.md  
+- **Design references:** error-handling.md; ml-design.md  
+- **Dependencies:** IMP-019, IMP-003, IMP-014  
+- **Files/modules affected:**
+  - `src/athletiq/provider/nba_stats.py`
+  - `src/athletiq/provider/seasons.py`
+  - `src/athletiq/provider/base.py`
+  - `src/athletiq/validate/`
+  - `src/athletiq/load/`
+  - `src/athletiq/prune/`
+- **Implementation sequence notes:** Keep null-score games; map in-progress vs Finished from provider fields (do not hardcode Finished). Remove live `season_depth` clamp of 3; do not age-prune live NBA. Fetch per-game player boxes from the same no-key host (`include=playerGameBasicStats` or equivalent). CI/unit tests inject `get_json` — no live HTTP (NFR-003). Live WNBA HTTP remains out.  
+- **Testing requirements:** TEST-003, TEST-020, TEST-025  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-021 — WNBA fixtures 2021–2025 + 2026 scheduled; NBA scheduled CI rows
+
+- **Requirement IDs:** FR-016, FR-021, DR-001, DR-006, NFR-003  
+- **Architecture references:** data-architecture.md  
+- **Design references:** error-handling.md  
+- **Dependencies:** IMP-014, IMP-019  
+- **Files/modules affected:**
+  - `src/athletiq/provider/fixture.py`
+  - `tests/fixtures/provider/`
+  - `tests/fixtures/provider/README.md`
+- **Implementation sequence notes:** Author completed WNBA seasons 2021–2025 plus 2026 scheduled rows. Add scheduled NBA fixture rows with null scores. Keep CI fixture set **small** (not a live dump). Do not retrain the 48-game CI pin here (IMP-024).  
+- **Testing requirements:** TEST-015, TEST-020, TEST-026  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-022 — Ledger settle in pipeline + Compose board poll
+
+- **Requirement IDs:** FR-023, FR-026, DR-003, ADR-015, CON-009, NFR-003  
+- **Architecture references:** system-architecture.md; data-architecture.md  
+- **Design references:** database-design.md; error-handling.md; `docs/09-devops/infrastructure.md`  
+- **Dependencies:** IMP-019, IMP-020  
+- **Files/modules affected:**
+  - `src/athletiq/pipeline/`
+  - `src/athletiq/board_poll/`
+  - `docker-compose.yml`
+- **Implementation sequence notes:** After load, settle open stakes when a game is ingested as Finished (even-money; house pays wins). Idempotent. `/slate` must not settle. Board poll is `python -m athletiq.board_poll` (or equivalent) in the **etl** image — newest pages only; design default interval 30s; **not** a fourth Compose service. CI does not call live HTTP. Copy is stake/settle.  
+- **Testing requirements:** TEST-021, TEST-024, TEST-025  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-023 — API user/slate/board/stake + UI surfaces
+
+- **Requirement IDs:** FR-015, FR-022, FR-023, FR-024, FR-025, CON-009, ADR-009, ADR-014, ADR-016  
+- **Architecture references:** api-architecture.md  
+- **Design references:** api-design.md; `api/openapi.yaml`; PRODUCT.md  
+- **Dependencies:** IMP-019, IMP-022, IMP-017, IMP-018  
+- **Files/modules affected:**
+  - `api/app/`
+  - `api/openapi.yaml`
+  - `api/static/`
+  - `PRODUCT.md`
+  - `DESIGN.md`
+- **Implementation sequence notes:** HTML `GET /slate` and `GET /board`; keep gamecast at `GET /` with no score/clock and no stake chrome. Producer-bar three-way links. `?user=demo-1|demo-2` (no cookies). JSON slate/board/wallet/stake/cancel as api-design (`replace` boolean default false). Same broadcast-instrument family; dramatic-improvement bar. No sportsbook chrome. Demo UI only at `http://127.0.0.1:8000/`. `Cache-Control: no-store`. `/slate` does not settle.  
+- **Testing requirements:** TEST-019, TEST-023, TEST-024, TEST-028  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-024 — Retrain/select/publish NBA+WNBA; disclose
+
+- **Requirement IDs:** FR-028, ML-003, ML-005, ML-007, ML-009, ML-010, ML-012, ADR-003, ADR-013, FR-010  
+- **Architecture references:** system-architecture.md  
+- **Design references:** ml-design.md; model-card.md  
+- **Dependencies:** IMP-020, IMP-021, IMP-016, IMP-012  
+- **Files/modules affected:**
+  - `src/athletiq/ml/`
+  - `src/athletiq/pipeline/`
+  - `api/app/methodology.py`
+  - `docs/06-design/model-card.md`
+- **Implementation sequence notes:** One-shot retrain + reselect of NBA and WNBA pins on the new history. Same families, hyperparameters, and `feature_version` (`team_l5_l10_player_agg_v1`). Select on validation; test once. Do not iterate on the new test set. CI 48-game fixture pin **unchanged**. Old live test log loss 0.623 does not bind. Disclose distribution shift on `/v1/model` + model card.  
+- **Testing requirements:** TEST-007, TEST-012, TEST-027  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
+
+### IMP-025 — Tests TEST-020–028 + CI fixture-only
+
+- **Requirement IDs:** NFR-003, OPS-001, CON-005, FR-021–FR-028  
+- **Architecture references:** system-architecture.md §6 CI  
+- **Design references:** `docs/08-testing/test-strategy.md`; `docs/08-testing/test-plan.md`  
+- **Dependencies:** IMP-019–024  
+- **Files/modules affected:**
+  - `tests/unit/`
+  - `tests/integration/`
+  - `tests/fixtures/provider/`
+  - `.github/workflows/ci.yml`
+- **Implementation sequence notes:** Implement TEST-020–028 as Planned cases. Injected HTTP only for nba-stats mapping (TEST-025). Do **not** put `# Implements` on test files. Keep GHA fixture-only (NFR-003). TEST-001–019 fixture/API cases must remain passing **except** TEST-003 step 6, which is **retargeted** (keep null-score rows; do not preserve skip-missing-scores). That mapper assertion lands with IMP-020.  
+- **Testing requirements:** TEST-011, TEST-020–028  
+- **Definition of Done:**
+  - [ ] Requirements satisfied  
+  - [ ] Design satisfied  
+  - [ ] Tests implemented and passing  
+  - [ ] Logging/observability addressed  
+  - [ ] Error handling addressed  
+  - [ ] Documentation updated  
+  - [ ] Traceability matrix + code annotations updated  
+  - [ ] Code review passed  
+  - [ ] CI passed  
+- **Status:** Not started
 
 ---
 

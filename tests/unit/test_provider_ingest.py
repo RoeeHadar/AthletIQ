@@ -151,7 +151,7 @@ def test_nba_stats_maps_aliases_and_skips_unusable() -> None:
             "visitorPts": 180,
         }
     ) is None
-    assert to_provider_game(
+    kept = to_provider_game(
         {
             "gameId": "202310250CHI",
             "date": "2023-10-25T00:00:00.000Z",
@@ -160,7 +160,10 @@ def test_nba_stats_maps_aliases_and_skips_unusable() -> None:
             "homePts": None,
             "visitorPts": None,
         }
-    ) is None
+    )
+    assert kept is not None
+    assert kept["scores"]["home"]["total"] is None
+    assert kept["status"] != "Finished"
 
 
 def test_nba_stats_pages_filter_and_stop_without_live_http() -> None:

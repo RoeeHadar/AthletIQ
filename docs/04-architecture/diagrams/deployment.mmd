@@ -5,7 +5,7 @@ flowchart TB
   end
   subgraph compose [Docker Compose]
     PG[(PostgreSQL)]
-    ETL[etl batch container]
+    ETL[etl batch + board poll]
     API[api FastAPI container]
     RawVol[(raw JSON volume)]
     ArtVol[(artifacts volume)]

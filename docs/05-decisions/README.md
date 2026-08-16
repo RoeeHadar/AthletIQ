@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.2.0
+Last Updated: 2026-08-16  
+Version: 1.3.0
 
 ## Binding index (MVP)
 
@@ -21,6 +21,10 @@ Version: 1.2.0
 | [ADR-010](ADR-010-bigint-surrogate-keys.md) | BIGINT / BIGSERIAL surrogate keys | Accepted |
 | [ADR-012](ADR-012-synthetic-odds-snapshots.md) | Fixture/synthetic odds snapshots | Accepted |
 | [ADR-013](ADR-013-per-league-selection-pins.md) | Per-league selection pins | Accepted |
+| [ADR-014](ADR-014-demo-identity-ecoin-ledger.md) | Demo identity + e-coin ledger | Accepted |
+| [ADR-015](ADR-015-game-lifecycle-board-poll-settle.md) | Scheduled persist, board poll, pipeline settle | Accepted |
+| [ADR-016](ADR-016-three-ui-surfaces.md) | Three FastAPI surfaces `GET /`, `/slate`, `/board` | Accepted |
+| [ADR-017](ADR-017-uncapped-nba-live-player-boxes.md) | Uncapped live NBA + live player boxes (extends ADR-011) | Accepted |
 
 ## Deferred / non-binding
 

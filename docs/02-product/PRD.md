@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.1
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > Product / user view. Sponsorship, portfolio objectives, and deliberate technical constraints: `docs/01-project/project-charter.md`.  
 > No implementation decisions belong here (specific vendors, container orchestrators, ML algorithms as mandated designs, table DDL, class structures). Those live in Charter constraints (portfolio must-demonstrate), ADRs, and design docs.
@@ -18,7 +18,7 @@ The **project** is designed as a reproducible portfolio artifact demonstrating e
 
 Sports outcome questions (“who is more likely to win?”) are hard to answer without a coherent path from historical data → validated storage → analysis → models → a queryable prediction interface. Fragmented tutorials rarely produce one system a user can run end-to-end.
 
-AthletIQ’s **product** problem: enable a local analyst/developer to ingest NBA (and overlapping WNBA) history, analyze performance, evaluate predictive models under a defined methodology, and obtain pre-game win/lose predictions via an API — with known limitations documented.
+AthletIQ’s **product** problem: enable a local analyst/developer to ingest NBA (and overlapping WNBA) history, analyze performance, evaluate predictive models under a defined methodology, obtain pre-game win/lose predictions via an API, inspect an upcoming slate and an in-progress board, and run a **labeled e-coin simulation** of even-money home/away stakes — with known limitations documented.
 
 ## Goals
 
@@ -32,15 +32,17 @@ AthletIQ’s **product** problem: enable a local analyst/developer to ingest NBA
 
 ## Non-goals
 
-- Betting **book** (stakes, accounts, payouts, live odds shopping). A labeled **synthetic Market P(home)** comparison is in scope (**CR-004**); a live book adapter is not.
+- **Real-money betting book** (payments, licensed gambling, juice, moneyline as a price). A **labeled e-coin simulation** (fake coins, even-money stake/settle, copy is stake/settle) is in scope (**CR-005**). A live odds adapter is **not** this CR; labeled **synthetic Market P(home)** stays the comparison column (**CR-004** / ADR-012).
 - Mobile app
 - Multi-tenant SaaS
-- Live in-game prediction
-- Paid user accounts
-- Production-grade model serving (feature store, automated retraining, A/B testing, drift monitoring as required capabilities)
+- Live in-game *prediction* (using live score/clock as model features). An in-progress **gameboard** that *displays* provider scores is in scope (**CR-005**); gamecast at `GET /` still has no score/clock.
+- Paid user accounts / passwords. Pick-a-demo-user (`demo-1` / `demo-2`) is in scope; ADR-009 stays.
+- Production-grade model serving (feature store, automated retraining, A/B testing, drift monitoring as required capabilities). A one-shot retrain/select this CR is in scope.
 - Anything beyond a demo-grade API + documentation for external “customers”
 - Extra sports/leagues beyond **WNBA** this iteration (further leagues later via `sport`/`league` columns)
 - Injury feeds, player embeddings, or Comp B/C / film-room UI directions
+- Live WNBA HTTP; Kafka / Redis / Kubernetes / GCP
+- Sportsbook chrome (odds, juice, moneyline, payout tables) on any UI surface
 
 
 
@@ -69,46 +71,66 @@ Binary and probability are the **same prediction task** (probability is the pres
 
 **Designated team:** **Home team** (resolved in SRS ML-002, Grill-Me requirements Q1).
 
-## User journeys / use cases (MVP + CR-004)
+## Simulation semantics (CR-005)
+
+**Not a book.** Fake e-coins. Copy is stake/settle — not odds, juice, moneyline, or payout tables. Model `P(home_win)` and synthetic Market P are analytics, not a price.
+
+**Identity:** Two seeded demo users (`demo-1`, `demo-2`). No passwords. Selected user is `?user=` on `/slate`. ADR-009 stays (no login middleware).
+
+**Wallets:** Each demo user starts at **1000** e-coins. No refill this CR. Reject a stake that would go below zero. House is a system wallet large enough to pay even-money wins.
+
+**Stake:** Pick home or away and a **positive integer** (min 1, max = unlocked balance). One open stake per `(user, game)`. New stakes only if scores are still null **and** `game_start_time` is still in the future (UTC). Before tip: cancel (unlock) or replace. After tip: frozen until Finished ingest.
+
+**Settle:** When the pipeline ingests a previously unplayed game as Finished, it settles every open stake on that game (correct → stake returned + equal credit; wrong → stake gone). Re-runs are idempotent. `/slate` displays only.
+
+**Slate:** Next **20** unplayed pre-tip games by `game_start_time` (NBA + WNBA mixed) **plus** that user’s open stakes. Finished games leave this table.
+
+**Board:** In-progress games only. Score + status; clock only if the provider sends one (do not invent). Live score updates are NBA via a Compose newest-page poll. WNBA board rows, if any, are fixture.
+
+## User journeys / use cases (MVP + CR-004 + CR-005)
 
 1. **Bootstrap & ingest:** Configure documented environment → start local containerized stack → run documented pipeline orchestration → migrations, ingestion, and validation complete with logs/report.
 2. **Analyze:** Inspect persisted NBA/WNBA entities/stats (including player box scores when loaded); run documented analytical queries (aggregations, windowed recent form).
 3. **Evaluate models:** Train/evaluate baseline + ML models **per league** on held-out games; review reproducible metrics and limitations.
 4. **Predict:** Request a pre-game win/lose prediction (binary + probability) via the HTTP API; optionally see labeled synthetic Market P; receive a documented response.
 5. **Verify change:** Push triggers CI (lint, unit, integration, image build).
-6. **Local UI:** Broadcast win-probability graphic at `GET /`; choose league; look up `game_id`; read model split vs synthetic Market P.
+6. **Local UI — gamecast:** Broadcast win-probability graphic at `GET /`; choose league; look up `game_id`; read model split vs synthetic Market P. No score/clock/quarter.
+7. **Local UI — slate:** At `GET /slate`, pick `demo-1` / `demo-2` (`?user=`), see the next 20 unplayed pre-tip games plus open stakes, place/cancel/replace an integer even-money stake, read balance.
+8. **Local UI — board:** At `GET /board`, see in-progress games (score + status; clock only if the provider sends one). Browser talks only to AthletIQ.
+9. **Settle:** When ingest writes a game as Finished, the pipeline settles open stakes (idempotent). `/slate` displays; it does not settle.
 
 
 
 ## High-level features
 
 
-| Feature (product capability)                                                                                                                                 | MVP | This iteration (CR-004)                                                                                                               |
+| Feature (product capability)                                                                                                                                 | MVP | This iteration (CR-005)                                                                                                               |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Ingest NBA data from an external sports data provider via a reproducible ingestion process (adapter boundary)                                                | Yes | Live NBA Stats API remains NBA-only; **3** completed NBA seasons                                                                      |
-| Persist teams, games, and team statistics                                                                                                                    | Yes | `sport` / `league` on teams and games                                                                                                 |
-| Player / player-stat persistence                                                                                                                             | Schema reserved (CR-001) | **Load** `players` / `player_game_stats` (fixture-backed this CR)                                                             |
-| SQL analytics (aggregations, window functions) over persisted **team** stats                                                                                 | Yes | Player-grain rolls used only as **team-aggregated** ML features                                                                       |
-| Feature engineering from recent team stats **without temporal leakage**                                                                                      | Yes | New `feature_version`: team windows + top-5-by-minutes L5 pts/minutes                                                                 |
-| Train/evaluate a baseline **and** at least two ML approaches on the same holdout (Charter constrains which families; algorithms finalized in ML design/ADRs) | Yes | **Separate pins per league** (no pooled classifier); same selection rule inside each league                                           |
-| Win/lose prediction only (binary + probability)                                                                                                              | Yes | Plus labeled synthetic **Market P(home)** (not a book)                                                                                |
-| HTTP prediction API (demo-grade)                                                                                                                             | Yes | League pin routing; nullable Market P                                                                                                 |
-| Local prediction UI                                                                                                                                          | CR-003 pulled | **Broadcast gamecast** (producer bar + WP split + Market P); same FastAPI `GET /`                                                      |
-| WNBA (same basketball grain)                                                                                                                                 | Future | **Yes** via **fixture** adapter this CR (no live WNBA HTTP; no BALLDONTLIE/key)                                                       |
-| Reproducible containerized local deployment + pipeline orchestration                                                                                         | Yes | Unchanged 3-service Compose                                                                                                           |
+| Ingest NBA data from an external sports data provider via a reproducible ingestion process (adapter boundary)                                                | Yes | Live NBA Stats API remains NBA-only; **no live season cap** (page everything); keep scheduled/in-progress rows; **live player boxes** |
+| Persist teams, games, and team statistics                                                                                                                    | Yes | Unplayed games (null scores, not Finished); in-progress scores allowed on `/board` path                                               |
+| Player / player-stat persistence                                                                                                                             | Schema reserved (CR-001) | **Load** live NBA boxes via `nba-stats`; WNBA/CI stay **fixture**                                                             |
+| SQL analytics (aggregations, window functions) over persisted **team** stats                                                                                 | Yes | Unchanged grain                                                                                                                                 |
+| Feature engineering from recent team stats **without temporal leakage**                                                                                      | Yes | Same `feature_version`; live NBA `player_agg` no longer all zeros                                                                     |
+| Train/evaluate a baseline **and** at least two ML approaches on the same holdout                                                                             | Yes | **Retrain + reselect NBA and WNBA pins** (same protocol; test once). CI 48-game pin **unchanged**                                     |
+| Win/lose prediction only (binary + probability)                                                                                                              | Yes | Plus labeled synthetic **Market P(home)** (not a book; **not** live odds this CR)                                                     |
+| HTTP prediction API (demo-grade)                                                                                                                             | Yes | Plus slate/board/ledger JSON; no auth; `?user=` identity                                                                              |
+| Local prediction UI                                                                                                                                          | CR-003 pulled | Gamecast `GET /` **unchanged** (no score/clock) + **`GET /slate`** + **`GET /board`**; producer-bar links; dramatic-improvement bar    |
+| WNBA (same basketball grain)                                                                                                                                 | Future | **Fixture** 2021–2025 completed + 2026 scheduled (no live WNBA HTTP)                                                                  |
+| Labeled e-coin simulation                                                                                                                                    | No  | Pick-a-demo-user; 1000 seed; integer even-money; pipeline settle; not a real book                                                     |
+| Reproducible containerized local deployment + pipeline orchestration                                                                                         | Yes | Compose **board poll** (newest pages); 3-service topology + poll loop; no Kafka                                                       |
 | Automated CI: lint → unit → integration → image build                                                                                                        | Yes | Fixture-only (NFR-003)                                                                                                                |
-| Documented evaluation methodology and known limitations with predictions                                                                                     | Yes | Disclose synthetic Market P and per-league pins                                                                                       |
+| Documented evaluation methodology and known limitations with predictions                                                                                     | Yes | Disclose uncapped history, live player boxes, new pins, synthetic Market P                                                            |
 
 
 
 
 ## MVP scope
 
-- **Domain:** NBA historical data; depth target **2–3 recent completed seasons** (MVP). **CR-004** raises live/fixture NBA depth to **3 completed seasons Must** and adds overlapping **WNBA** (fixture this CR).
-- **Provider:** external sports data provider (specific vendor/plan is a Charter/architecture decision, not a PRD lock). Live NBA = NBA Stats API (ADR-011). WNBA live HTTP = not this CR.
-- **Prediction:** pre-game win/lose with binary + `P(win)` for a designated team; temporal boundary enforced.
-- **Models (product expectation):** MVP **shall** implement a **baseline**, **logistic regression**, and **XGBoost**, compared on the **same** held-out evaluation set. (How they are packaged/trained is ML design.) **CR-004:** repeat that selection **inside each league**.
-- **Delivery capabilities:** reproducible containerized local deployment; documented pipeline orchestration; demo HTTP API; CI through image build.
+- **Domain:** NBA historical data. **CR-004** was 3 completed NBA seasons Must + overlapping WNBA fixture. **CR-005** live NBA has **no season cap** (page everything `nba-stats` returns); CI fixtures stay small. WNBA Must = authored fixtures **2021–2025 completed + 2026 scheduled**.
+- **Provider:** external sports data provider (specific vendor/plan is a Charter/architecture decision, not a PRD lock). Live NBA = NBA Stats API (ADR-011) including **player boxes** (CR-005). WNBA live HTTP = not this CR. Live odds = not this CR.
+- **Prediction:** pre-game win/lose with binary + `P(win)` for a designated team; temporal boundary enforced. Upcoming `P(home_win)` uses **prior completed history only**.
+- **Models (product expectation):** baseline, logistic regression, and XGBoost, compared on the **same** held-out evaluation set, **inside each league**. **CR-005:** retrain NBA and WNBA pins on the new history (same hyperparameters and `feature_version`; test once). CI 48-game fixture pin unchanged.
+- **Delivery capabilities:** reproducible containerized local deployment; documented pipeline orchestration; demo HTTP API; CI through image build; gamecast + slate + board UI.
 - **Documentation:** full roadmap (including post-MVP) and engineering decisions documented; **Approved** docs before non-trivial build (Charter/gates).
 
 
@@ -146,7 +168,7 @@ MVP is complete when all of the following are true:
 - Further leagues via `sport` / `league` columns
 - Deploy/CD beyond image build — **future consideration**; GCP is a **candidate** host (ADR-007 Proposed), not an Accepted decision
 
-Still **no** betting **book**. Architecture may **document** where production ML ops would plug in later without implementing them in this iteration.
+Still **no** real-money betting **book**. The CR-005 e-coin ledger is a labeled simulation. Architecture may **document** where production ML ops would plug in later without implementing them in this iteration.
 
 
 
@@ -160,7 +182,7 @@ Still **no** betting **book**. Architecture may **document** where production ML
 
 ## Assumptions
 
-- The chosen external provider’s free/affordable tier can support MVP historical depth (2–3 seasons), possibly with multi-day backfill. `[ASSUMPTION — needs confirmation]`
+- The chosen external provider can support **uncapped** live NBA paging for a local demo (CR-005); CI stays on small fixtures. Multi-day backfill is acceptable. `[ASSUMPTION]`
 - Baseline methodology defined in SRS ML-006 (naive + domain-informed); approved via requirements Grill-Me Q2 before evaluation.
 
 
@@ -205,4 +227,4 @@ AthletIQ does **not** claim to “accurately predict NBA games” as a product g
 
 ## Source
 
-Grill-Me Rounds 1–4 (2026-08-12); PRD revision from owner review (2026-08-12); **CR-001** (2026-08-13) team-level MVP persist; **CR-003** (2026-08-15) local UI; **CR-004** (2026-08-15) post-MVP Grill-Me close (WNBA, players, synthetic Market P, Comp A reconstruction). Charter: `docs/01-project/project-charter.md`.
+Grill-Me Rounds 1–4 (2026-08-12); PRD revision from owner review (2026-08-12); **CR-001** (2026-08-13) team-level MVP persist; **CR-003** (2026-08-15) local UI; **CR-004** (2026-08-15) post-MVP Grill-Me close (WNBA, players, synthetic Market P, Comp A reconstruction); **CR-005** (2026-08-16) platform-slice Grill-Me Q1–Q27 confirmed. Charter: `docs/01-project/project-charter.md`.

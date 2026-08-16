@@ -111,7 +111,7 @@ def test_curated_upsert_idempotent_and_update(test_db_url: str) -> None:
                     home_score=110,
                     away_score=95,
                     home_win=True,
-                    status="Final",
+                    status="Finished",
                 ),
                 home_team_id=home,
                 away_team_id=away,
@@ -119,7 +119,7 @@ def test_curated_upsert_idempotent_and_update(test_db_url: str) -> None:
             assert store.count_games() == n_games
             games = {g.record.provider_game_id: g for g in store.iter_games()}
             assert games["g-idem-2"].record.home_score == 110
-            assert games["g-idem-2"].record.status == "Final"
+            assert games["g-idem-2"].record.status == "Finished"
     finally:
         store.close()
 

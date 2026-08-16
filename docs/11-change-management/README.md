@@ -2,12 +2,12 @@
 
 Status: Draft  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 0.4.0
+Last Updated: 2026-08-16  
+Version: 0.5.0
 
 Living process for scope and requirement changes. Change Requests **re-enter at Gate 2 (Requirements)** — they are not the end of the chain.
 
-**Accepted CRs:** [CR-001](CR-001-mvp-team-stats-not-players.md) — MVP persist/ingest is team-level; player tables reserved until CR-004. [CR-002](CR-002-nba-stats-api-provider.md) — live provider is no-key NBA Stats API (ADR-011). [CR-003](CR-003-minimal-prediction-ui.md) — local prediction UI at `GET /`. [CR-004](CR-004-post-mvp-wnba-players-odds-ui.md) — WNBA fixtures, player load, synthetic Market P, per-league pins, Comp A reconstruction.
+**Accepted CRs:** [CR-001](CR-001-mvp-team-stats-not-players.md) — MVP persist/ingest is team-level; player tables reserved until CR-004. [CR-002](CR-002-nba-stats-api-provider.md) — live provider is no-key NBA Stats API (ADR-011). [CR-003](CR-003-minimal-prediction-ui.md) — local prediction UI at `GET /`. [CR-004](CR-004-post-mvp-wnba-players-odds-ui.md) — WNBA fixtures, player load, synthetic Market P, per-league pins, Comp A reconstruction. [CR-005](CR-005-platform-slice-ledger-slate-board.md) — e-coin ledger, `/slate`, `/board`, uncapped live NBA, live player boxes, retrain (not a real book; not live odds; not live WNBA HTTP).
 
 ## Propagation flow
 

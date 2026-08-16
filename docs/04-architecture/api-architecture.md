@@ -2,14 +2,14 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.1
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > Sync demo FastAPI (CON-004). Contract details in Gate 4 `api-design.md`.
 
 ## Purpose
 
-Synchronous home-win predictions for a known **`game_id`** using precomputed features and the **batch pin for `game.league`** (FR-009, ADR-008, ADR-013). Optional labeled synthetic Market P from `odds_snapshots` (ADR-012). Same-origin UI at `GET /` (FR-015). Predict does **not** call a book or the live provider.
+Synchronous home-win predictions for a known **`game_id`** using precomputed features and the **batch pin for `game.league`** (FR-009, ADR-008, ADR-013). Optional labeled synthetic Market P from `odds_snapshots` (ADR-012). Same-origin UI at `GET /`, `GET /slate`, `GET /board` (FR-015, FR-024, FR-025, ADR-016). Ledger JSON for demo users (ADR-014) on the same app. Predict does **not** call a book or the live provider. Browser does **not** call `nbaapi.com`. Gamecast has no score/clock and no stake chrome. `/slate` may use stake/settle copy. `/board` is in-progress display only.
 
 ## Request lifecycle
 

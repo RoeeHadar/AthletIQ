@@ -1,4 +1,4 @@
-# Implements: FR-011, CON-001, OPS-002, ADR-005, ML-010, ADR-013, CR-004
+# Implements: FR-011, FR-021, FR-023, CON-001, OPS-002, ADR-005, ML-010, ADR-013, ADR-015, CR-004, CR-005
 """Concrete pipeline stage implementations (offline-capable)."""
 
 from __future__ import annotations
@@ -84,13 +84,17 @@ def stage_load(ctx: PipelineContext) -> None:
     report_path = ctx.artifacts_dir / "reports" / f"validation_{batch_dir.name}.json"
     write_validation_report(report, report_path)
     ctx.store = store
+    from athletiq.ledger.settle import settle_finished_on_store
+
+    settled = settle_finished_on_store(store)
     logger.info(
-        "stage=load batch=%s teams=%s games=%s report=%s store=%s",
+        "stage=load batch=%s teams=%s games=%s report=%s store=%s settled=%s",
         batch_dir.name,
         report.teams_loaded,
         report.games_loaded,
         report_path,
         ctx.store_kind,
+        settled,
     )
 
 
@@ -104,7 +108,7 @@ def stage_features(ctx: PipelineContext) -> None:
     tip_by_game = {g.game_id: g.record.game_start_time for g in games}
     for g in games:
         rec = g.record
-        if rec.home_score is None or rec.away_score is None:
+        if rec.status != "Finished" or rec.home_score is None or rec.away_score is None:
             continue
         home_stat = store.team_stat(g.game_id, g.home_team_id) or {}
         away_stat = store.team_stat(g.game_id, g.away_team_id) or {}
@@ -129,10 +133,13 @@ def stage_features(ctx: PipelineContext) -> None:
             )
         )
 
+    finished_ids = {g.game_id for g in games if g.record.status == "Finished"}
     player_history: list[PlayerGameHistory] = []
     iter_pgs = getattr(store, "iter_player_game_stats", None)
     if iter_pgs is not None:
         for stat in iter_pgs():
+            if int(stat["game_id"]) not in finished_ids:
+                continue
             tip = stat.get("game_start_time") or tip_by_game.get(stat["game_id"])
             if tip is None:
                 continue

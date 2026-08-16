@@ -1,4 +1,4 @@
-# Implements: DR-001, CR-004 — active history window (3 completed NBA seasons)
+# Implements: DR-001, ADR-017, CR-005 — season window helpers (live NBA uncapped)
 """Completed-season window helpers."""
 
 from __future__ import annotations
@@ -13,16 +13,11 @@ def active_season_years(
 ) -> list[int]:
     """Return the most recent `depth` completed NBA season start years.
 
-    NBA seasons are labeled by the year they start (e.g. 2023-24 → 2023).
-    A season is treated as completed once the calendar year after tip-off
-    has begun (simple MVP rule: if as_of.month >= 9, latest completed start
-    year is as_of.year - 1; else as_of.year - 2).
+    Used by fixture/CI windows. Live `--provider nba-stats` does not clamp
+    (ADR-017). `depth` has no maximum.
     """
     if depth < 1:
         raise ValueError("depth must be >= 1")
-    if depth > 3:
-        # Should(3) is the MVP max; callers may still request 3.
-        depth = 3
     as_of = as_of or date.today()
     if as_of.month >= 9:
         latest_completed = as_of.year - 1

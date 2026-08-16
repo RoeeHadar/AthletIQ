@@ -1,4 +1,4 @@
-# Implements: FR-001, CON-007, ADR-011, CR-002 — live HTTP adapter (not used in CI)
+# Implements: FR-001, FR-021, FR-027, CON-007, ADR-011, ADR-017, CR-002, CR-005 — live HTTP adapter (not used in CI)
 """No-key NBA Stats API client (api.server.nbaapi.com)."""
 
 from __future__ import annotations
@@ -13,7 +13,6 @@ from typing import Any, Callable
 from urllib.parse import urlencode
 
 from athletiq.provider.retry import parse_retry_after, retry_with_backoff
-from athletiq.provider.seasons import active_season_years
 
 logger = logging.getLogger("athletiq.provider")
 
@@ -84,7 +83,11 @@ def normalize_team_code(raw: str) -> str:
 
 
 def to_provider_game(raw: dict[str, Any]) -> dict[str, Any] | None:
-    """Map API row to parse_game-shaped dict, or None if unusable."""
+    """Map API row to parse_game-shaped dict, or None if unusable.
+
+    Null scores are kept (FR-021). Status is not hardcoded Finished (ADR-015).
+    Non-NBA / unmappable teams are still skipped.
+    """
     gid = raw.get("gameId") or raw.get("id")
     if gid is None:
         return None
@@ -101,24 +104,97 @@ def to_provider_game(raw: dict[str, Any]) -> dict[str, Any] | None:
         return None
     home_pts = raw.get("homePts")
     away_pts = raw.get("visitorPts")
-    if home_pts is None or away_pts is None:
-        return None
+    home_total = int(home_pts) if home_pts is not None else None
+    away_total = int(away_pts) if away_pts is not None else None
     season = season_start_year(tip)
+    clock = raw.get("gameStatusText") or raw.get("clock")
     return {
         "id": str(gid),
         "date": tip.isoformat(),
         "season": season,
-        "status": "Finished",
+        "status": map_game_status(raw, home_total, away_total),
+        "clock": clock if clock and str(clock).strip() and "final" not in str(clock).lower() else None,
         "teams": {
             "home": {"id": home, "name": NBA_TEAM_NAMES.get(home, home)},
             "away": {"id": away, "name": NBA_TEAM_NAMES.get(away, away)},
         },
-        "scores": {"home": {"total": int(home_pts)}, "away": {"total": int(away_pts)}},
+        "scores": {"home": {"total": home_total}, "away": {"total": away_total}},
+        "playerGameBasicStats": list(raw.get("playerGameBasicStats") or []),
     }
 
 
+def map_game_status(raw: dict[str, Any], home_pts: int | None, away_pts: int | None) -> str:
+    text = str(raw.get("gameStatusText") or raw.get("status") or "").strip().lower()
+    if text in {"finished", "final", "closed"} or "final" in text:
+        return "Finished"
+    if any(token in text for token in ("q1", "q2", "q3", "q4", "ot", "halftime", "live", "in progress")):
+        return "in_progress"
+    if home_pts is None or away_pts is None:
+        return "scheduled"
+    return "Finished"
+
+
+def _minutes_to_float(raw: Any) -> float | None:
+    if raw is None:
+        return None
+    if isinstance(raw, (int, float)):
+        return float(raw)
+    text = str(raw).strip()
+    if ":" in text:
+        minutes, _, seconds = text.partition(":")
+        try:
+            return float(minutes) + float(seconds) / 60.0
+        except ValueError:
+            return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def to_player_game_stats(mapped_game: dict[str, Any]) -> list[dict[str, Any]]:
+    """Map per-game boxes on a mapped nba-stats row into parse_player_game_stat shape."""
+    boxes = mapped_game.get("playerGameBasicStats") or []
+    if not isinstance(boxes, list):
+        return []
+    gid = mapped_game.get("id")
+    home_id = ((mapped_game.get("teams") or {}).get("home") or {}).get("id")
+    away_id = ((mapped_game.get("teams") or {}).get("away") or {}).get("id")
+    out: list[dict[str, Any]] = []
+    for box in boxes:
+        if not isinstance(box, dict):
+            continue
+        pid = box.get("playerId") or box.get("personId") or box.get("id")
+        name = box.get("playerName") or box.get("name") or box.get("full_name")
+        if pid is None or not name:
+            continue
+        team_raw = box.get("teamTricode") or box.get("team") or box.get("teamAbbr") or ""
+        team = normalize_team_code(str(team_raw)) if team_raw else ""
+        if team not in NBA_TEAM_NAMES:
+            if home_id and away_id:
+                is_home = bool(box.get("isHome") or box.get("home"))
+                team = str(home_id if is_home else away_id)
+            else:
+                continue
+        if team not in NBA_TEAM_NAMES:
+            continue
+        out.append(
+            {
+                "id": str(pid),
+                "name": str(name).strip(),
+                "game_id": str(gid),
+                "player_id": str(pid),
+                "team_id": team,
+                "league": "nba",
+                "minutes": _minutes_to_float(box.get("min") or box.get("minutes")),
+                "points": box.get("pts") if box.get("pts") is not None else box.get("points"),
+            }
+        )
+    return out
+
+
 class NbaStatsApiProvider:
-    """Pages newest-first; filters into AthletIQ season start years (ADR-011)."""
+    """Pages newest-first. Live NBA history is uncapped unless `seasons` is set (ADR-017)."""
 
     def __init__(
         self,
@@ -129,18 +205,29 @@ class NbaStatsApiProvider:
         page_size: int = PAGE_SIZE,
         get_json: Callable[[str], dict[str, Any]] | None = None,
         pause_seconds: float = PAGE_PAUSE_SECONDS,
+        max_pages: int | None = None,
     ) -> None:
-        self._seasons = seasons if seasons is not None else active_season_years(depth=season_depth)
+        self._wanted = set(seasons) if seasons is not None else None
+        self._season_depth = season_depth
         self._base_url = base_url.rstrip("/")
         self._page_size = page_size
         self._get_json = get_json or self._http_get
         self._pause = pause_seconds
-        self._games_by_season: dict[int, list[dict[str, Any]]] = {s: [] for s in self._seasons}
+        self._max_pages = max_pages
+        self._games_by_season: dict[int, list[dict[str, Any]]] = {}
+        self._players: dict[str, dict[str, Any]] = {}
+        self._player_game_stats: list[dict[str, Any]] = []
         self._teams: list[dict[str, Any]] = []
         self._loaded = False
 
     def leagues(self) -> list[str]:
         return ["nba"]
+
+    def available_seasons(self, league: str = "nba") -> list[int]:
+        if league != "nba":
+            return []
+        self._ensure_loaded()
+        return sorted(self._games_by_season)
 
     def fetch_teams(self) -> list[dict[str, Any]]:
         self._ensure_loaded()
@@ -153,26 +240,47 @@ class NbaStatsApiProvider:
         return list(self._games_by_season.get(season, []))
 
     def fetch_players(self) -> list[dict[str, Any]]:
-        return []
+        self._ensure_loaded()
+        return list(self._players.values())
 
     def fetch_player_game_stats(self) -> list[dict[str, Any]]:
-        return []
+        self._ensure_loaded()
+        return list(self._player_game_stats)
 
     def fetch_odds_snapshots(self) -> list[dict[str, Any]]:
         return []
 
+    def fetch_newest_pages(self, *, pages: int = 1) -> list[dict[str, Any]]:
+        """Board poll: map newest pages only (ADR-015). Does not page all history."""
+        mapped: list[dict[str, Any]] = []
+        for page in range(1, max(1, pages) + 1):
+            payload = self._get_json(self._games_url(page))
+            rows = list(payload.get("data") or [])
+            for raw in rows:
+                game = to_provider_game(raw)
+                if game is not None:
+                    mapped.append(game)
+        return mapped
+
+    def _games_url(self, page: int) -> str:
+        return (
+            f"{self._base_url}/api/games?"
+            f"{urlencode({'page': page, 'pageSize': self._page_size, 'include': 'playerGameBasicStats'})}"
+        )
+
     def _ensure_loaded(self) -> None:
         if self._loaded:
             return
-        wanted = set(self._seasons)
-        earliest = date(min(self._seasons), 9, 1)
         seen_ids: set[str] = set()
         page = 1
         pages = 1
+        earliest = None
+        if self._wanted:
+            earliest = date(min(self._wanted), 9, 1)
         while page <= pages:
-            payload = self._get_json(
-                f"{self._base_url}/api/games?{urlencode({'page': page, 'pageSize': self._page_size})}"
-            )
+            if self._max_pages is not None and page > self._max_pages:
+                break
+            payload = self._get_json(self._games_url(page))
             rows = list(payload.get("data") or [])
             pagination = payload.get("pagination") or {}
             pages = int(pagination.get("pages") or page)
@@ -184,22 +292,34 @@ class NbaStatsApiProvider:
                     continue
                 mapped_on_page += 1
                 tip = datetime.fromisoformat(mapped["date"])
-                if tip.date() >= earliest:
+                if earliest is None or tip.date() >= earliest:
                     all_before_window = False
                 gid = str(mapped["id"])
                 if gid in seen_ids:
                     continue
                 seen_ids.add(gid)
                 season = int(mapped["season"])
-                if season in wanted:
-                    self._games_by_season[season].append(mapped)
+                if self._wanted is not None and season not in self._wanted:
+                    continue
+                self._games_by_season.setdefault(season, []).append(mapped)
+                for stat in to_player_game_stats(mapped):
+                    self._player_game_stats.append(stat)
+                    pid = str(stat["player_id"])
+                    self._players[pid] = {
+                        "id": pid,
+                        "name": stat["name"],
+                        "team_id": stat["team_id"],
+                        "league": "nba",
+                    }
             logger.info(
                 "nba-stats page=%s/%s kept=%s",
                 page,
                 pages,
                 sum(len(v) for v in self._games_by_season.values()),
             )
-            if not rows or (mapped_on_page > 0 and all_before_window):
+            if not rows:
+                break
+            if earliest is not None and mapped_on_page > 0 and all_before_window:
                 break
             page += 1
             if page <= pages and self._pause > 0:

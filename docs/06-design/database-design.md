@@ -2,11 +2,11 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.0
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > Design intent. Contract: `database/schema.sql`. PostgreSQL (ADR-001). Raw landing is **filesystem** (**ADR-006**), not Postgres staging.  
-> **CR-004:** load path writes teams / games / `team_game_stats` / `players` / `player_game_stats` / `odds_snapshots` / features. `sport`/`league` on teams and games. CR-001 reserved-empty expectation is superseded for the fixture path.
+> **CR-005:** users/wallets/stakes; unplayed/in-progress games; live NBA player boxes. Migration `003_cr005_ledger_game_lifecycle.sql` (name may shift at IMP-019).
 
 ## NFRs cited
 
@@ -16,15 +16,15 @@ Version: 1.1.0
 ## Principles
 
 - Natural keys: `provider_*`  
-- Idempotent upserts (DR-003) on **MVP** grains  
-- Active history window **3** completed NBA seasons + overlapping WNBA (DR-001); prune older  
+- Idempotent upserts (DR-003) on **MVP** grains plus ledger settle (FR-023)  
+- **Live NBA:** no season-age prune (DR-001 / ADR-017). **CI fixtures:** small. **WNBA fixture:** 2021–2025 + 2026 scheduled  
 - **Curated schema only** — raw JSON on volume (ADR-006), not `raw_*` tables  
 
 ## Identity types (**ADR-010**)
 
 | Id | Type | Notes |
 |---|---|---|
-| `game_id`, `team_id`, `player_id` | **BIGINT** (`BIGSERIAL`) | API exposes as decimal string; **not** UUID (**ADR-010**; inference key semantics still ADR-008) |
+| `game_id`, `team_id`, `player_id`, `user_id`, `wallet_id`, `stake_id`, `ledger_entry_id` | **BIGINT** (`BIGSERIAL`) | API exposes as decimal string; **not** UUID (**ADR-010**; inference key semantics still ADR-008) |
 
 > Older sketches mentioning UUID/serial are **superseded**. Design, contract (`schema.sql`), IMP-002, and TEST-002 must agree on BIGINT.
 
@@ -34,14 +34,18 @@ Version: 1.1.0
 |---|---|
 | `teams`, `games`, `team_game_stats` | Loaded; `sport` TEXT default `basketball`; `league` TEXT (`nba`\|`wnba`). Natural key `(league, provider_*_id)`. |
 | `features` | Written by feature builder; JSONB **envelope** (below) |
-| `players`, `player_game_stats` | **Loaded** on fixture path (CR-004). Empty after live nba-stats-only ingest is expected. |
+| `players`, `player_game_stats` | **Loaded** on fixture path (CR-004) and live NBA boxes (CR-005 / FR-027). WNBA stays fixture. |
 | `odds_snapshots` | Synthetic implied P(home) (ADR-012). Grain `(game_id, source, captured_at)`. |
+| `users` | Seed `demo-1`, `demo-2` (slug unique). No password columns. Do **not** seed a selectable `house` user. |
+| `wallets` | One per demo user (`kind=user`, `user_id` NOT NULL, unique) plus one house wallet (`kind=house`, `user_id` NULL). Balance is integer e-coins. House starts at **`1000000000`**. |
+| `ledger_entries` | Append-only; explains every balance change (stake lock, cancel, settle win/lose). |
+| `stakes` | **Open** grain unique `(user_id, game_id)` via partial unique index `WHERE status = 'open'`. Status `open` \| `settled` \| `canceled`. Side `home`\|`away`; integer amount ≥ 1. |
 | `model_registry` | Optional mirror; **files** (pins + joblib + JSON) remain canonical lineage (ADR-004). |
 | `schema_migrations` | Migrate-runner bookkeeping. |
 
 ### `games`
 
-`game_id BIGSERIAL PK`, `provider_game_id`, `league`, `sport`, unique `(league, provider_game_id)`, `season`, `game_start_time`, FKs, scores, `home_win`, `status`.
+`game_id BIGSERIAL PK`, `provider_game_id`, `league`, `sport`, unique `(league, provider_game_id)`, `season`, `game_start_time`, FKs, nullable scores, `home_win`, `status` (`scheduled` \| `in_progress` \| `Finished` \| `unknown`). Training labels require Finished + non-null scores.
 
 ### `features.payload` envelope
 
@@ -63,13 +67,18 @@ Readers must accept a legacy bare map (`values` missing → treat the object as 
 | Index | Purpose |
 |---|---|
 | `games (game_start_time)` | Temporal splits, ordered history |
-| `games (season)` | Season filters / prune |
+| `games (season)` | Season filters |
 | `team_game_stats (team_id, game_id)` | Per-team history joins (**MVP** analytics/features) |
-| `player_game_stats (player_id, game_id)` | Reserved per-player history / top scorers |
-| `player_game_stats (team_id, game_id)` | Reserved team roster lines |
+| `player_game_stats (player_id, game_id)` | Per-player history / top scorers |
+| `player_game_stats (team_id, game_id)` | Team roster lines |
 | `features (feature_version, game_id)` | Predict lookup by pin version |
 | `games (league)` | Pin routing / UI filter |
+| `games (status, game_start_time)` | Slate / board queries |
 | `odds_snapshots (game_id)` | Market P lookup |
+| `users (slug)` | `?user=` lookup |
+| `stakes (user_id, game_id) WHERE status = 'open'` | One open stake per user/game (partial unique) |
+| `ledger_entries (wallet_id, created_at)` | Balance audit |
+| `wallets (user_id) WHERE kind = 'user'` | One user wallet |
 
 Rolling averages: join `team_game_stats` → `games.game_start_time` and order by time. Window performance is best-effort local (NFR-004).
 

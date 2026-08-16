@@ -2,8 +2,8 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.0
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > Logical + deployment views. Data lifecycle: `data-architecture.md`. API: `api-architecture.md`.  
 > Sources: SRS v1.1+; architecture Grill-Me; owner reviews (2026-08-12).
@@ -18,6 +18,15 @@ Version: 1.1.0
 3. **Idempotent curated loads:** Re-running transform/load on the same raw input does not duplicate logical curated/feature records.
 4. **Test isolation:** Test data is never used to select models, tune hyperparameters, or modify feature definitions.
 5. **Artifact/API consistency:** The API serves only a **published** model artifact for the game’s `league` with its compatible `feature_version` / preprocessing (ADR-013).
+6. **CR-005:** Browser talks only to AthletIQ. Adapter is the only `nbaapi.com` client. No Kafka/Redis/WebSockets. E-coin ledger is not a book (ADR-014). Settle is a pipeline stage (ADR-015).
+
+## CR-005 logical components
+
+| Component | Role |
+|---|---|
+| Pipeline (etl) | Uncapped live NBA page + player boxes; persist scheduled/in-progress; **settle** Finished stakes |
+| Board poll | Compose loop: newest-page upsert of in-progress NBA games |
+| API | Predict + slate/board/ledger JSON; static `GET /`, `/slate`, `/board` |
 
 ## 1. System context
 
@@ -52,7 +61,7 @@ flowchart TB
   end
   subgraph compose [Docker Compose]
     PG[(PostgreSQL)]
-    ETL[etl batch container]
+    ETL[etl batch + board poll]
     API[api FastAPI container]
     RawVol[(raw JSON volume)]
     ArtVol[(artifacts volume)]
@@ -71,7 +80,7 @@ Source: `diagrams/deployment.mmd`.
 | Kind | Component | Role |
 |---|---|---|
 | Container | `database` | Curated PostgreSQL |
-| Container | `etl` | **Packaging** of all batch logical components (below) |
+| Container | `etl` | **Packaging** of all batch logical components (below); also the image used for **board poll** (`python -m athletiq.board_poll` or documented equivalent) |
 | Container | `api` | Synchronous prediction API |
 | Volume | raw | Immutable provider JSON |
 | Volume | artifacts | Models, metrics, lineage metadata, **per-league** selection pins |
@@ -85,8 +94,8 @@ Logical pipeline stages are **separated by responsibility in code**, but for MVP
 Logical stages inside the batch package:
 
 ```text
-Adapter → Ingest → Validate → Transform/Load → (Analytics) → Feature build
-  → Train → Validation scoring → Model selection → Test-once eval → Publish artifact
+Adapter → Ingest → Validate → Transform/Load → Settle open stakes on newly Finished games
+  → (Analytics) → Feature build → Train → Validation scoring → Model selection → Test-once eval → Publish artifact
 ```
 
 ## 3. Data / ML pipeline
@@ -99,6 +108,7 @@ flowchart TD
   R --> V[Validate]
   V -->|valid| C[(Curated PostgreSQL)]
   V -->|invalid| VR[Validation report / skip or fail per design]
+  C --> Settle[Settle Finished stakes]
   C --> F[Feature tables]
   F --> T[Train]
   F --> Val[Validation]
@@ -201,6 +211,12 @@ Single-node Compose. Scaling mechanisms deferred until a real requirement exists
 | [ADR-008](../05-decisions/ADR-008-inference-feature-contract.md) | `game_id` + precomputed features | Accepted |
 | [ADR-009](../05-decisions/ADR-009-no-auth-mvp-api.md) | No auth MVP API | Accepted |
 | [ADR-010](../05-decisions/ADR-010-bigint-surrogate-keys.md) | BIGINT surrogate keys | Accepted |
+| [ADR-012](../05-decisions/ADR-012-synthetic-odds-snapshots.md) | Synthetic Market P | Accepted |
+| [ADR-013](../05-decisions/ADR-013-per-league-selection-pins.md) | Per-league pins | Accepted |
+| [ADR-014](../05-decisions/ADR-014-demo-identity-ecoin-ledger.md) | Demo identity + e-coin ledger | Accepted |
+| [ADR-015](../05-decisions/ADR-015-game-lifecycle-board-poll-settle.md) | Scheduled persist, board poll, settle | Accepted |
+| [ADR-016](../05-decisions/ADR-016-three-ui-surfaces.md) | `GET /`, `/slate`, `/board` | Accepted |
+| [ADR-017](../05-decisions/ADR-017-uncapped-nba-live-player-boxes.md) | Uncapped live NBA + player boxes (extends ADR-011) | Accepted |
 
 **Future consideration (not an ADR yet):** candidate cloud host GCP when Gate 8 is designed. Former ADR-007 deferred — see `../05-decisions/ADR-007-post-mvp-gcp.md` (Proposed / non-binding) or ignore until CD.
 

@@ -4,16 +4,16 @@
 
 Status: Approved  
 Owner: Project owner  
-Last Updated: 2026-08-15  
-Version: 1.1.0
+Last Updated: 2026-08-16  
+Version: 1.2.0
 
 > **FR-010** disclosure for evaluation and API consumers. Design source: `ml-design.md`.  
 > Runtime summary: `GET /v1/model` (`limitations_ref` → this document).
 
 ## Intended use
 
-Portfolio / demo **pre-game home-win** prediction for NBA contests keyed by existing `game_id`.  
-Output: binary `home_win_pred` and `P(home_win)`. **Not** a betting product; **not** a claim of accurate game forecasting.
+Portfolio / demo **pre-game home-win** prediction for NBA/WNBA contests keyed by existing `game_id`.  
+Output: binary `home_win_pred` and `P(home_win)`. **Not** a real-money betting product. CR-005 adds a labeled e-coin simulation on `/slate` that does **not** use model `P` as a price.
 
 ## Temporal boundary (no leakage)
 
@@ -23,14 +23,17 @@ Features, training labels for prior games, model selection, and evaluation use o
 
 - **Version:** `team_l5_l10_player_agg_v1` (CR-004).
 - **Team windows:** L5/L10 win rate, point differential, points for/against; season win rate to date.
-- **Player aggregates:** mean L5 points and minutes of the top-5 players by prior minutes (per side). Missing box scores → 0.0.
+- **Player aggregates:** mean L5 points and minutes of the top-5 players by prior minutes (per side). Missing box scores → 0.0. **CR-005** loads live NBA boxes so this is no longer universally 0.0 on `--provider nba-stats`.
 - **Cold start:** if fewer than `min_prior_games = 5` completed prior games → season-to-date aggregates for team windows.
 - Train and serve share the same feature definitions / preprocessing contract (ML-008).
 - **Pins:** separate served models per `league` (ADR-013).
 
 ## Data window
 
-Active history: **3** most recent **completed** NBA seasons plus overlapping WNBA (DR-001 / CR-004). Seasons outside the window are too old (do not ingest; prune if present).
+**Live NBA (CR-005):** no season cap — page everything `nba-stats` returns (ADR-017). Do not age-prune.  
+**CI fixtures:** small (not a dump).  
+**WNBA:** authored fixtures 2021–2025 completed + 2026 scheduled.  
+**CR-004 3-season pin** is historical; the CR-005 retrained live NBA pin is a new artifact. Old test log loss 0.623 does not bind it (ML-012).
 
 ## Splits
 
@@ -79,11 +82,12 @@ Publish: **joblib** model + **JSON** metadata + **selection pin** (`model_versio
 1. Ignores injuries, rest, travel, coaching, and live market odds. Player context is team-aggregated top-5 L5 points/minutes only (no injury feed, no embeddings).
 2. Cold-start games use coarse season-to-date proxies.
 3. Small / fixture datasets can pass local demos without reflecting production NBA signal.
-4. Provider free-tier coverage and schema drift can affect ingest completeness.
-5. Manual retrain only — no drift dashboards or automated retrain in MVP.
+4. Provider coverage and schema drift can affect ingest completeness.
+5. Manual retrain only — no drift dashboards. CR-005 retrains once; does not hunt hyperparameters.
 6. Honest evaluation ≠ guaranteed predictive skill on future seasons.
-7. Live NBA holdout pin `logistic_regression-v1` was fit with sklearn `LogisticRegression(solver="lbfgs", max_iter=500)` on unscaled team L5/L10 features. The solver emitted `ConvergenceWarning`. Reported test log loss 0.623 is the output of that fit, not a claim of full optimizer convergence. Config was not changed after inspecting test metrics.
+7. **CR-004** live NBA pin `logistic_regression-v1` (3-season, team features only) reported test log loss 0.623 with a `ConvergenceWarning`. That number **does not bind** the CR-005 retrained pin (ML-012).
 8. Naive and domain-informed baselines emit hard 0/1 probabilities, so log loss sits near the clip epsilon when they are wrong. ML-005 is therefore easy relative to a calibrated baseline. This matches the locked Grill-Me baseline definitions — it is not a reason to change the baselines.
+9. Scheduled games have **no** current-game box; P(home_win) uses **prior completed** games only.
 
 ## Non-claims
 

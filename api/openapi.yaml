@@ -1,4 +1,4 @@
-# Implements: FR-009, FR-014, FR-018, FR-019, CON-004, ADR-008, ADR-009, NFR-002, NFR-004, CR-004
+# Implements: FR-009, FR-014, FR-018, FR-019, FR-022, FR-023, FR-024, FR-025, CON-004, ADR-008, ADR-009, NFR-002, NFR-004, CR-004, CR-005
 openapi: 3.0.3
 info:
   title: AthletIQ Demo API
@@ -94,6 +94,99 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /v1/slate:
+    get:
+      summary: Next 20 unplayed pre-tip games plus the demo user's open stakes
+      parameters:
+        - name: user
+          in: query
+          required: false
+          schema: { type: string, enum: [demo-1, demo-2], default: demo-1 }
+      responses:
+        "200":
+          description: Slate payload (display only; does not settle)
+        "404":
+          description: user_not_found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/board:
+    get:
+      summary: In-progress games only
+      responses:
+        "200":
+          description: Board payload
+        "503":
+          description: db_unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/users/{slug}/wallet:
+    get:
+      summary: Integer e-coin balance for a demo user
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Wallet
+        "404":
+          description: user_not_found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/stakes:
+    post:
+      summary: Place or replace an even-money stake (replace default false)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user, game_id, side, amount]
+              properties:
+                user: { type: string }
+                game_id: { type: integer }
+                side: { type: string, enum: [home, away] }
+                amount: { type: integer, minimum: 1 }
+                replace: { type: boolean, default: false }
+      responses:
+        "200":
+          description: Stake row
+        "400":
+          description: invalid_request, insufficient_balance, or stake_window_closed
+        "404":
+          description: game_not_found or user_not_found
+        "409":
+          description: duplicate_open_stake
+  /v1/stakes/{id}/cancel:
+    post:
+      summary: Cancel an open stake before tip
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user]
+              properties:
+                user: { type: string }
+      responses:
+        "200":
+          description: Canceled stake
+        "400":
+          description: invalid_request or stake_window_closed
 components:
   securitySchemes: {}
   schemas:
@@ -147,5 +240,9 @@ components:
                 - model_unavailable
                 - db_unavailable
                 - internal_error
+                - insufficient_balance
+                - stake_window_closed
+                - user_not_found
+                - duplicate_open_stake
             message: { type: string }
             details: { type: object }

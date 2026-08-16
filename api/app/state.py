@@ -1,10 +1,11 @@
-# Implements: FR-009, FR-014, FR-018, FR-019, FR-020, ADR-008, ADR-003, ADR-012, ADR-013
+# Implements: FR-009, FR-014, FR-018, FR-019, FR-020, FR-022, FR-024, FR-025, ADR-008, ADR-003, ADR-012, ADR-013, ADR-016, CR-005
 """Runtime state: pin, model, feature/game lookups."""
 
 from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Protocol
 
@@ -27,6 +28,10 @@ class GameRepo(Protocol):
 
     def resolve_provider_game_id(self, provider_game_id: str) -> int | None: ...
 
+    def list_upcoming(self, *, limit: int = 20) -> list[dict[str, Any]]: ...
+
+    def list_in_progress(self) -> list[dict[str, Any]]: ...
+
 
 class FeatureRepo(Protocol):
     def get_features(self, game_id: int, feature_version: str) -> FeatureRow | None: ...
@@ -43,6 +48,41 @@ class InMemoryGameRepo:
 
     def resolve_provider_game_id(self, provider_game_id: str) -> int | None:
         return self.by_provider.get(provider_game_id)
+
+    def list_upcoming(self, *, limit: int = 20) -> list[dict[str, Any]]:
+        now = datetime.now(timezone.utc)
+        rows: list[dict[str, Any]] = []
+        for gid, game in self.games.items():
+            row = dict(game)
+            row.setdefault("game_id", gid)
+            if str(row.get("status") or "") != "scheduled":
+                continue
+            if row.get("home_score") is not None or row.get("away_score") is not None:
+                continue
+            tip = row.get("game_start_time")
+            if tip is None:
+                continue
+            if isinstance(tip, str):
+                tip_dt = datetime.fromisoformat(tip.replace("Z", "+00:00"))
+            else:
+                tip_dt = tip
+            if tip_dt.tzinfo is None:
+                tip_dt = tip_dt.replace(tzinfo=timezone.utc)
+            if tip_dt <= now:
+                continue
+            rows.append(row)
+        rows.sort(key=lambda g: str(g.get("game_start_time") or ""))
+        return rows[:limit]
+
+    def list_in_progress(self) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        for gid, game in self.games.items():
+            if str(game.get("status") or "") != "in_progress":
+                continue
+            row = dict(game)
+            row.setdefault("game_id", gid)
+            out.append(row)
+        return out
 
     def latest_synthetic_odds(self, game_id: int) -> float | None:
         if game_id not in self.odds:
@@ -74,6 +114,7 @@ class AppState:
     games: GameRepo | None = None
     features: FeatureRepo | None = None
     db_ping: Callable[[], bool] | None = None
+    ledger: Any | None = None
     _loaded: LoadedModel | None = None
     _models: dict[str, LoadedModel] = field(default_factory=dict)
     _default_league: str = "nba"

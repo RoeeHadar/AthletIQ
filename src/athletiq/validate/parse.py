@@ -1,4 +1,4 @@
-# Implements: FR-002, FR-013, FR-017, FR-018, CR-004
+# Implements: FR-002, FR-013, FR-017, FR-018, FR-021, CR-004, CR-005
 """Validate provider-shaped records; skip noisy rows."""
 
 from __future__ import annotations
@@ -118,11 +118,10 @@ def parse_game(raw: dict[str, Any], *, default_season: int | None = None) -> Gam
     scores = raw.get("scores") or {}
     home_score = _score(scores.get("home"))
     away_score = _score(scores.get("away"))
+    status = _normalize_status(str(raw.get("status") or "unknown"), home_score, away_score)
     home_win: bool | None = None
-    if home_score is not None and away_score is not None:
+    if status == "Finished" and home_score is not None and away_score is not None:
         home_win = home_score > away_score
-
-    status = str(raw.get("status") or "unknown")
     return GameRecord(
         provider_game_id=str(gid),
         season=season_i,
@@ -136,6 +135,22 @@ def parse_game(raw: dict[str, Any], *, default_season: int | None = None) -> Gam
         sport=str(raw.get("sport") or "basketball"),
         league=str(raw.get("league") or "nba").lower(),
     )
+
+
+def _normalize_status(raw: str, home_score: int | None, away_score: int | None) -> str:
+    text = raw.strip()
+    low = text.lower()
+    if text in {"scheduled", "in_progress", "Finished", "unknown"}:
+        return text
+    if low in {"finished", "final", "closed"}:
+        return "Finished"
+    if "progress" in low or low in {"live", "q1", "q2", "q3", "q4"}:
+        return "in_progress"
+    if low in {"scheduled", "not started", "upcoming"}:
+        return "scheduled"
+    if home_score is None or away_score is None:
+        return "scheduled"
+    return "unknown"
 
 
 def _score(node: Any) -> int | None:

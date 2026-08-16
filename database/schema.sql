@@ -1,4 +1,4 @@
--- Implements: FR-002, DR-002, DR-003, DR-004, NFR-005, CON-002, ADR-001, ADR-010, ADR-012, CR-004
+-- Implements: FR-002, FR-021, FR-022, DR-002, DR-003, DR-004, DR-005, DR-006, NFR-005, CON-002, ADR-001, ADR-010, ADR-012, ADR-014, ADR-015, CR-004, CR-005
 -- AthletIQ curated schema contract (PostgreSQL)
 -- Design: docs/06-design/database-design.md
 -- Status: Approved contract aligned to Gate 4 design + ADR-010 (BIGINT) + CR-004
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS games (
     league               TEXT NOT NULL DEFAULT 'nba',
     updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT games_teams_distinct CHECK (home_team_id <> away_team_id),
-    CONSTRAINT games_league_provider_uid UNIQUE (league, provider_game_id)
+    CONSTRAINT games_league_provider_uid UNIQUE (league, provider_game_id),
+    CONSTRAINT games_status_known CHECK (status IN ('scheduled', 'in_progress', 'Finished', 'unknown'))
 );
 
 CREATE TABLE IF NOT EXISTS player_game_stats (
@@ -116,3 +117,50 @@ CREATE INDEX IF NOT EXISTS idx_player_game_stats_player_game ON player_game_stat
 CREATE INDEX IF NOT EXISTS idx_player_game_stats_team_game ON player_game_stats (team_id, game_id);
 CREATE INDEX IF NOT EXISTS idx_features_version_game ON features (feature_version, game_id);
 CREATE INDEX IF NOT EXISTS idx_odds_snapshots_game ON odds_snapshots (game_id);
+CREATE INDEX IF NOT EXISTS idx_games_status_start ON games (status, game_start_time);
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id              BIGSERIAL PRIMARY KEY,
+    slug                 TEXT NOT NULL UNIQUE,
+    created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS wallets (
+    wallet_id            BIGSERIAL PRIMARY KEY,
+    kind                 TEXT NOT NULL CHECK (kind IN ('user', 'house')),
+    user_id              BIGINT REFERENCES users(user_id),
+    balance              INT NOT NULL CHECK (balance >= 0),
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT wallets_user_kind CHECK (
+        (kind = 'user' AND user_id IS NOT NULL)
+        OR (kind = 'house' AND user_id IS NULL)
+    )
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_wallets_user ON wallets (user_id) WHERE kind = 'user';
+CREATE UNIQUE INDEX IF NOT EXISTS idx_wallets_one_house ON wallets ((kind)) WHERE kind = 'house';
+
+CREATE TABLE IF NOT EXISTS stakes (
+    stake_id             BIGSERIAL PRIMARY KEY,
+    user_id              BIGINT NOT NULL REFERENCES users(user_id),
+    game_id              BIGINT NOT NULL REFERENCES games(game_id),
+    side                 TEXT NOT NULL CHECK (side IN ('home', 'away')),
+    amount               INT NOT NULL CHECK (amount >= 1),
+    status               TEXT NOT NULL CHECK (status IN ('open', 'settled', 'canceled')),
+    created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_stakes_one_open ON stakes (user_id, game_id) WHERE status = 'open';
+
+CREATE TABLE IF NOT EXISTS ledger_entries (
+    ledger_entry_id      BIGSERIAL PRIMARY KEY,
+    wallet_id            BIGINT NOT NULL REFERENCES wallets(wallet_id),
+    amount               INT NOT NULL,
+    reason               TEXT NOT NULL,
+    stake_id             BIGINT REFERENCES stakes(stake_id),
+    created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ledger_wallet_created ON ledger_entries (wallet_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_users_slug ON users (slug);

@@ -1,4 +1,4 @@
-# Implements: FR-009, FR-010, FR-014, FR-015, CON-004, NFR-002, NFR-004, ADR-008, ADR-009
+# Implements: FR-009, FR-010, FR-014, FR-015, FR-024, FR-025, CON-004, NFR-002, NFR-004, ADR-008, ADR-009, ADR-016, CR-005
 """FastAPI factory — no auth middleware (ADR-009)."""
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.types import Scope
 
 from api.app.errors import ApiError, api_error_handler
+from api.app.ledger_routes import router as ledger_router
 from api.app.routes import router
 from api.app.state import AppState
 
@@ -37,10 +38,19 @@ def create_app(state: AppState | None = None) -> FastAPI:
     app.state.athletiq = state or AppState()
     app.add_exception_handler(ApiError, api_error_handler)
     app.include_router(router)
+    app.include_router(ledger_router)
 
     @app.get("/", include_in_schema=False)
     def demo_ui() -> FileResponse:
         return FileResponse(_STATIC_DIR / "index.html", headers=_NO_STORE)
+
+    @app.get("/slate", include_in_schema=False)
+    def slate_ui() -> FileResponse:
+        return FileResponse(_STATIC_DIR / "slate.html", headers=_NO_STORE)
+
+    @app.get("/board", include_in_schema=False)
+    def board_ui() -> FileResponse:
+        return FileResponse(_STATIC_DIR / "board.html", headers=_NO_STORE)
 
     app.mount("/static", _NoStoreStaticFiles(directory=_STATIC_DIR), name="static")
 

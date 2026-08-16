@@ -143,6 +143,10 @@ Clock on live `/board` is the only material design-vs-contract gap (finding 1).
 - Auto-starting board poll on `compose up` (batch etl remains `sleep infinity`; poll is `exec`).
 - Marking traceability Implementation=`Implemented` (still correctly Not started).
 
+## Post-review attest (implementer, 2026-08-16)
+
+Implementation committed as `657e5a1`. Remote CI [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628) succeeded (lint, unit, integration, image). IMP/TEST/traceability closeout is a follow-up docs commit — this review file is not rewritten.
+
 ## Owning skills if follow-up
 
 - Live board clock (finding 1): **architecture** (api/database design) then implementation.

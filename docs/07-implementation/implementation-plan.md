@@ -6,7 +6,7 @@ Last Updated: 2026-08-16
 Version: 1.2.0
 
 > Bridge from Approved design (Gate 4) to code. Annotation scope for `# Implements: FR-XXX` is exactly the **Files/modules affected** lists below.  
-> **Gate 5 Approved.** **Gate 7 test strategy v1.2.0 + test plan v1.2.0 Approved**. IMP-001…012 **Done**. IMP-013–018 **Done** (CR-004 CI `491c5c0`; code review APPROVE 2026-08-16). IMP-019–025 **Not started** (CR-005) — Gate 6 coding starts only after lead-developer **docs** review APPROVE.
+> **Gate 5 Approved.** **Gate 7 test strategy v1.2.0 + test plan v1.2.0 Approved**. IMP-001…012 **Done**. IMP-013–018 **Done** (CR-004 CI `491c5c0`; code review APPROVE 2026-08-16). IMP-019–025 **Done** (CR-005 CI `657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628); code review APPROVE 2026-08-16). Live NBA/WNBA pin **publish** remains operator (IMP-024 protocol + CI pin unchurned on this SHA).
 
 ## Upstream
 
@@ -438,16 +438,16 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
 - **Implementation sequence notes:** Forward-only 003: `users`, `wallets` (user + house `1000000000`), `ledger_entries`, `stakes` with partial unique open `(user_id, game_id)`; seed `demo-1`/`demo-2` at 1000 e-coins; no password columns. Document `games.status` (`scheduled` \| `in_progress` \| `Finished` \| `unknown`) and nullable scores. Compose initdb mounts 003 for fresh volumes. Name may shift only if migrate-runner requires it — keep registry/design in sync.  
 - **Testing requirements:** TEST-002, TEST-020, TEST-022  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-020 — Provider: scheduled/in-progress, uncapped NBA, live player boxes
 
@@ -465,16 +465,16 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
 - **Implementation sequence notes:** Keep null-score games; map in-progress vs Finished from provider fields (do not hardcode Finished). Remove live `season_depth` clamp of 3; do not age-prune live NBA. Fetch per-game player boxes from the same no-key host (`include=playerGameBasicStats` or equivalent). CI/unit tests inject `get_json` — no live HTTP (NFR-003). Live WNBA HTTP remains out.  
 - **Testing requirements:** TEST-003, TEST-020, TEST-025  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-021 — WNBA fixtures 2021–2025 + 2026 scheduled; NBA scheduled CI rows
 
@@ -489,16 +489,16 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
 - **Implementation sequence notes:** Author completed WNBA seasons 2021–2025 plus 2026 scheduled rows. Add scheduled NBA fixture rows with null scores. Keep CI fixture set **small** (not a live dump). Do not retrain the 48-game CI pin here (IMP-024).  
 - **Testing requirements:** TEST-015, TEST-020, TEST-026  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-022 — Ledger settle in pipeline + Compose board poll
 
@@ -513,16 +513,16 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
 - **Implementation sequence notes:** After load, settle open stakes when a game is ingested as Finished (even-money; house pays wins). Idempotent. `/slate` must not settle. Board poll is `python -m athletiq.board_poll` (or equivalent) in the **etl** image — newest pages only; design default interval 30s; **not** a fourth Compose service. CI does not call live HTTP. Copy is stake/settle.  
 - **Testing requirements:** TEST-021, TEST-024, TEST-025  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-023 — API user/slate/board/stake + UI surfaces
 
@@ -539,16 +539,16 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
 - **Implementation sequence notes:** HTML `GET /slate` and `GET /board`; keep gamecast at `GET /` with no score/clock and no stake chrome. Producer-bar three-way links. `?user=demo-1|demo-2` (no cookies). JSON slate/board/wallet/stake/cancel as api-design (`replace` boolean default false). Same broadcast-instrument family; dramatic-improvement bar. No sportsbook chrome. Demo UI only at `http://127.0.0.1:8000/`. `Cache-Control: no-store`. `/slate` does not settle.  
 - **Testing requirements:** TEST-019, TEST-023, TEST-024, TEST-028  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-024 — Retrain/select/publish NBA+WNBA; disclose
 
@@ -561,19 +561,19 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - `src/athletiq/pipeline/`
   - `api/app/methodology.py`
   - `docs/06-design/model-card.md`
-- **Implementation sequence notes:** One-shot retrain + reselect of NBA and WNBA pins on the new history. Same families, hyperparameters, and `feature_version` (`team_l5_l10_player_agg_v1`). Select on validation; test once. Do not iterate on the new test set. CI 48-game fixture pin **unchanged**. Old live test log loss 0.623 does not bind. Disclose distribution shift on `/v1/model` + model card.  
+- **Implementation sequence notes:** One-shot retrain + reselect of NBA and WNBA pins on the new history. Same families, hyperparameters, and `feature_version` (`team_l5_l10_player_agg_v1`). Select on validation; test once. Do not iterate on the new test set. CI 48-game fixture pin **unchanged**. Old live test log loss 0.623 does not bind. Disclose distribution shift on `/v1/model` + model card. This SHA lands **protocol + disclosure + CI pin unchurned** (TEST-027). Live NBA/WNBA pin **publish** is operator — not `657e5a1`. Do not hunt hyperparameters against the new test set.  
 - **Testing requirements:** TEST-007, TEST-012, TEST-027  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ### IMP-025 — Tests TEST-020–028 + CI fixture-only
 
@@ -586,19 +586,19 @@ NumPy NN; score/spread; live WNBA HTTP; live odds; GCP when Gate 8 designed.
   - `tests/integration/`
   - `tests/fixtures/provider/`
   - `.github/workflows/ci.yml`
-- **Implementation sequence notes:** Implement TEST-020–028 as Planned cases. Injected HTTP only for nba-stats mapping (TEST-025). Do **not** put `# Implements` on test files. Keep GHA fixture-only (NFR-003). TEST-001–019 fixture/API cases must remain passing **except** TEST-003 step 6, which is **retargeted** (keep null-score rows; do not preserve skip-missing-scores). That mapper assertion lands with IMP-020.  
+- **Implementation sequence notes:** TEST-020–028 are implemented (`tests/unit/test_cr005.py`). Injected HTTP only for nba-stats mapping (TEST-025). Do **not** put `# Implements` on test files. Keep GHA fixture-only (NFR-003). TEST-001–019 fixture/API cases remain passing **except** TEST-003 step 6, which is **retargeted** (keep null-score rows; do not preserve skip-missing-scores). That mapper assertion landed with IMP-020.  
 - **Testing requirements:** TEST-011, TEST-020–028  
 - **Definition of Done:**
-  - [ ] Requirements satisfied  
-  - [ ] Design satisfied  
-  - [ ] Tests implemented and passing  
-  - [ ] Logging/observability addressed  
-  - [ ] Error handling addressed  
-  - [ ] Documentation updated  
-  - [ ] Traceability matrix + code annotations updated  
-  - [ ] Code review passed  
-  - [ ] CI passed  
-- **Status:** Not started
+  - [x] Requirements satisfied  
+  - [x] Design satisfied  
+  - [x] Tests implemented and passing  
+  - [x] Logging/observability addressed  
+  - [x] Error handling addressed  
+  - [x] Documentation updated  
+  - [x] Traceability matrix + code annotations updated  
+  - [x] Code review passed — 2026-08-16 Gate 6 APPROVE (`docs/00-meta/reviews/2026-08-16-cr005-lead-dev-code-review.md`)  
+  - [x] CI passed (`657e5a1` / [31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628))  
+- **Status:** Done
 
 ---
 

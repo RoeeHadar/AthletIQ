@@ -57,7 +57,7 @@ Status: Planned | Implemented | Passing
   5. Apply the **same** migration set again — succeeds; schema unchanged; no duplicate objects / corrupted state.  
 - **Expected result:** Idempotent migrate; contract + ADR-010 hold. Empty player tables after migrate-only (no load) is expected. Seed demo users after 003 (TEST-022).  
 - **Level:** integration  
-- **Status:** Passing (001/002 contract); 003 ledger tables **Planned** (IMP-019)
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-003 — Provider adapter and raw ingest (fixtures)
 
@@ -76,7 +76,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** No live HTTP; raw landing correct; null-score NBA rows are not dropped solely for missing scores.  
 - **Level:** integration  
 - **Also:** unit (retry helper; mocked nba-stats pages)  
-- **Status:** Passing (fixture ingest/raw); nba-stats keep-null-score mapper **Planned** (IMP-020)
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-004 — Validate, load, report, idempotency
 
@@ -362,7 +362,7 @@ Status: Planned | Implemented | Passing
 
 ---
 
-## CR-005 cases (Planned)
+## CR-005 cases (Passing)
 
 ### TEST-020 — Scheduled/unplayed persist; P from prior history only
 
@@ -378,7 +378,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Unplayed rows stored; no leakage from the unplayed game itself.  
 - **Level:** integration  
 - **Also:** unit (feature builder)  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-021 — Even-money settle idempotent; pre-tip cancel/replace
 
@@ -398,7 +398,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Even-money win and lose; replace works before tip; idempotent settle; copy stake/settle not odds/juice/moneyline.  
 - **Level:** integration  
 - **Also:** unit (settle math)  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-022 — Integer stake bounds; one open stake per (user, game)
 
@@ -415,7 +415,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Bounds and uniqueness hold; no passwords/cookies.  
 - **Level:** integration  
 - **Also:** unit  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-023 — `/slate` next-20 + open stakes + `?user=`
 
@@ -431,7 +431,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Next-20 rule; query-param identity; stake/settle copy allowed.  
 - **Level:** unit  
 - **Also:** integration  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-024 — `/board` in-progress; gamecast still no score/clock
 
@@ -447,7 +447,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Third surface is the board; gamecast lock holds.  
 - **Level:** unit  
 - **Also:** integration  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-025 — nba-stats maps null scores, in-progress, player boxes (injected HTTP)
 
@@ -463,7 +463,7 @@ Status: Planned | Implemented | Passing
   4. Board-poll helper uses newest-page mapping, not full-history paging.  
 - **Expected result:** Live mapper no longer returns `[]` for NBA boxes; CI never calls the host.  
 - **Level:** unit  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-026 — WNBA fixture 2021–2025 + 2026 scheduled
 
@@ -478,7 +478,7 @@ Status: Planned | Implemented | Passing
 - **Expected result:** Authored window only; CI stays fixture.  
 - **Level:** integration  
 - **Also:** unit (fixture provider)  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-027 — Retrain protocol: val select, test once; CI pin unchanged
 
@@ -493,7 +493,7 @@ Status: Planned | Implemented | Passing
   3. Fixture `selected_pin.json` for the 48-game toy remains the existing pin identity (or a documented distinct CI pin).  
 - **Expected result:** Protocol holds; CI pin unchurned.  
 - **Level:** unit  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ### TEST-028 — Producer-bar three-way links; no book language on `/slate` and `/board`
 
@@ -508,10 +508,10 @@ Status: Planned | Implemented | Passing
   3. `/slate` may include stake/settle; `/` must not.  
 - **Expected result:** Three-way instrument family; not a book.  
 - **Level:** unit  
-- **Status:** Planned
+- **Status:** Passing (local); Passing (remote)
 
 ## Open (non-blocking)
 
 - Exact ML-005 attestation fixture / `dataset_version` — choose at IMP-007; freeze before gate.  
 - Compose smoke on every PR vs nightly — devops CI doc.  
-- Remote GitHub Actions green — attested `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)).
+- Remote GitHub Actions green — attested CR-004 `491c5c0` ([31913410157](https://github.com/RoeeHadar/AthletIQ/actions/runs/31913410157)); CR-005 `657e5a1` ([31956566628](https://github.com/RoeeHadar/AthletIQ/actions/runs/31956566628)).
